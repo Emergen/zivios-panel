@@ -1,0 +1,60 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		ZiviosInstaller
+ * @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ **/
+
+$formid   = Zivios_Util::randomString(8);
+$regexLib = Zivios_Util::getRegexLibrary();
+?>
+<div class="heading">Certificate Authority Initialization</div>
+<div class="content">
+    Zivios is ready to initialize a Certificate Authority for your organization. 
+    The Certificate Authority Service (or CA Service) is responsible for issuing
+    digital certificates to your users and network services.<br /><br />
+</div>
+<div class="subheading">Certificate Authority Details</div>
+<div class="content">
+    <form id='<?php echo $formid; ?>' enctype="application/x-www-form-urlencoded" method="post" 
+        action="#" dojoType="dijit.form.Form">
+
+    <label>CA Hostname: </label>
+    <div class="disabledInput"><?php echo $this->localSysInfo['hostname']; ?></div>
+    <div class="cboth"></div>
+
+    <label>CA Lifetime: </label>
+    <input dojoType="dijit.form.NumberSpinner" value="5" smallDelta="5"
+        constraints="{min:5,max:150,places:0}" name="casetup[rq_digits_califetime_CA+Lifetime]" class="genField" />
+    <div class="cboth"></div>
+
+    <label></label>
+    <input onclick="installer.postxhr('/installer/index/processinica', '', '<?php echo $formid; ?>',
+        'form', 'json', [], ['loadingmsg'], ['loadingmsg'], [], this.id); return false;" 
+        name="inica" value="Initialize Certificate Authority" 
+        type="submit" label="Initialize Certificate Authority" dojoType="dijit.form.Button"/>
+    <div class="cboth"></div>
+
+    <input type="hidden" name="casetup[rq_hostname_webhost_CA+Hostname]" 
+        value="<?php echo $this->localSysInfo['hostname']; ?>"/>
+
+    </form>
+</div>
+

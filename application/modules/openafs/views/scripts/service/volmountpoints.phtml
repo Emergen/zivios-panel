@@ -1,0 +1,181 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		mod_openafs
+ * @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ * @version		$Id: volmountpoints.phtml 919 2008-08-25 11:45:23Z fkhan $
+ * @lastchangeddate $LastChangedDate: 2008-08-25 17:45:23 +0600 (Mon, 25 Aug 2008) $
+ **/
+
+?>
+
+<table border="0" width="100%" align="center">
+<tr><td colspan="2"><b>Edit Mount Points</b></td></tr>
+<?php
+if (!empty($this->mountPoints)) {
+	$c = 1;
+	foreach ($this->mountPoints as $mp => $mpt) {
+		if (strtolower($mpt) == "rw") {
+			$rw = 'CHECKED';
+			$ro = '';
+		} else {
+			$ro = 'CHECKED';
+			$rw = '';
+		}
+
+		$mpa = explode("/", $mp);
+		$mpid = '';
+		for ($x=3; $x < count($mpa); $x++) {
+			$mpid .= $mpa[$x];
+			if ($x < count ($mpa)-1)
+				$mpid .= "/";
+		}
+
+	echo
+	'<tr id="mpdiv'.$c.'">
+		<td width="350" NOWRAP>
+		<form id="femp'.$c.'">
+		<span id="editmp'.$c.'">' . $mp . '</span>
+		<span id="f_editmp'.$c.'" style="display: none;">
+		/afs/.' . $this->obj->getproperty('emsafscell') . '<input size="26" maxlength="64" type="text" name="nmp" value="' . $mpid . '" /><br />
+
+		<label for="MountPointType">Mount Point Type:</label>
+			<input type="radio" value="rw" name="vtype" '.$rw.'/> RW
+			<input type="radio" value="ro" name="vtype" '.$ro.'/> RO <br />
+
+		<label for="releaseBaseVol">Release base volume:</label>
+			<input type="checkbox" value="1" name="releasebasevol" CHECKED /> <br />
+
+			<input type="hidden" name="omp" value="' . $mp . '" />
+			<input type="hidden" name="ompcompare" value="'.$mpid.'" />
+			<input type="hidden" name="ovtype" value="'.strtolower($mpt).'" />
+			<input type="hidden" name="operate_dn" value="' . $this->obj->getdn() . '" />
+			<input type="hidden" name="voldn" value="' . $this->volEntry->getdn() . '" />
+			<input type="hidden" name="updateRequestFor" value="updatevolmountpoint" />
+			<input type="hidden" name="utype" value="update" />
+		</span>
+		</form>
+		</td>
+		<td NOWRAP>
+		<span id="emp'.$c.'"><a href="#" onclick="javascript:editMountPoint(\'emp'.$c.'\',\'editmp'.$c.'\',\'ump'.$c.'\',\'f_editmp'.$c.'\');">Edit</a></span>
+		<span id="ump'.$c.'" style="display: none;"><a href="#" onclick="javascript:updateMountPoint(\'femp'.$c.'\', \'emp'.$c.'\',\'editmp'.$c.'\',\'ump'.$c.'\',\'f_editmp'.$c.'\');">Save</a></span>
+		| <a href="#" onClick="javascript:deleteMountPoint(\''.$mp.'\', \'optrst\');">Delete</a>
+		</td>
+	</tr>';
+	$c++;
+	}
+} else {
+	echo '<tr><td>No Mountpoint Set</td></tr>';
+}
+?>
+</table>
+
+<hr size="1" />
+
+<form method="post" action="#" onsubmit="return false;" id="addmountpoint">
+<fieldset>
+<legend>Add Volume Mountpoint</legend>
+<div class="notice">Path leading up to your mount point <b>must</b> exist</div>
+<label for="MountPoint">/afs/.<?php echo $this->obj->getProperty("emsafscell");?>/ </label>
+	<input type="text" name="newmountpoint" value="" maxlength="64" size="32" /><br />
+<label for="MountPointAccess">Mount Point Type:</label>
+	<input type="radio" value="rw" name="vtype" CHECKED /> RW
+	<input type="radio" value="ro" name="vtype" /> RO <br />
+<label for="releaseBaseVol">Release base volume:</label>
+	<input type="checkbox" value="1" name="releasebasevol" CHECKED /> <br />
+
+	<input type="submit" name="anmp" value="Add Mountpoint"
+		onclick="javascript:callAfsFormAction('addmountpoint', '/openafs/server/addmountpoint', 'optrst');" />
+	  	<input type="hidden" name="operate_dn" value="<?php echo $this->obj->getdn(); ?>" />
+	  	<input type="hidden" name="voldn" value="<?php echo $this->volEntry->getdn(); ?>" />
+	  	<input type="hidden" name="addRequestFor" value="addvolmountpoint" />
+	  	<input type="hidden" name="utype" value="add" />
+</fieldset>
+</form>
+
+
+<script language="javascript">
+/**
+ * Show EditMountPoint Options
+ */
+editMountPoint = function (emp, editmp, ump, f_editmp)
+{
+
+	Element.hide(emp);
+	Element.hide(editmp);
+	Element.show(ump);
+	Element.show(f_editmp);
+}
+
+updateMountPoint = function (fdiv, emp, editmp, ump, f_editmp)
+{
+	var f = $(fdiv);
+	var voltype = Form.getInputs(fdiv,'radio','vtype').find(function(radio) {
+		return radio.checked;
+	}).value;
+
+	if (f.nmp.value.strip() == f.ompcompare.value && voltype == f.ovtype.value) {
+		/**
+		 * Cancel update and reset fields to orig values
+		 */
+		Element.hide(ump);
+		Element.hide(f_editmp);
+		Element.show(emp);
+		Element.show(editmp);
+		return false;
+	} else {
+		/**
+		 * Update the mountpoint.
+		 */
+		callAfsFormAction(f, "/openafs/server/updateMountPoint", "optrst");
+		return false;
+	}
+}
+
+deleteMountPoint = function (mp, div)
+{
+	var msg = "You are about to remove a mount point from the AFS filesystem.";
+	var url = "/openafs/server/deletemountpoint";
+
+	msg += " \n\nAre you certain you wish to continue?";
+
+	if (!confirm(msg))
+       return false;
+
+   	var data = {voldn: '<?php echo $this->volEntry->getdn(); ?>', mp: mp, operate_dn: '<?php echo $this->obj->getdn(); ?>'};
+	rpc = Object.toJSON(data);
+
+	var ma = new Ajax.Updater (
+		{success: div},
+		url,
+		{
+			method: 'get',
+			parameters: 'mr='+rpc,
+			evalScripts: true,
+			onLoading: function(request) {
+				showNotify()
+			},
+			onComplete:function(request) {
+				hideNotify()
+			},
+		}
+	);
+}
+</script>

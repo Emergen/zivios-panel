@@ -1,0 +1,46 @@
+[libdefaults]
+    ticket_lifetime = 86400
+    default_realm = %%%KRB5REALM%%%
+
+[appdefaults]
+    pkinit_anchors = FILE:/opt/zivios/ca/anchors/ZiviosCA.pem
+
+[realms]
+    %%%KRB5REALM%%% = {
+        kdc = %%%KDC_HOST%%%:88
+        admin_server = %%%KADMIN_HOST%%%:749
+        pkinit_require_eku = true
+        pkinit_require_krbtgt_otherName = true
+        win2k_pkinit = no
+        win2k_pkinit_require_binding = yes
+   }
+
+[domain_realm]
+    %%%LCKRB5REALM%%% = %%%KRB5REALM%%%
+    .%%%LCKRB5REALM%%% = %%%KRB5REALM%%%
+
+[kdc]
+    enable-pkinit = yes
+    pkinit_identity = FILE:%%%KDC_PUBKEY%%%,%%%KDC_PRVKEY%%%
+    pkinit_anchors = FILE:%%%ZIVIOS_CA_PUBKEY%%%
+    pkinit_allow-proxy-certificate = false
+
+    database = {
+        dbname = ldap:%%%DB_BASE%%%
+        acl_file = /opt/zivios/heimdal/etc/kadmind.acl
+    }
+
+[logging]
+    kdc = FILE:/var/log/krb5kdc.log
+    admin_server = FILE:/var/log/kadmin.log
+    default = FILE:/var/log/krb5lib.log
+
+[password_quality]
+        %%%KDC_EXTERNCHECKPOLICY%%%
+        policies = minimum-length
+        external_program = /opt/zivios/heimdal/bin/check-cracklib.pl
+        min_length = %%%KDC_PASSMINLENGTH%%%
+        
+[kadmin]
+     password_lifetime = %%%KDC_PASSMAXLIFEDAYS%%% days
+

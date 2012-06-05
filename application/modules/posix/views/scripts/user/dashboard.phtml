@@ -1,0 +1,90 @@
+<?php
+/**
+ * Copyright (c) 2008-2010 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     mod_posix
+ * @copyright   Copyright (c) 2008-2010 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+
+$formid   = Zivios_Util::randomString(8);
+$regexLib = Zivios_Util::getRegexLibrary();
+
+$primaryGroup = $this->userEntry->getPrimaryGroup();
+$availShells  = $this->posixUser->getAvailableShells();
+?>
+<div class="heading">Posix User Plugin</div>
+<div class="content">
+
+    <form id='<?php echo $formid; ?>' enctype="application/x-www-form-urlencoded" method="post" 
+        action="#" dojoType="dijit.form.Form">
+
+    <div class="zflabel" style="width: 150px;">Primary Group: </div>
+    <input name="posixuserdata[rq_posixgroup_primarygroup_Primary+Group]" type="text" dojoType="dijit.form.ValidationTextBox" 
+        size="16" maxlength="64" regExp="<?php echo $regexLib->exp->posixgroup; ?>" required="true" 
+        invalidMessage="Invalid characters in field value." class="zfgenField" 
+        value="<?php echo $primaryGroup->getProperty('cn'); ?>" disabled="true"/>
+    <div class="cboth"></div>
+
+    <div class="zflabel" style="width: 150px;">Primary Group ID: </div>
+    <input name="posixuserdata[rq_digits_gidnumber_Primary+Group+Id]" type="text" dojoType="dijit.form.ValidationTextBox" 
+        size="16" maxlength="64" regExp="<?php echo $regexLib->exp->digits; ?>" required="true" 
+        invalidMessage="Invalid characters in field value." class="zfgenField" 
+        value="<?php echo $this->userEntry->getProperty('gidnumber'); ?>" disabled="true"/>
+    <div class="cboth"></div>
+
+    <div class="zflabel" style="width: 150px;">User ID: </div>
+    <input name="posixuserdata[rq_digits_uidnumber_User+Id]" type="text" dojoType="dijit.form.ValidationTextBox" 
+        size="16" maxlength="64" regExp="<?php echo $regexLib->exp->digits; ?>" required="true" 
+        invalidMessage="Invalid characters in field value." class="zfgenField" 
+        value="<?php echo $this->userEntry->getProperty('uidnumber'); ?>" disabled="true"/>
+    <div class="cboth"></div>
+
+    <div class="zflabel" style="width: 150px;">Home Directory: </div>
+    <input name="posixuserdata[rq_homedirectory_homedirectory_Home+Directory]" type="text" dojoType="dijit.form.ValidationTextBox" 
+        size="16" maxlength="64" regExp="<?php echo $regexLib->exp->homedirectory; ?>" required="true" 
+        invalidMessage="Invalid characters in field value." class="zfgenField" 
+        value="<?php echo $this->userEntry->getProperty('homedirectory'); ?>" disabled="false"/>
+    <div class="cboth"></div>
+
+    <div class="zflabel" style="width: 150px;">Login Shell: </div>
+    <select dojoType="dijit.form.FilteringSelect" name="posixuserdata[rq_loginshell_loginshell_Login+Shell]" 
+        style="margin-top: 10px; font-size: 11px; width: 230px;">
+    <?php
+    foreach ($availShells as $shell) {
+        $selected = '';
+        if ($shell == $this->userEntry->getProperty('loginshell')) {
+            $selected = 'selected';
+        }
+        echo '<option value="'.$shell.'" '.$selected.'>'.$shell.'</option>';
+    }
+    ?>
+    </select>
+    <div class="cboth"></div>
+
+    <div class="zflabel" style="width: 150px;">&nbsp;</div>
+    <input onclick="zivios.postxhr('/posix/user/update', '', '<?php echo $formid; ?>',
+        'form', 'json', [], [], [], [], this.id); return false;" 
+        name="upuserposix" value="Apply Changes"
+        type="submit" label="Apply Changes" dojoType="dijit.form.Button"/>
+    <div class="cboth"></div>
+
+    <input type="hidden" name="posixuserdata[rq_dn_dn_Distinguished+Name_enc]" value="<?php echo urlencode($this->userEntry->getdn()); ?>"/>
+    </form>
+</div>
+

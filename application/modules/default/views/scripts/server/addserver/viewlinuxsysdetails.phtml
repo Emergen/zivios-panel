@@ -1,0 +1,91 @@
+<?php
+/**
+ * Copyright (c) 2008-2010 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     Zivios
+ * @copyright   Copyright (c) 2008-2010 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+?>
+<p class="headline">Linux System Details:</p>
+
+<div class="probereport">
+    <div class="reportitem">Distribution Details</div>
+    <div class="reportresult">
+    <?php echo ucfirst(strtolower($this->distroDetails['distro'])) . ' ' .
+        ucfirst(strtolower($this->distroDetails['codename'])) . '-' .
+        $this->distroDetails['release']; ?>
+    </div>
+    <div class="clearboth"></div>
+
+    <div class="reportitem">CPU Model</div>
+    <div class="reportresult"><?php echo $this->systemDetails['cpu']; ?></div>
+    <div class="clearboth"></div>
+
+    <div class="reportitem">CPU Count</div>
+    <div class="reportresult"><?php echo $this->systemDetails['cpucount']; ?></div>
+    <div class="clearboth"></div>
+
+    <div class="reportitem">CPU Mhz</div>
+    <div class="reportresult"><?php echo $this->systemDetails['cpumhz']; ?></div>
+    <div class="clearboth"></div>
+
+    <div class="reportitem">System RAM</div>
+    <div class="reportresult"><?php echo $this->systemDetails['ram']; ?></div>
+    <div class="clearboth"></div>
+
+    <div class="reportitem">System SWAP</div>
+    <div class="reportresult"><?php echo $this->systemDetails['swap']; ?></div>
+    <div class="clearboth"></div>
+
+    <div class="reportitem">System Kernel</div>
+    <div class="reportresult"><?php echo $this->systemDetails['system']; ?></div>
+    <div class="clearboth"></div>
+
+    <div class="reportitem">System Architecture</div>
+    <div class="reportresult"><?php echo $this->systemDetails['arch']; ?></div>
+    <div class="clearboth"></div>    
+
+    <div class="reportitem">Hostname</div>
+    <div class="reportresult"><?php echo $this->systemDetails['hostname']; ?></div>
+    <div class="clearboth"></div>
+</div>
+
+<style>
+.probereport {
+    width: 95%;
+    margin-left: 10px;
+}
+
+.reportitem {
+    width: 150px;
+    background: #ccc;
+    float: left;
+    padding: 5px;
+    border-bottom: 1px solid #ccc;
+}
+
+.reportresult {
+    width: 200px;
+    background: #e5e5e5;
+    float: left;
+    padding: 5px;
+    border-bottom: 1px solid #ccc;
+}
+</style>
+

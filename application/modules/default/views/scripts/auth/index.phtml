@@ -1,0 +1,70 @@
+<?php
+/**
+ * Copyright (c) 2008-2010 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     Zivios
+ * @copyright   Copyright (c) 2008-2010 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+
+$formid   = Zivios_Util::randomString(8);
+$regexLib = Zivios_Util::getRegexLibrary();
+?>
+<?php
+echo $this->render('auth/_toolbar.phtml');
+?>
+<div style="width: 450px; margin-top: 5px; padding: 10px;">
+
+    <div class="heading">Welcome to Zivios | Version <?php echo ZVERSION; ?></div>
+    <div class="content">
+        Please enter your username and password in the form below and click on <b>Login</b> to proceed. 
+        <br /><br />
+    </div>
+
+    <div class="subheading">Login Form</div>
+
+    <div class="content">
+
+        <form id='<?php echo $formid; ?>' enctype="application/x-www-form-urlencoded" method="post" 
+            action="#" dojoType="dijit.form.Form">
+
+        <label>Username: </label>
+        <input name="login[rq_uid_login_User+Login]" type="text" dojoType="dijit.form.ValidationTextBox" size="16" maxlength="64" 
+            regExp="<?php echo $regexLib->exp->uid; ?>" required="true" 
+            invalidMessage="Invalid characters. Only alphabets and numbers permitted." class="genField" 
+            value="" />
+        <div class="cboth"></div>
+
+        <label>Password: </label>
+        <input name="login[rq_password_pass_User+Password]" type="password" dojoType="dijit.form.ValidationTextBox" size="16" maxlength="64" 
+            regExp="<?php echo $regexLib->exp->password; ?>" required="true" 
+            invalidMessage="Invalid password. Should be at least 3 characters." class="genField" 
+            value="" />
+        <div class="cboth"></div>
+
+        <label></label>
+        <input onclick="zivios.postxhr('/default/auth/dologin', '', '<?php echo $formid; ?>',
+            'form', 'json', [], [], [], [], this.id); return false;" 
+            name="zvlogin" value="Login" 
+            type="submit" label="Login" dojoType="dijit.form.Button"/>
+        <div class="cboth"></div>
+
+        </form>
+    </div>
+</div>
+

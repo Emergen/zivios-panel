@@ -1,0 +1,125 @@
+# Zivios slapd.conf template
+include /opt/zivios/openldap/etc/openldap/schema/core.schema
+include /opt/zivios/openldap/etc/openldap/schema/cosine.schema
+include /opt/zivios/openldap/etc/openldap/schema/inetorgperson.schema
+include /opt/zivios/openldap/etc/openldap/schema/rfc2307bis.schema
+include /opt/zivios/openldap/etc/openldap/schema/rfc2739.schema
+include /opt/zivios/openldap/etc/openldap/schema/samba.schema
+include /opt/zivios/openldap/etc/openldap/schema/qmail.schema
+include /opt/zivios/openldap/etc/openldap/schema/hdb.schema
+include /opt/zivios/openldap/etc/openldap/schema/dlz.schema
+include /opt/zivios/openldap/etc/openldap/schema/dhcp.schema
+include /opt/zivios/openldap/etc/openldap/schema/amavis.schema
+include /opt/zivios/openldap/etc/openldap/schema/asterisk.schema
+
+pidfile /opt/zivios/openldap/var/run/slapd.pid
+argsfile /opt/zivios/openldap/var/run/slapd.args
+
+allow bind_v2
+loglevel 256
+
+modulepath /opt/zivios/openldap/libexec/openldap
+moduleload back_hdb
+moduleload syncprov
+moduleload back_monitor
+moduleload auditlog
+moduleload smbk5pwd
+moduleload unique
+moduleload accesslog
+
+sizelimit 500
+tool-threads 1
+
+backend hdb
+
+# access log database setup
+database hdb
+suffix cn=accesslog
+directory /opt/zivios/openldap/var/accesslog-data
+rootdn cn=accesslog
+index default eq
+index entryCSN,objectClass,reqEnd,reqResult,reqStart
+
+overlay syncprov
+syncprov-nopresent TRUE
+syncprov-reloadhint TRUE
+
+limits dn.exact="uid=zldapreplica,ou=zusers,ou=core control,ou=zivios,%%%BASE_DN%%%" time.soft=unlimited time.hard=unlimited size.soft=unlimited size.hard=unlimited
+
+# slapd monitor & config dbs
+database monitor
+database config
+rootdn cn=config
+rootpw %%%CNCONFIG_PASS%%%
+
+# primary db
+database hdb
+overlay syncprov
+overlay auditlog
+overlay smbk5pwd
+overlay unique
+overlay accesslog
+
+auditlog "/opt/zivios/openldap/log/auditlog.txt"
+suffix "%%%BASE_DN%%%"
+rootdn "cn=admin,%%%BASE_DN%%%"
+rootpw %%%ZADMIN_PASS%%%
+
+# overlay config
+# syncprov
+syncprov-checkpoint 1000 60
+
+# accesslog
+logdb cn=accesslog
+logops writes
+logsuccess TRUE
+logpurge 07+00:00 01+00:00
+
+limits dn.exact="uid=zldapreplica,ou=zusers,ou=core control,ou=zivios,%%%BASE_DN%%%" time.soft=unlimited time.hard=unlimited size.soft=unlimited size.hard=unlimited
+
+checkpoint 512 30
+directory "/opt/zivios/openldap/var/openldap-data"
+
+dbconfig set_cachesize 0 2097152 0
+dbconfig set_lk_max_objects 1500
+dbconfig set_lk_max_locks 1500
+dbconfig set_lk_max_lockers 1500
+
+index accountStatus eq
+index mailHost eq
+index cn eq,pres,subinitial
+index mail eq,pres
+index mailAlternateAddress eq,pres
+index objectClass eq
+index uid pres,eq
+index uidNumber eq
+index gidNumber eq
+
+lastmod on
+unique_attributes mail uid uidNumber
+
+TLSCertificateFile %%%SSL_PUBCERT%%%
+TLSCertificateKeyFile %%%SSL_PRVKEY%%%
+
+sasl-realm %%%SASL_REALM%%%
+sasl-host %%%SASL_HOST%%%
+sasl-secprops minssf=0
+
+authz-regexp uid=(.*),cn=%%%SASL_REGEX_DOMAIN%%%,cn=gssapi,cn=auth ldap:///%%%BASE_DN%%%??sub?(&(uid=$1)(objectClass=posixAccount))
+authz-regexp "gidNumber=.*+uidNumber=0,cn=peercred,cn=external,cn=auth" "uid=zadmin,ou=zusers,ou=core control,ou=zivios,%%%BASE_DN%%%"
+
+#
+# ACL Section
+#
+access to *
+ by dn.base="uid=zldapreplica,ou=zusers,ou=core control,ou=zivios,%%%BASE_DN%%%" read
+ by * break
+
+access to attrs=userPassword,shadowLastChange,krb5Key,krb5PrincipalName,krb5KeyVersionNumber,krb5MaxLife,krb5MaxRenew,krb5KDCFlags
+ by dn="uid=zadmin,ou=zusers,ou=core control,ou=zivios,%%%BASE_DN%%%" write
+ by sockurl.regex="^ldapi:///$" write
+ by anonymous auth
+ by self write
+ by * none
+
+access to dn="" by * read

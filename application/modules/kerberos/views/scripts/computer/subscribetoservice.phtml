@@ -1,0 +1,53 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		mod_kerberos
+ * @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ * @version		$Id$
+ * @lastchangeddate $LastChangedDate$
+ **/
+
+?>
+<br /><br />
+<div style="padding-left: 10px">
+
+	<div class="floatleft" style="width: 140px">Subscribing Computer</div>
+	<div class="floatleft" style="width: 350px"><?php echo $this->obj->getProperty("cn"); ?></div>
+	<div class="clear"></div>
+
+	<div class="floatleft" style="width: 140px">To Service</div>
+	<div class="floatleft" style="width: 350px"><?php echo $this->service->returnDisplayName(); ?></div>
+	<div class="clear"></div>
+
+	<div class="floatleft" style="width: 140px">Provided by</div>
+	<div class="floatleft" style="width: 350px"><?php echo $this->service->mastercomp->getProperty("cn"); ?></div>
+	<div class="clear"></div>
+
+	<p>
+	<form id="addkerbclient" method="post" action="#" onsubmit="return false;">
+	<input type="submit" onClick="javascript:callFormUpdate('addkerbclient','/kerberos/computer/linkcomputertoservice');
+		return false;" value="Subscribe Computer to Kerberos Service" />
+	<input type="hidden" name="process" value="1" />
+	<input type="hidden" name="operate_dn" value="<?php echo $this->obj->getdn(); ?>" />
+	<input type="hidden" name="service_dn" value="<?php echo $this->service->getdn(); ?>" />
+	</form>
+	</p>
+
+</div>

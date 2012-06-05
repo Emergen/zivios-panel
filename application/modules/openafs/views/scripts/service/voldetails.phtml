@@ -1,0 +1,327 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		mod_openafs
+ * @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ * @version		$Id: voldetails.phtml 919 2008-08-25 11:45:23Z fkhan $
+ * @lastchangeddate $LastChangedDate: 2008-08-25 17:45:23 +0600 (Mon, 25 Aug 2008) $
+ **/
+
+?>
+
+<?php
+/**
+ * Mountpoints for the volume in question are retrieved and setup in an array
+ * which separately holds the mountpoint type (rw or ro).
+ */
+$this->mountPoints = array();
+
+if ($mps = $this->volEntry->getProperty("emsafsvolmountpoint")) {
+	if (!is_array($mps)) {
+		$mpd = explode(':', $mps);
+		$this->mountPoints = array($mpd[0] => $mpd[1]);
+	} else {
+		$mountPoint = array();
+		foreach ($mps as $mp) {
+			$mpd = explode(':', $mp);
+			$this->mountPoints[$mpd[0]] = $mpd[1];
+		}
+	}
+} else {
+	/**
+	 * Set as empty array.
+	 */
+	$this->mountPoints = array();
+}
+?>
+
+<style type="text/css">
+.voltable {
+	width: auto;
+	max-height: 800px;
+	height: auto;
+	border: 0px;
+	overflow: auto;
+	margin: 0px;
+	max-width: 650px;
+}
+
+table.afsvols {
+	font: 10px/22px Verdana, Arial, Helvetica, sans-serif;
+	width: 650px;
+	background-color: #fafafa;
+	border: 1px #ccc solid;
+	border-collapse: collapse;
+	border-spacing: 2px;
+	height: 400px;
+}
+
+table.volmenu {
+	font: 10px/22px Verdana, Arial, Helvetica, sans-serif;
+	width: 150px;
+	border: 0px;
+}
+
+table.volmenu td {
+	border-bottom: 1px solid #ccc;
+	font: 10px/22px Verdana, Arial, Helvetica, sans-serif;
+	color: #000;
+	background-color: #f5f5f5;
+	text-align: left;
+	padding: 2px;
+}
+
+table.afsvols td.header {
+	border-bottom: 2px solid #ccc;
+	border-left: 1px solid #ccc;
+	background-color: #e5e5e5;
+	text-align: left;
+	font: 10px/22px Verdana, Arial, Helvetica, sans-serif;
+	color: #666;
+	padding: 4px;
+}
+
+table.afsvols td.sheader {
+	border-left: 1px solid #ccc;
+	background-color: #e5e5e5;
+	text-align: left;
+	font: 10px/22px Verdana, Arial, Helvetica, sans-serif;
+	color: #666;
+	padding: 4px;
+	font-weight: bold;
+}
+
+table.afsvols td {
+	border-bottom: 1px solid #ccc;
+	font: 10px/22px Verdana, Arial, Helvetica, sans-serif;
+	color: #000;
+	background-color: #f5f5f5;
+	text-align: left;
+	padding: 2px;
+}
+
+table.afsvols td.volmenu {
+	border-left: 1px solid #ccc;
+	background-color: #fff;
+	text-align: left;
+	font: 10px/22px Verdana, Arial, Helvetica, sans-serif;
+	color: #000;
+	width: 100px;
+}
+
+table.afsvols td.switch {
+	background-color: #e7e7e7;
+	border-left: 1px solid #ccc;
+}
+table.afsvols td.default {
+	border-left: 1px solid #ccc;
+}
+
+#voloptions {
+    position: absolute;
+    width: 490px;
+    padding: 0px;
+	z-index: 14;
+	background-color: #fff;
+	height: 350px;
+	overflow: auto;
+}
+
+#voldetails {
+    position: absolute;
+    width: 490px;
+    padding: 0px;
+	z-index: 13;
+	background-color: #fff;
+	height: 350px;
+	overflow: auto;
+}
+
+</style>
+<br />
+<div id="afsvoldetails">
+<table class="afsvols">
+<tr>
+	<td colspan="2" class="header">&laquo; <a href="#" onClick="javascript:callAfsAction('/openafs/server/listvolumes/', 'pgupdate');">Back to Volume Listing</a></td>
+</tr>
+<tr>
+	<td class="volmenu" valign="top" rowspan="2">
+
+	<table border="0" class="volmenu">
+	<tr>
+		<td colspan="2">Volume Menu</td>
+	</tr>
+	<tr>
+		<td></td><td><a href="#" onclick="javascript:viewOption('editquota');">Edit Quota</a></td>
+	</tr>
+	<tr>
+		<td></td><td><a href="#" onclick="javascript:viewOption('setmountpoint');">Edit Mountpoints</a></td>
+	</tr>
+	<tr>
+		<td></td><td><a href="#" onclick="javascript:viewOption('migratevol');">Migrate Volume</a></td>
+	</tr>
+	<tr>
+		<td></td><td><a href="#" onclick="javascript:viewOption('addreplica');">Add Replica Site</a></td>
+	</tr>
+	<tr>
+		<td></td><td><a href="#" onclick="javascript:viewOption('viewreplica');">View Replica Sites</a></td>
+	</tr>
+	<tr>
+		<td></td><td><a href="#" onclick="javascript:viewOption('salvagevol');">Salvage Volume</td>
+	</tr>
+	<tr>
+		<td><img align="bottom" src="<?php echo $this->imgBase; ?>/icons/lock2.gif"></td>
+		<td><a href="#" onclick="javascript:viewOption('lockvol');">Lock Volume</a><br /></td>
+	</tr>
+	<tr>
+		<td></td><td><a href="#" onclick="javascript:viewOption('releasevol');">Release Volume</a></td>
+	</tr>
+	<tr>
+		<td><img align="bottom" src="<?php echo $this->imgBase; ?>/icons/caution.png"></td>
+		<td><a href="#" onclick="javascript:viewOption('deletevol');">Delete Volume</a></td>
+	</tr>
+	</table>
+	</td>
+</tr>
+<tr>
+	<td valign="top">
+	<div id="voloptions" style="display:none;">
+		<!-- Edit Quota -->
+		<div class="afsvolopts" id="editquota" style="display: none;">
+			<?php echo $this->render("server/editvolquota.phtml"); ?>
+		</div>
+		<!-- End Edit Quota -->
+
+		<!-- Set Mount Point -->
+		<div class="afsvolopts" id="setmountpoint" style="display: none;">
+			<?php echo $this->render("server/volmountpoints.phtml"); ?>
+		</div>
+		<!-- End Set Mountpoint-->
+		<div class="afsvolopts" id="migratevol" style="display: none;">Migrate Volume</div>
+		<div class="afsvolopts" id="addreplica" style="display: none;">Add Replica</div>
+		<div class="afsvolopts" id="viewreplica" style="display: none;">View Replica Sites</div>
+		<div class="afsvolopts" id="salvagevol" style="display: none;">Salvage Volume</div>
+		<div class="afsvolopts" id="lockvol" style="display: none;">Lock Volume</div>
+		<div class="afsvolopts" id="unlockvol" style="display: none;">Unlock Volume</div>
+		<div class="afsvolopts" id="releasevol" style="display: none;">Release Volume</div>
+		<div class="afsvolopts" id="deletevol" style="display: none;">
+			<?php echo $this->render("server/deletevolume.phtml"); ?>
+		</div>
+
+		<hr size="1" />
+		<a href="#" onclick="javascript:closeOption();">[x]</a> Close
+	</div>
+
+	<div id="voldetails">
+	<table width="100%" border="0" cellpadding="0" cellspacing="0">
+		<tr>
+			<td class="switch">ID</td>
+			<td class="switch"><?php echo $this->volEntry->getProperty("emsafsvolid"); ?></td>
+		</tr>
+		<tr>
+			<td class="default">Name</td>
+			<td class="default"><?php echo $this->volEntry->getProperty("emsafsvolname"); ?></td>
+		</tr>
+		<tr>
+			<td class="switch">Mount Point</td>
+			<td class="switch"><?php
+			if (!empty($this->mountPoints)) {
+				foreach ($this->mountPoints as $mountPoint => $mpt) {
+					echo "(" . $mpt . ") " . $mountPoint . "<br />";
+				}
+			} else {
+				echo "No Mountpoint Set";
+			} ?></td>
+		</tr>
+		<tr>
+			<td class="default">Server</td>
+			<td class="default"><?php echo $this->volEntry->getProperty("emsafsvollocation"); ?></td>
+		</tr>
+		<tr>
+			<td class="switch">Partition</td>
+			<td class="switch"><?php echo $this->volEntry->getProperty("emsafsvolpartition"); ?></td>
+		</tr>
+		<tr>
+			<td class="default">Maximum Quota</td>
+			<td class="default"><?php echo Ecl_Util::formatSize(($this->volEntry->getProperty('emsafsvolmaxquota') * 1024), null, '%01.0f (%s)', true); ?></td>
+		</tr>
+		<tr>
+			<td class="switch">Status</td>
+			<td class="switch"><?php echo $this->volEntry->getProperty("emsafsvolstatus"); ?></td>
+		</tr>
+		<tr>
+			<td class="default">Type</td>
+			<td class="default"><?php echo $this->volEntry->getProperty("emsafsvoltype"); ?></td>
+		</tr>
+		<tr>
+			<td class="switch">Creation Date</td>
+			<td class="switch"><?php echo $this->volEntry->getProperty("emsafsvolcreationdate"); ?></td>
+		</tr>
+		<tr>
+			<td class="default">File Count</td>
+			<td class="default"><?php echo $this->volEntry->getProperty("emsafsvolfilecount"); ?></td>
+		</tr>
+		<tr>
+			<td class="switch">Disk Used</td>
+			<td class="switch"><?php echo Ecl_Util::formatSize(($this->volEntry->getProperty('emsafsvoldiskused') * 1024), null, '%01.0f (%s)', true); ?></td>
+		</tr>
+		<tr>
+			<td class="default">Requires Salvage?</td>
+			<td class="default"><?php echo $this->volEntry->getProperty("emsafsvolneedssalvage"); ?></td>
+		</tr>
+		<tr>
+			<td class="switch">In Use?</td>
+			<td class="switch"><?php echo $this->volEntry->getProperty("emsafsvolinuse"); ?></td>
+		</tr>
+	</table>
+	</div>
+	</td>
+</tr>
+</table>
+</div>
+
+<script language="javascript">
+viewOption = function (div)
+{
+	/**
+	 * Close view of all option divs.
+	 */
+
+	var vdiv = document.getElementById("voloptions");
+
+	$$('div.afsvolopts').each(Element.hide);
+	/**
+	 * Display the primary option div and the sub-option div.
+	 */
+	if (vdiv.style.display == "none" || vdiv.style.display == "") {
+		Effect.SlideDown(vdiv, {duration:0.5});
+	}
+
+	Element.show(div);
+
+}
+
+closeOption = function ()
+{
+	var vdiv = document.getElementById("voloptions");
+	Effect.SlideUp(vdiv, {duration:0.5});
+	$$('div.afsvolopts').each(Element.hide);
+}
+</script>

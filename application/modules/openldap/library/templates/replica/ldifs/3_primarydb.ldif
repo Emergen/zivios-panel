@@ -1,0 +1,100 @@
+# Consumer backend DB
+dn: olcDatabase=hdb,cn=config
+objectClass: olcDatabaseConfig
+objectClass: olcHdbConfig
+olcDatabase: {1}hdb
+olcSuffix: %%%BASE_DN%%%
+olcRootDn: cn=admin,%%%BASE_DN%%%
+olcDbDirectory: %%%DATA_DIR%%%
+olcDbConfig: set_cachesize 0 2097152 0
+olcDbConfig: set_lk_max_objects 1500
+olcDbConfig: set_lk_max_locks 1500
+olcDbConfig: set_lk_max_lockers 1500
+olcLastMod: TRUE
+olcSyncrepl: rid=%%%RID%%% provider=ldap://%%%MASTER_SERVER%%%:389 bindmethod=simpl
+ e timeout=0 network-timeout=0 binddn="%%%REPLICA_USERDN%%%" credent
+ ials="%%%REPL_PASS%%%" filter="(objectclass=*)" searchbase="%%%BASE_DN%%%" logfilter="(&(objectCl
+ ass=auditWriteObject)(reqResult=0))" logbase="cn=accesslog" scope=sub schemachecking=o
+ n type=refreshAndPersist retry="60 +" syncdata=accesslog starttls=no
+olcUpdateRef: ldap://%%%MASTER_SERVER%%%
+olcDbCheckpoint: 512 30
+olcDbIndex: objectClass eq
+olcDbIndex: entryUUID eq
+olcDbIndex: cn pres,eq,subinitial
+olcDbIndex: uid pres,eq
+olcDbIndex: uidNumber eq
+olcDbIndex: gidNumber eq
+olcDbIndex: mail pres,eq
+olcAccess: to attrs=userPassword,shadowLastChange
+  by dn="%%%REPLICA_USERDN%%%" write
+  by sockurl.regex="^ldapi:///$" read
+  by anonymous auth
+olcAccess: to attrs=krb5PrincipalName
+  by dn="%%%REPLICA_USERDN%%%" write
+  by sockurl.regex="^ldapi:///$" read
+  by anonymous auth
+olcAccess: to attrs=krb5KeyVersionNumber,krb5PrincipalRealm,krb5EncryptionType,krb5KDCFlags,krb5Key,krb5MaxLife,krb5MaxRenew,krb5PasswordEnd,krb5ValidEnd,krb5ValidStart,krb5RealmName
+  by dn="%%%REPLICA_USERDN%%%" write
+  by sockurl.regex="^ldapi:///$" read
+  by * none
+olcAccess: to dn.base="" by * read
+olcAccess: to *
+  by dn="%%%REPLICA_USERDN%%%" write
+  by sockurl.regex="^ldapi:///$" read
+  by * read
+
+# syncprov overlay
+dn: olcOverlay=syncprov,olcDatabase={1}hdb,cn=config
+objectClass: olcOverlayConfig
+objectClass: olcSyncProvConfig
+olcOverlay: syncprov
+
+# smbk5pwd overlay
+dn: olcOverlay=smbk5pwd,olcDatabase={1}hdb,cn=config
+objectClass: olcOverlayConfig
+objectClass: olcSmbK5PwdConfig
+olcOverlay: smbk5pwd
+
+# memberof overlay
+dn: olcOverlay=memberof,olcDatabase={1}hdb,cn=config
+objectclass: olcOverlayConfig
+objectclass: olcMemberof
+olcOverlay: memberof 
+
+# unique overlay
+dn: olcOverlay=unique,olcDatabase={1}hdb,cn=config
+objectClass: olcOverlayConfig
+objectClass: olcUniqueConfig
+olcOverlay: unique
+olcUniqueAttribute: uid
+olcUniqueAttribute: uidNumber
+olcUniqueAttribute: mail
+
+#ppolicy overly
+dn: olcOverlay=ppolicy,olcDatabase={1}hdb,cn=config
+objectClass: olcOverlayConfig
+objectClass: olcPPolicyConfig
+olcOverlay: ppolicy
+olcPPolicyUseLockout: TRUE
+olcPPolicyForwardUpdates: TRUE
+olcPPolicyDefault: cn=default,ou=policies,%%%BASE_DN%%%
+olcPPolicyHashCleartext: TRUE
+
+dn: olcOverlay={0}chain,olcDatabase={-1}frontend,cn=config
+objectClass: olcOverlayConfig
+objectClass: olcChainConfig
+olcOverlay: {0}chain
+olcChainReturnError: TRUE
+
+dn: olcDatabase={0}ldap,olcOverlay={0}chain,olcDatabase={-1}frontend,cn=config
+objectClass: olcLDAPConfig
+objectClass: olcChainDatabase
+olcDbURI: ldap://%%%MASTER_SERVER%%%
+olcDatabase: {0}ldap
+olcDbIDAssertBind: 
+  bindmethod="simple"
+  binddn="%%%CHAIN_DN%%%"
+  credentials=%%%CHAIN_PASS%%%
+  mode=self
+olcDbIDAssertAuthzFrom: "dn.regex:.*"
+olcDbStartTLS: start

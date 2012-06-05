@@ -1,0 +1,49 @@
+dn: cn=zivios-samba,cn=schema,cn=config
+objectClass: olcSchemaConfig
+cn: zivios-samba
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.3.1 NAME 'emssambacfgnetbios
+ name' DESC 'Samba CFG NETBIOS Name' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.3.2 NAME 'emssambacfglogleve
+ l' DESC 'Samba CFG' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.3.3 NAME 'emssambacfgtimeser
+ ver' DESC 'Samba CFG Time Server' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.3.4  NAME 'emssambacfgwinssu
+ pport' DESC 'Samba CFG WINS Support' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.3.5 NAME 'emssambacfgldapbas
+ e' DESC 'Samba CFG Ldap Base' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.3.6 NAME 'emssambacfgldapadm
+ indn' DESC 'Samba CFG Ldap Admin DN' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.3.7 NAME 'emssambacfgnetlogo
+ npath' DESC 'Samba CFG Net Logon Path' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.3.8 NAME 'emssambacfgprofile
+ path' DESC 'Samba CFG Profile Path' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.3.9 NAME 'emssharepath' DESC
+  'Samba Share CFG Share Path' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.3.10 NAME 'emssharecfgcommen
+ t' DESC 'Samba CFG Share Comment' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.3.11 NAME 'emssharecfgbrows
+ eable' DESC 'Samba CFG Browseable' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.3.12 NAME 'emssharecfgwrite
+ able' DESC 'Samba CFG Share Writeable' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.3.13 NAME 'emssharecfgcreat
+ emask' DESC 'Samba CFG Share Create mask' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.3.14 NAME 'emssharecfgdirma
+ sk' DESC 'Samba CFG Share Dirk Mask' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.3.15 NAME 'emssharecfgvalid
+ users' DESC 'Samba CFG Share Valid Users' SUP name )
+olcAttributeTypes: (1.3.6.1.4.1.31267.1.3.1.3.16 NAME 'emssharecfgreadon
+ ly' DESC 'Samba CFG Read Only' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.3.17 NAME 'emssharecfgguest
+ ok' DESC 'Samba CFG share guest ok' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.3.18 NAME 'emssambacfgldaps
+ erver' DESC ' Samba Home Ldap Server' sup name)
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.3.2.3.1 NAME 'emssambaservice' DESC 
+ 'EMS Samba Service' SUP emsservice AUXILIARY MAY ( emssambacfgnetbiosname $
+ emssambacfgloglevel $ emssambacfgtimeserver $ emssambacfgwinssupport $ emss
+ ambacfgldapbase $ emssambacfgldapadmindn $ emssambacfgnetlogonpath $ emssam
+ bacfgprofilepath $ emssambacfgldapserver $ uidnumber $ gidnumber) )
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.3.2.3.2 NAME 'emssambashare' DESC
+  'EMS Samba Share' SUP emsobject AUXILIARY MUST emssharepath MAY ( emsshare
+ cfgcomment $ emssharecfgbrowseable $ emssharecfgwriteable $ emssharecfgcrea
+ temask $ emssharecfgdirmask $ emssharecfgvalidusers $ emssharecfgreadonly $
+  emssharecfgguestok ) )

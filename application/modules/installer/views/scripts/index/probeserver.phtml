@@ -1,0 +1,118 @@
+<?php
+/**
+ * Copyright (c) 2008-2010 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		ZiviosInstaller
+ * @copyright	Copyright (c) 2008-2010 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ **/
+?>
+
+<div class="heading">System Probe Results</div>
+
+<div class="content">
+<?php
+if ($this->probeResults['osDetails']['distroSupported'] == true && 
+    $this->probeResults['osDetails']['releaseSupported'] == true) {
+    ?>
+    Your operating system and hardware are <span class="green bold">compatible with Zivios</span>. To continue, please click
+    on the &quot;Proceed with Database Setup&quot; button below. Information regarding your current server configuration is
+    displayed below. 
+    <br /><br />
+    <button dojoType="dijit.form.Button" type="button" style="margin-bottom: 5px;">
+        Proceed with Database Setup
+        <script type="dojo/method" event="onClick" args="evt">
+            installer.getxhr('/installer/index/initializedb', 'primaryContent', '', 'text', [], 
+            ['loadingmsg'], ['loadingmsg'], [''], true, false, this.id);
+        </script>
+    </button>
+    <?php
+} else {
+?>
+    Your operating system and/or hardware is <span class="red bold">incompatible with Zivios</span>. Please check the 
+    <a href="http://wiki.zivios.org" target="_blank">Zivios Wiki</a> for minimum hardware requirements as well as software dependencies.
+<?php
+}
+?>
+
+<div id="probeReport" style="border-top: 1px solid #ccc;">
+
+    <div style="float: left;">
+        <div class="rheading">Operating System Details:</div>
+        <div class="rlc">Operating System</div>
+        <div class="rrc" id="os"><?php echo $this->probeResults['osDetails']['os']; ?></div>
+
+        <div class="rlc">Distribution</div>
+        <div class="rrc" id="distro"><?php echo $this->probeResults['osDetails']['distro']; ?></div>
+
+        <div class="rlc">Release</div>
+        <div class="rrc" id="release"><?php echo $this->probeResults['osDetails']['release']; ?></div>
+
+        <div class="rlc">Codename</div>
+        <div class="rrc" id="codename"><?php echo $this->probeResults['osDetails']['codename']; ?></div>
+
+        <div class="rlc">Architecture</div>
+        <div class="rrc" id="arch"><?php echo $this->probeResults['localSysInfo']['arch']; ?></div>
+    </div>
+    
+    <div style="float: left; clear: right;">
+        <div class="rheading">System Details</div>
+        <div class="rlc">Total System Memory</div>
+        <div class="rrc" id="totalmemory"><?php echo $this->probeResults['localSysInfo']['memory']['totalMemory']; ?></div>
+
+        <div class="rlc">Free System Memory</div>
+        <div class="rrc" id="freememory"><?php echo $this->probeResults['localSysInfo']['memory']['freeMemory']; ?></div>
+   
+        <div class="rlc">Total Swap Memory</div>
+        <div class="rrc" id="totalswap"><?php echo $this->probeResults['localSysInfo']['memory']['totalSwap']; ?></div>
+
+        <div class="rlc">Free Swap Memory</div>
+        <div class="rrc" id="freeswap"><?php echo $this->probeResults['localSysInfo']['memory']['freeSwap']; ?></div>
+    </div>
+
+    <div style="float: left; clear: left; padding-top: 10px;">
+        <div class="rheading">Zivios Installation Details</div>
+        <div class="rlc">Master Zivios Server</div>
+        <div class="rrc" id="zhost"><?php echo $this->probeResults['localSysInfo']['hostname']; ?></div>
+    
+        <div class="rlc">Master Server IP</div>
+        <div class="rrc" id="zip"><?php echo $this->probeResults['localSysInfo']['ip']; ?></div>
+
+        <div class="rlc">Kerberos Realm</div>
+        <div class="rrc" id="krb5realm"><?php echo $this->probeResults['localSysInfo']['krb5realm']; ?></div>
+
+        <div class="rlc">KDC Hostname</div>
+        <div class="rrc" id="kdchost"><?php echo $this->probeResults['localSysInfo']['kdchost']; ?></div>
+
+        <div class="rlc">Directory Base DN</div>
+        <div class="rrc" id="basedn"><?php echo $this->probeResults['localSysInfo']['basedn']; ?></div>
+
+    </div>
+
+    <div style="float: left; clear: right; margin-top: 24px; margin-left: 20px;">
+        <div class="info" style="width: 200px;">
+            Please <b>ensure that all system details appear correctly</b>. You cannot change any of detected
+            defaults at a later stage. 
+            <br/><br/>
+        </div>
+    </div>
+   
+    <div style="clear: both; padding-top: 10px;">
+
+</div>
+

@@ -1,0 +1,87 @@
+<div style="height: 500px; overflow: auto; ">
+<div class="info">
+The following table displays transactions in reverse order of execution. Most recent transactions are displayed first
+</div>
+<table class="general" align="center">
+<th>Id</th>
+<th>User</th>
+<th>Description</th>
+<th>Created Time</th>
+<th>Start Time</th>
+<th>Stop Time</th>
+<th>Status</th>
+<th>Action</th>
+<?php
+    foreach ($this->trans as $tr) {
+        $user = Zivios_Ldap_Cache::loadDn($tr->init_user);
+        $username = $user->getProperty('cn');
+        $createtime = $tr->created_ts->toString('EEE MMM d H:mm');
+        $starttime = $tr->start_ts->toString('EEE MMM d H:mm');
+        $stoptime = $tr->stop_ts->toString('EEE MMM d H:mm');
+        ?>
+        <tr>
+        <td><?php echo $tr->id;?></td>
+        <td><?php echo $username;?></td>
+        <td><?php echo $tr->description;?></td>
+        <td><?php echo $createtime;?></td>
+        <td><?php echo $starttime;?></td>
+        <td><?php echo $stoptime;?></td>
+        <td><?php echo $tr->status;?></td>
+        <td><button dojoType="dijit.form.Button">Details
+            <script type="dojo/method" event="onClick">
+                zivios.loadApp('/transaction/transdetail/id/<?php echo $tr->id;?>','transsrvtabs01','transdetail<?php echo $tr->id;?>','Transaction #<?php echo $tr->id;?>');
+            </script>
+        </button></td>
+        </tr>
+        <?php
+    }
+    ?>
+</table>
+
+
+</div>
+<div style="height: 20px; margin-top: 10px; text-align: center">
+Page <b><?php echo $this->page;?></b> of <b><?php echo $this->maxpage;?></b>
+</div>
+
+<div style="height: 50px; margin-top: 20px;">
+
+<?php
+$prevdisabled = "false";
+$nextdisabled = "false";
+
+if ($this->page == 0) 
+    $prevdisabled = "true";
+
+if ($this->page == $this->maxpage)
+    $nextdisabled = "true";
+?>
+    <div class="floatleft">
+      <button dojoType="dijit.form.Button" disabled="<?php echo $prevdisabled;?>">Prev
+        <script type="dojo/method" event="onClick">
+            zivios.cpaneRefresh('transmaintab','/transaction/transactionlist/page/<?php echo $this->page - 1;?>');
+        </script>
+      </button>
+      <button dojoType="dijit.form.Button" disabled="<?php echo $nextdisabled;?>">Next
+        <script type="dojo/method" event="onClick">
+            zivios.cpaneRefresh('transmaintab','/transaction/transactionlist/page/<?php echo $this->page + 1;?>');
+        </script>
+      </button>
+    </div>
+    <div class="floatleft">
+    Jump to Page: <input dojoType="dijit.form.TextBox" id="jumptopage" />
+    <button dojoType="dijit.form.Button">Jump!
+        <script type="dojo/method" event="onClick">
+            zivios.cpaneRefresh('transmaintab','/transaction/transactionlist/page/'+dojo.byId('jumptopage').value);
+        </script>
+      </button>
+    </div>
+    <div class="floatleft">
+    <button dojoType="dijit.form.Button">Refresh This Page
+        <script type="dojo/method" event="onClick">
+            zivios.cpaneRefresh('transmaintab','/transaction/transactionlist/page/<?php echo $this->page;?>');
+        </script>
+      </button>
+    </div>
+    <div class="clearboth"> </div>
+</div>

@@ -1,0 +1,71 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     mod_kerberos
+ * @copyright   Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+
+ 
+$formid   = Zivios_Util::randomString(8);
+$regexLib = Zivios_Util::getRegexLibrary();
+$service = $this->service;
+
+$policies = $service->getProperty('emskrbpasspolicies',1);
+if (in_array('external-check',$policies))
+	$polcheck = 'true';
+else 
+	$polcheck = 'false';
+	
+?>
+
+<div class="subheading">Kerberos Password Policies System Wide</div>
+<div class="content">
+    <form id='<?php echo $formid; ?>' enctype="application/x-www-form-urlencoded" method="post" 
+        action="#" dojoType="dijit.form.Form">
+    
+     
+    <div class="labell">Password Max Age (days): </div>
+
+    <input dojoType="dijit.form.NumberSpinner" value="<?php echo $service->getProperty('emskrbpasslifedays');?>" smallDelta="1" style="width: 100px;" required="false"
+        constraints="{min:0,max:300,places:0}" name="krb[op_digits_passlife_Kerberos+Password+Max+Age]" class="genField" />
+    <div class="cboth"></div>
+
+         
+    <div class="labell">Password Min Length: </div>
+
+    <input dojoType="dijit.form.NumberSpinner" value="<?php echo $service->getProperty('emskrbpassminlength');?>" smallDelta="1" style="width: 100px;" required="false"
+        constraints="{min:3,max:20,places:0}" name="krb[op_digits_minlength_Kerberos+Password+Max+Age]" class="genField" />
+    <div class="cboth"></div>
+    
+    <div class="labell">Password Policy Check: </div>
+    <input dojoType="dijit.form.CheckBox" value="1" checked="<?php echo $polcheck;?>" name="krb[op_noval_pwexternal_PWE]" class="genField"/>
+    <div class="cboth"></div>
+    
+    <br />
+    <div class="labell"></div>
+    <input onclick="zivios.postxhr('/kerberos/service/dopasswdconfig', '', '<?php echo $formid; ?>',
+        'form', 'json', [], [], [], [], this.id); return false;" 
+        name="inica" value="Apply" 
+        type="submit" label="Apply" dojoType="dijit.form.Button"/>
+    <div class="cboth"></div>
+
+    <input type="hidden" name="krb[rq_noval_dn_dn]" value="<?php echo $service->getdn();?>"/>
+    </form>
+</div>

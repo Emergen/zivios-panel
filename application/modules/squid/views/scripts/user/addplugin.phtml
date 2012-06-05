@@ -1,0 +1,36 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		Zivios
+ * @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ **/
+?>
+<p class="headline">Zivios Squid User</p>
+
+<div class="info infocl" style="width: 650px;">
+Zivios Squid is not yet enabled for user <b><?php echo $this->entry->getProperty('cn'); ?></b>.
+To enable the plugin, simply click on the &quot;<b>Activate Now</b>&quot; button below.
+</div>
+<button dojoType="dijit.form.Button" id="actsquiduserplugin">Activate now
+    <script type="dojo/method" event="onClick">
+    zivios.callAction('/squid/user/doaddplugin',{dn: '<?php echo urlencode($this->entry->getdn()); 
+    ?>'},'actsquiduserplugin');
+    </script>
+</button>

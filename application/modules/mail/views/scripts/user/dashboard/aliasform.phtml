@@ -1,0 +1,57 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		Zivios
+ * @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ **/
+$regex = Zivios_Regex::loadLibrary();
+$service = $this->mailuser->getService();
+$maildomains = $service->getProperty('emsmaildomains',1);
+?>
+<div class="note"> You can add a new email to the Alias list below </div>
+
+<form action="#" method="post" id="addaliasform" dojoType="dijit.form.Form" onsubmit="return false;">
+    <input type="hidden" name="dn" value="<?php echo $this->dn;?>"/>
+    <input type="hidden" name="changeaction" value="add"/>
+    
+    <div style="padding: 0px; margin: 0px; width:350px; float: left;">
+        <Label for="acl"><B>New Alias: </b> </label>
+        <input type="text" dojoType="dijit.form.ValidationTextBox" name="alias" id="alias" 
+        regExp="^[a-zA-Z0-9\.]+$" required="true" invalidMessage="Invalid Email" style="width: 100px;">
+        @ <select dojoType="dijit.form.FilteringSelect" name="aliasdomain" style="width: 120px;">
+        <?php
+        foreach ($maildomains as $domain) {
+            ?>
+            <option value="<?php echo $domain;?>"><?php echo $domain;?></option>
+            <?php
+        }
+        ?>
+            </select>
+    </div>
+    
+    <div style="width: 40px; float: left; padding: 0px; margin: 0px;">
+    <button id="addaliasform-submit" dojoType="dijit.form.Button" label="Add">
+        <script type="dojo/method" event="onClick"> 
+            zivios.formXhrPost('addaliasform', '/mail/user/dochangealiases');
+        </script>
+    </button>   
+    </div>
+    <div style="clear: both;"></div>
+</form>

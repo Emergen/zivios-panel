@@ -1,0 +1,41 @@
+dn: cn=zivios-squid,cn=schema,cn=config
+objectClass: olcSchemaConfig
+cn: zivios-squid
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.4.1 NAME 'emssquidblacklist'
+  DESC 'Squid Black List' SUP name)
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.4.2 NAME 'emssquiddelaypool'
+  DESC 'Squid Delay Pool' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.4.3 NAME 'emssquidactive' DE
+ SC 'Squid Service Status' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.4.4 NAME 'emssquidtimeofday'
+  DESC 'Squid Time Based Control' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.4.5 NAME 'emssquidwhitelist'
+  DESC 'Squid White List' SUP name)
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.4.6 NAME 'emssquidport' DESC
+  'Squid Port' SUP emsdescription)
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.4.7 NAME 'emssquidhostname'
+ DESC 'Squid Hostname' SUP emsdescription)
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.4.8 NAME 'emssquidcachemem'
+ DESC 'Squid Cache Memory' SUP emsdescription)
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.4.9 NAME 'emssquidvisiblehost'
+ DESC 'Squid Visible Hostname' SUP emsdescription)
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.4.10 NAME 'emssquiddebuglevel'
+ DESC 'Squid Debug Level' SUP emsdescription)
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.4.11 NAME 'emssquidcachepool'
+ DESC 'Squid Cache Pool' SUP name)
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.4.12 NAME 'emssquidaclsactive'
+ DESC 'Squid ACL Status' SUP emsdescription)
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.4.13 NAME 'emssquidtrustednetworks'
+ DESC 'Squid Trusted Networks' SUP name)
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.4.14 NAME 'emssquidenablemembers'
+ DESC 'Squid Members Enabled' SUP emsdescription)
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.3.2.4.1 NAME 'emssquidservice' DESC
+ 'Squid Service Object' SUP emsservice AUXILIARY MAY (emssquidport $ emssqui
+ dhostname $ emssquidvisiblehost $ emssquidcachemem $ emssquiddebuglevel $ e
+ mssquidcachepool $ emssquidaclsactive $ emssquidtrustednetworks ))
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.3.2.4.2 NAME 'emssquiduser' DESC 'S
+ quid User Object' SUP emsSecurityObject AUXILIARY MUST emssquidactive MAY (
+ emssquidblacklist $ emssquidwhitelist $ emssquidtimeofday ) )
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.3.2.4.3 NAME 'emssquidgroup' DESC 'S
+ quid Group Object' SUP emsSecurityObject AUXILIARY MUST emssquidactive MAY (
+ emssquidblacklist $ emssquidwhitelist $ emssquidtimeofday $ emssquidenablemembers ))

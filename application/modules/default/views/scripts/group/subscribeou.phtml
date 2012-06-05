@@ -1,0 +1,50 @@
+<?php
+/**
+ * Copyright (c) 2008-2010 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		Zivios
+ * @copyright	Copyright (c) 2008-2010 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ **/
+
+// start border layout container for group entry.
+$this->borderContainer()->captureStart('groupentry', array('design' => 'headline', 
+    'style' => 'width: 100%; padding: 0px; margin: 0px; border: 0px;'));
+
+// Content pane for group toolbar
+$this->contentPane()->captureStart('gtb01', array('region' => 'top', 'style' => 'width: 100%; 
+    padding: 0px; margin: 0px; border: 0px;'));
+   
+$this->render('group/toolbar/empty.phtml');
+
+echo $this->contentPane()->captureEnd('gtb01');
+// Content pane for Zivios group toolbar ends above.
+
+$this->contentPane()->captureStart('groupdata', array('region' => 'center', 'style' =>'width: 100%; padding: 0px; margin: 0px; border: 0px;'));
+$this->tabContainer()->captureStart('grouptabs', array('class' => 'u-tab'));
+
+$this->contentPane()->captureStart('groupfirst', array('region' => 'center', 'style' => 'width: 100%; 
+    padding: 0px; margin: 0px; border: 0px;', 'title' => 'Delete Group'));
+echo $this->render('group/subscribeou/main.phtml');
+echo $this->contentPane()->captureEnd('groupfirst');
+
+echo $this->tabContainer()->captureEnd('grouptabs');
+
+echo $this->contentPane()->captureEnd('groupdata');
+// End border container layout
+echo $this->borderContainer()->captureEnd('groupentry');

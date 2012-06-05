@@ -1,0 +1,146 @@
+
+<?php
+/**
+ * Copyright (c) 2008-2010 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		Zivios
+ * @copyright	Copyright (c) 2008-2010 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ **/
+$formid   = Zivios_Util::randomString(8);
+$ranPass  = Zivios_Util::randomString(8);
+$regexLib = Zivios_Util::getRegexLibrary();
+?>
+<div dojoType="dijit.layout.TabContainer" id="tc_addzvreplica" class="u-tab">
+    <div id="cp_addzvreplica" dojoType="dijit.layout.ContentPane" title="Add Zivios Replica" 
+        selected="true" style="width: 100%; padding: 0px; margin: 0px; border: 0px;">
+
+        <div id="addreplicadata" style="display: block;">
+            <div class="heading">Adding a Zivios Replica</div>
+
+            <div class="content">
+                <div class="info infocl">
+                    A Zivios replica will add the following services in the selected container: 
+                    <ul>
+                        <li/> Zivios Directory
+                        <li/> Zivios Kerberos
+                        <li/> Zivios DNS
+                    </ul>
+                    Server and Desktop add operations after Zivios replica setup will allow for service 
+                    subscription to replica servers, allowing load balancing, high availability as well
+                    as distributed authentication to Zivios services. 
+                    <br /><br />
+                    For additional information regarding Zivios Replica Services, please consult
+                    the <a href="http://wiki.zivios.org" target="_blank">Zivios Wiki</a>.
+                </div>
+            </div>
+
+            <div class="subheading">Zivios Replica Services Setup</div>
+            <div class="content">
+                <div class="note notecl" style="width: 500px;">
+                    Parent DN: <?php echo $this->parentdn; ?>
+                </div>
+
+                <form id='<?php echo $formid; ?>' enctype="application/x-www-form-urlencoded" method="post" 
+                    action="#" dojoType="dijit.form.Form">
+
+                <div class="zflabel" style="width: 150px;">Select Server: </div>
+                <div class="zflabel">
+                    <select dojoType="dijit.form.FilteringSelect" name="zvreplicadata[rq_dn_compatSystems_Compatible+Systems_enc]" 
+                        style="width: 230px;">
+                    <?php
+                    $c = 0;
+                    foreach ($this->compatibleSystems as $dn => $compatSystem) {
+                    if ($c == 0) {
+                        $selected = ' selected';
+                        $c++;
+                    } else {
+                        $selected = '';
+                    }
+
+                    echo '<option class="zfgenField" value="'.urlencode($dn).'" '.$selected.'>'  . $compatSystem . '</option>';
+                    }
+                    ?>
+                    </select>
+                </div>
+                <div class="cboth" style="margin-bottom: 10px;"></div>
+
+                <div class="info infocl">
+                    Please specify individual &quot;<b>Labels</b>&quot; for the services that will be initialized. Labels should be short and descriptive.
+                    For example, the primary Zivios Directory Service is labeled &quot;<b>Zivios Directory</b>&quot;. It is recommended that labels be
+                    unique. Note: when adding computers (servers or desktops) that qualify for compatible service subscription, the service hostname 
+                    will be provided alongside the label defined. 
+                    <br /><br />
+                    For additional information regarding service labels, please visit the <a href="http://wiki.zivios.org" target="_blank">Zivios Wiki</a>.
+                </div>
+
+                <div class="zflabel" style="width: 150px;">Zivios Directory Label: </div>
+                <input name="zvreplicadata[rq_alnumwithspaces_ldapcn_Directory+Service+Label]" type="text" dojoType="dijit.form.ValidationTextBox" 
+                    size="16" maxlength="22" regExp="<?php echo $regexLib->exp->alnumwithspaces; ?>" required="true" 
+                    invalidMessage="Invalid characters. Only alphabets, numbers and spaces are permitted." class="zfgenField" 
+                    value="" />
+                <div class="cboth"></div>
+
+                <div class="zflabel" style="width: 150px;">Zivios Kerberos Label: </div>
+                <input name="zvreplicadata[rq_alnumwithspaces_krbcn_Kerberos+Service+Label]" type="text" dojoType="dijit.form.ValidationTextBox" 
+                    size="16" maxlength="22" regExp="<?php echo $regexLib->exp->alnumwithspaces; ?>" required="true" 
+                    invalidMessage="Invalid characters. Only alphabets, numbers and spaces are permitted." class="zfgenField" 
+                    value="" />
+                <div class="cboth"></div>
+
+                <div class="zflabel" style="width: 150px;">Zivios DNS Label: </div>
+                <input name="zvreplicadata[rq_alnumwithspaces_dnscn_DNS+Service+Label]" type="text" dojoType="dijit.form.ValidationTextBox" 
+                    size="16" maxlength="22" regExp="<?php echo $regexLib->exp->alnumwithspaces; ?>" required="true" 
+                    invalidMessage="Invalid characters. Only alphabets, numbers and spaces are permitted." class="zfgenField" 
+                    value="" />
+                <div class="cboth"></div>
+
+                <div class="info infocl">Zivios will generate random passwords and propagate them to the service configuration files. All data is 
+                    transferred securely. It is recommended that you make a note of passwords (just in case!), or specify a password.
+                </div>
+       
+                <div class="zflabel" style="width: 150px;">Cn=Config Password: </div>
+                <input name="zvreplicadata[rq_password_cnpass_cnConfig+Password]" type="text" dojoType="dijit.form.ValidationTextBox" maxlength="64" 
+                    regExp="<?php echo $regexLib->exp->password; ?>" required="true"
+                    invalidMessage="Invalid password. Should be at least 3 characters." class="zfgenField"  value="<?php echo $ranPass; ?>"/>
+                <div class="cboth"></div>
+
+                <div class="zflabel" style="width: 150px;">&nbsp;</div>
+                <input onclick="zivios.postxhr('/default/zreplica/doaddziviosreplica', '', '<?php echo $formid; ?>',
+                    'form', 'json', [], [], [], [], this.id); return false;" 
+                    name="zvaddreplica" value="Initialize Replica Services" 
+                    type="submit" label="Initialize Replica Services" dojoType="dijit.form.Button"/>
+                <div class="cboth"></div>
+
+                <input type="hidden" name="zvreplicadata[rq_dn_dn_Distinguished+Name_enc]" value="<?php echo urlencode($this->parentdn); ?>"/>
+                </form>
+            </div>
+        </div>
+
+        <div style="display: none;" id="replicaaddsuccess">
+            <div class="heading">Zivios Replica Initialized Successfully</div>
+            <div class="content">
+            Zivios Replication has been initialized <span class="bold green">successfully</span>. Replica service entries should now appear in the target service container.
+            <br /><br/>
+            You may also view consolidated replication status by visiting the LDAP Replicas' section of the primary <b><a href="#" 
+                onclick="zivios.cpaneRefresh('dirdata', '/openldap/service/dashboard/dn/<?php echo $this->service->getdn(); ?>'); return false;">Zivios Directory Service</a></b>.
+            </div>
+        </div>
+    </div>
+</div>
+

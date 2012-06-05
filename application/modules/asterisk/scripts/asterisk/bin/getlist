@@ -1,0 +1,47 @@
+#!/usr/bin/perl -w
+#
+# Copyright (c) 2008 Zivios, LLC.
+#
+# This file is part of Zivios.
+#
+# Zivios is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Zivios is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+#
+# @package		Zivios
+# @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+# @license		http://www.zivios.org/legal/license
+# @version		$Id: addattendant 1019 2008-09-08 07:26:34Z gmustafa $
+#
+use lib "/opt/zivios/asterisk/lib";
+use Asterisk::config;
+use Getopt::Long;
+
+GetOptions ("name=s" => \$name, "type:s" => \$type);
+
+
+my $rc = new Asterisk::config(file=>'/etc/asterisk/'.$name.'.conf',keep_resource_array=>0);
+
+@list = $rc->fetch_sections_list();
+
+
+foreach (@list) {
+	if ($_ ne "general") {
+		if ($type ne "all") {
+			if ($_ =~ m/^$type+/) {
+				print $_ . "\n";
+			}
+		} else {
+			print $_ . "\n";
+		}
+	}
+}

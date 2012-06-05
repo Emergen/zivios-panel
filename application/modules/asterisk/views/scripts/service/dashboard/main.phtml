@@ -1,0 +1,80 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		Zivios
+ * @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ **/
+?>
+<div style="float: left; width: 50%; border-right: 1px solid #ccc;">
+<p class="headline">Asterisk Dashboard</p>
+<div style="width: 310px; padding-left: 10px; padding-top: 5px;">
+    <div class="floatleft" style="border-left: 1px solid #eee; border-top: 1px solid #eee; font-weight: normal; width: 110px;">Service Status:</div>
+    <div class="floatleft" style="border-top: 1px solid #eee;width: 180px; text-align: left;">
+        <?php
+            if ($this->dashboardData['status']) {
+                echo '<span style="color: green;font-weight: bold">Running</span>';
+                echo '&nbsp;&nbsp;<span>';
+                echo '<button dojoType="dijit.form.Button" id="stop_astservice">Stop now';
+                echo '     <script type="dojo/method" event="onClick">';
+                echo '        zivios.callAction("/asterisk/service/stopservice/dn/'.$this->dn.'", "","stop_astservice")';
+                echo '     </script>';
+                echo '</button>';
+                echo '</span>';
+            } else {
+                echo '<span style="color: red;font-weight: bold">Stopped</span>';
+                echo '&nbsp;&nbsp;<span>';
+                echo '<button dojoType="dijit.form.Button" id="start_astservice">Start now';
+                echo '     <script type="dojo/method" event="onClick">';
+                echo '        zivios.callAction("/asterisk/service/startservice/dn/'.$this->dn.'", "","start_astservice")';
+                echo '     </script>';
+                echo '</button>';
+                echo '</span>';
+            }
+        ?>
+    </div>
+    <div class="clear"></div>
+
+    <div class="floatleft" style="border-left: 1px solid #eee; font-weight: normal; width: 110px;">Server:</div>
+    <div class="floatleft" style="width: 180px; text-align: left; ">
+    <strong><?php echo $this->masterComputer;?></strong>
+    </div>
+    <div style="clear:both;"></div>
+</div>
+</div>
+&nbsp;
+<div style="float: left; width: 49%;">
+    <?php
+        if (!$this->dashboardData['status']) {
+            echo '<div class="alert" style="margin-left: 5px; margin-right: 5px;">';
+            echo "Asterisk Service at " . $this->masterComputer . " is down!";
+            echo '</div>';
+        } else {
+            echo '<div class="note" style="margin-left: 5px; margin-right: 5px;">';
+            echo "Asterisk Service at " . $this->masterComputer . " is up and running!";
+            echo '</div>';
+        }
+    ?>
+
+    <div class="info" style="margin-left: 5px; margin-right: 5px;">
+
+    Changing any parameter in Zivios Asterisk service will not effect untill <strong>Asterisk Service</strong> is not restarted manually, you can Stop and Start service from left or manully from command line.
+    </div>
+</div>
+<div style="clear: both;"></div>

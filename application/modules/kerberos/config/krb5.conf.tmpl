@@ -1,0 +1,21 @@
+[libdefaults]
+   ticket_lifetime = 86400
+   default_realm = %%%krb5realm%%%
+
+[appdefaults]
+        pkinit_anchors = FILE:/opt/zivios/ca/anchors/ZiviosCA.pem
+
+[realms]
+       %%%krb5realm%%% = {
+               kdc = %%%krb5kdcserver%%%:88
+               admin_server = %%%krb5kadminserver%%%:749
+               pkinit_require_eku = true
+               pkinit_require_krbtgt_otherName = true
+               win2k_pkinit = no
+               win2k_pkinit_require_binding = yes
+       }
+
+[domain_realm]
+       %%%domain%%% = %%%krb5realm%%%
+       .%%%domain%%% = %%%krb5realm%%%
+       

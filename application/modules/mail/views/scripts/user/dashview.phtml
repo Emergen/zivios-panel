@@ -1,0 +1,68 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		mod_mail
+ * @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ * @version		$Id: dashview.phtml 914 2008-08-25 11:31:06Z fkhan $
+ * @lastchangeddate $LastChangedDate: 2008-08-25 17:31:06 +0600 (Mon, 25 Aug 2008) $
+ **/
+?>
+
+	<div style="padding-left: 10px;">
+		<div style="width: 140px;" class="floatleft">User</div>
+		<div style="width: 350px;" class="floatleft">
+			<img src="<?php echo $this->imgBase; ?>/icons/user.png" align="absmiddle"/>
+			<a href="#" onclick="javascript:nodeDetails('<?php
+				echo $this->obj->getdn();
+				?>'); return false;">
+				<?php echo $this->obj->getProperty("cn");?></a>
+		</div>
+		<div class="clear"></div>
+		<div style="width: 140px;" class="floatleft">Mailbox Status</div>
+		<div style="width: 350px;" class="floatleft">
+		<?php
+			if ($this->dashboardData['active']) {
+				echo '<span style="color: green; font-weight: bold;">Active</span>';
+				echo '  [<a href="#" onclick="javascript:callAction(\'/mail/user/uptaccountstatus\',\'innermailuser\',\''.
+				$this->obj->getdn().'\'); return false;">Disable Mailbox</a>]';
+			} else {
+				echo '<span style="color: red; font-weight: bold;">Disabled</span>';
+				echo '  [<a href="#" onclick="javascript:callAction(\'/mail/user/uptaccountstatus\',\'innermailuser\',\''.
+				$this->obj->getdn().'\'); return false;">Enable Mailbox</a>]';
+			}
+
+		?></div>
+		<div class="clear"></div>
+		<div style="width: 140px;" class="floatleft">Mailbox Quota</div>
+		<div style="width: 350px;" class="floatleft"><?php echo $this->dashboardData['quota']; ?> MB</div>
+		<div class="clear"></div>
+		<div style="width: 140px;" class="floatleft">Mailbox Usage</div>
+		<div style="width: 350px;" class="floatleft">
+    	<?php
+    	/**
+    	 * We need better reporting from the mailuser class here -- global
+    	 * conversion and auto formatting is required here.
+    	 */
+    	echo round($this->dashboardData['quotausage']['usage']/1024,2);?> MB
+    	[<?php echo round($this->dashboardData['quotapercentused'],2);?>% used]
+		</div>
+		<div class="clear"></div>
+		<div class="clear"></div>
+	</div>

@@ -1,0 +1,42 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		Zivios
+ * @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ **/
+?>
+<div class="alert">You are about to perform a delete operation.</div>
+
+<div style="margin: 10px; font-size: 12px;">
+All records associated with the server <?php echo $this->server->getProperty('cn'); ?> 
+will be purged from Zivios systems. Are you certain you wish to proceed?
+
+    <div style="margin-left: 10px;font-weight: normal; color: blue;">
+        <button dojoType="dijit.form.Button" id="confirmserverdelete">Delete
+            <script type="dojo/method" event="onClick">
+            zivios.callAction('/server/dodeleteserver', { 
+                confirm: true,
+                dn: '<?php echo $this->server->getdn();?>'}, 
+                'confirmserverdelete');
+            </script>
+        </button>
+    </div>
+</div>
+

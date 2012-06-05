@@ -1,0 +1,70 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     mod_ca
+ * @copyright   Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+?>
+<div id="pgupdate">
+    <div style="padding-left: 10px;">
+    Back to <a href="#" onclick="javascript:callAction('/ca/service/listcerts/','pgupdate','<?php
+            echo $this->obj->getdn(); ?>');"><b>Certificate Listing</b></a> &raquo; Viewing Certificate:
+            <?php echo $this->certDetails['subject']['CN']; ?>
+        <hr size="1" />
+        <div style="width: 140px;" class="floatleft">Certificate Issue Date</div>
+        <div style="width: 350px;" class="floatleft"><?php echo $this->certDetails['validFrom']; ?></div>
+        <div class="clear"></div>
+
+        <div style="width: 140px;" class="floatleft">Certificate Valid Till</div>
+        <div style="width: 350px;" class="floatleft"><?php echo $this->certDetails['validTo']; ?></div>
+        <div class="clear"></div>
+
+        <div style="width: 140px;" class="floatleft">Common Name</div>
+        <div style="width: 350px;" class="floatleft"><?php
+        if (!is_array($this->certDetails['subject']['CN']))
+            echo $this->certDetails['subject']['CN'];
+        else
+            echo $this->certDetails['subject']['CN'][sizeof($this->certDetails['subject']['CN'])-1];
+
+
+        ?></div>
+        <div class="clear"></div>
+
+        <div style="width: 140px;" class="floatleft">Administrative e-Mail</div>
+        <div style="width: 350px;" class="floatleft"><?php
+            isset($this->certDetails['subject']['emailAddress']) ?
+                print ($this->certDetails['subject']['emailAddress']) :
+                print('<em>Not specified</em>'); ?></div>
+        <div class="clear"></div>
+
+        <div style="width: 140px;" class="floatleft">Serial</div>
+        <div style="width: 350px;" class="floatleft"><?php echo $this->certDetails['serialNumber']; ?></div>
+        <div class="clear"></div>
+
+        <div style="width: 140px;" class="floatleft">Hash</div>
+        <div style="width: 350px;" class="floatleft"><?php echo $this->certDetails['hash']; ?></div>
+        <div class="clear"></div>
+
+        <div style="width: 140px;" class="floatleft">Purpose</div>
+        <div style="width: 350px;" class="floatleft"><?php echo $this->certDetails['purposes']; ?></div>
+        <div class="clear"></div>
+
+    </div>
+</div>

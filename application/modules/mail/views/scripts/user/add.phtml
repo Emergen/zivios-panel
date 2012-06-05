@@ -1,0 +1,81 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		mod_mail
+ * @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ * @version		$Id: add.phtml 914 2008-08-25 11:31:06Z fkhan $
+ * @lastchangeddate $LastChangedDate: 2008-08-25 17:31:06 +0600 (Mon, 25 Aug 2008) $
+ **/
+?>
+<div id="innermailuser">
+	<div style="padding-left: 10px;">
+	<br />
+	<div style="width: 450px;" class="info">Activating Mail Plugin for User ID:
+		<b><?php echo $this->obj->getProperty("uid"); ?></b>.</div>
+	<br>
+	<form id="addmailplugin" method="post" action="#" onsubmit="return false;"
+	style="padding-left: 0px; width: 470px;">
+	<fieldset>
+	<legend>Mail Details</legend>
+	<label for="">Email Address: </label>
+		<input disabled id="email" type="text" size="16" value="<?php
+		echo $this->obj->getProperty("uid");
+		?>" name="email" maxlength="64" /> @
+	<select name="maildomain">
+	<?php
+	foreach ($this->maildomains as $domain) {
+		echo '<option value="'.$domain.'">'.$domain.'</option>';
+	}
+	?>
+	</select>
+	<br />
+    <label for="">Email Quota (MB): </label>
+		<input id="quota" type="text" size="38" value="" name="quota" maxlength="8"/><br />
+    <label for="">Security Class: </label>
+	<select name="secclass">
+	<?php
+	foreach ($this->secclasses as $secclass) {
+    ?>
+	<option value="<?php echo $secclass;?>"><?php echo $secclass;?></option>
+    <?php
+    }
+    ?>
+    </select>
+    <br />
+    <label for="">Max Message Size (MB): </label>
+		<input id="maxmailsize" type="text" size="38" value="" name="maxmailsize" maxlength="8" ></input><br />
+    <label for="">User Black Lists (one address per line): </label>
+        <textarea rows=6 cols=33 name="blacklist"></textarea><br />
+	<label for="">User White Lists (one address per line): </label>
+        <textarea rows=6 cols=33 name="whitelist"></textarea><br />
+    <label for="">Spam Tag 1 Level: </label>
+		<input id="spamtagone" type="text" size="38" value="4" name="spamtagone" maxlength="4" /><br />
+    <label for="">Add **SPAM** Level: </label>
+		<input id="spamtagtwo" type="text" size="38" value="6" name="spamtagtwo" maxlength="4" /><br />
+     <label for="">Spam Block Level: </label>
+		<input id="spamkill" type="text" size="38" value="10" name="spamkill" maxlength="4" /><br />
+     <input type=hidden name="operate_dn" value="<?php echo $this->obj->getdn(); ?>" />
+     <input type=hidden name="action" value="activate" />
+     <input type="submit" value="Apply" name="submit"
+        onclick="javascript:callFormUpdate('addmailplugin','/mail/user/activateplugin');"><br />
+	</fieldset>
+	</form>
+	</div>
+</div>

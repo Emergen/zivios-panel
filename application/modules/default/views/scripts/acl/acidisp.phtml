@@ -1,0 +1,89 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		Zivios
+ * @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ **/
+
+Zend_Dojo_View_Helper_Dojo::setUseDeclarative();
+$aciarray = $this->aciarray;
+
+?>
+<div style="padding-left: 25px; width: 70%; float: left;">
+<p class="headline"><B>OpenLdap ACIs on this Object</b></p>
+<br />
+<?php
+if (sizeof($aciarray) == 0) {
+    ?>
+    <div class="info">No OpenLdap ACIs found on this Object</div>
+    <?php
+} else
+{
+    ?>
+    <table class="general" width=100%>
+    <th>OID</th><th>SCOPE</th><th>ACTION</th><th>PERMS</th><th>TARGET</th><th>TYPE</th><th style="width: 150px">SUBJECT</th>
+    <?php
+    foreach ($aciarray as $aci) {
+        ?>
+        <tr>
+        <Td><?php echo $aci->oid;?></Td>
+        <td><?php echo $aci->scope;?></td>
+        <td><?php echo $aci->action;?></td>
+        <td><?php echo implode(",",$aci->perm_array);?></td>
+        <td><?php echo $aci->target;?></td>
+        <td><?php echo $aci->type;?></td>
+        <td>
+            <?php
+            $objdisp = "";
+            if ($aci->subject != "") {
+                try {
+                $obj = Zivios_Ldap_Cache::loadDn($aci->subject,'NOMODEL');
+                $objdisp = $obj->getProperty('cn');
+                } catch (Exception $e) {
+                    $objdisp = '<font color="red">' . $aci->subject . '</font>';
+                }
+    
+            }
+            echo $objdisp;
+            ?>
+        </td>
+        <td><span id="delete<?php echo $aci->oid;?>">
+        <a href= "#" onClick="zivios.callAction('/acl/deleteaci',{
+                                      origline: '<?php echo $aci->origline;?>',
+                                      dn: '<?php echo $this->entry->getdn();?>'
+                                        },'delete<?php echo $aci->oid;?>')">Delete</a>
+                </span>
+        </td>
+        <?php
+    }
+    ?>
+    </table>
+    
+    <?php
+}
+?>
+</div>
+<div class="note" style="width: 20%; float: left; margin-top: 25px;">
+<p>Zivios uses in-object Openldap ACI's for ACL management.</p>
+<p>OpenLdap ACIs on this object are listed on the left. You can delete or add Acis accordingly. Please note that
+Incorrect handling of ACLs can lock you out from the system completely, even if you are a super user</p>
+</div>
+<div style="clear: both;"></div>
+

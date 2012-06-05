@@ -1,0 +1,188 @@
+<?php
+/**
+ * Copyright (c) 2008-2010 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     Zivios
+ * @copyright   Copyright (c) 2008-2010 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+
+$formid   = Zivios_Util::randomString(8);
+$regexLib = Zivios_Util::getRegexLibrary();
+?>
+
+<div dojoType="dijit.layout.TabContainer" id="tc_adducontainer" class="u-tab">
+    <div id="cp_adducontainer" dojoType="dijit.layout.ContentPane" title="Add User Container" 
+        selected="true" style="width: 150%; padding: 0px; margin: 0px; border: 0px;">
+
+        <div class="heading">User Accounts your Organizational Tree</div>
+
+        <div class="content">
+            <div class="info infocl" style="width: 500px;">
+                User Account provisioning via Zivios allows for the automatic instantiation
+                of the default Group plugin's for the User in question.
+                <br /><br />
+                For additional information regarding User and Group Management, 
+                please consult the <a href="http://wiki.zivios.org" target="_blank">Zivios Wiki</a>.
+            </div>
+        </div>
+
+        <div class="subheading">Add a User Account</div>
+        <div class="content">
+
+        <div class="note notecl" style="width: 500px;">
+            Parent DN: <?php echo $this->parentdn; ?>
+        </div>
+
+        <form id='<?php echo $formid; ?>' enctype="application/x-www-form-urlencoded" method="post" 
+            action="#" dojoType="dijit.form.Form">
+
+        <div class="zflabel" style="width: 150px;">First Name: </div>
+        <input name="userdata[rq_givenname_givenname_First+Name]" type="text" dojoType="dijit.form.ValidationTextBox" 
+            size="16" maxlength="64" regExp="<?php echo $regexLib->exp->givenname; ?>" required="true" 
+            invalidMessage="Invalid characters in field value." class="zfgenField" 
+            value="" />
+        <div class="cboth"></div>
+
+        <div class="zflabel" style="width: 150px;">Last Name: </div>
+        <input name="userdata[rq_sn_sn_Last+Name]" type="text" dojoType="dijit.form.ValidationTextBox" 
+            size="16" maxlength="64" regExp="<?php echo $regexLib->exp->sn; ?>" required="true" 
+            invalidMessage="Invalid characters in field value." class="zfgenField" 
+            value="" />
+        <div class="cboth"></div>
+
+        <div class="zflabel" style="width: 150px;">Title: </div>
+        <input name="userdata[op_alnumwithspaces_title_Title]" type="text" dojoType="dijit.form.ValidationTextBox" 
+            size="16" maxlength="64" regExp="<?php echo $regexLib->exp->alnumwithspaces; ?>" required="false" 
+            invalidMessage="Invalid characters in field value." class="zfgenField" 
+            value="" />
+        <div class="cboth"></div>
+
+        <div class="zflabel" style="width: 150px;">Employee Number: </div>
+        <input name="userdata[op_digits_employeenumber_Employee+Number]" type="text" dojoType="dijit.form.ValidationTextBox" 
+            size="16" maxlength="64" regExp="<?php echo $regexLib->exp->digits; ?>" required="false" 
+            invalidMessage="Invalid characters in field value." class="zfgenField" 
+            value="" />
+        <div class="cboth"></div>
+        
+        <div class="zflabel" style="width: 150px;">Email: </div>
+        <input name="userdata[op_email_mail_Email]" type="text" dojoType="dijit.form.ValidationTextBox" 
+            size="16" maxlength="64" regExp="<?php echo $regexLib->exp->email; ?>" required="false" 
+            invalidMessage="Invalid characters in field value." class="zfgenField" 
+            value="" />
+        <div class="cboth"></div>
+        
+
+        <div class="zflabel" style="width: 150px;">Department: </div>
+        <input name="userdata[op_alnumwithspaces_ou_Department]" type="text" dojoType="dijit.form.ValidationTextBox" 
+            size="16" maxlength="64" regExp="<?php echo $regexLib->exp->alnumwithspaces; ?>" required="false" 
+            invalidMessage="Invalid characters in field value." class="zfgenField" 
+            value="" />
+        <div class="cboth"></div>
+
+        <div class="zflabel" style="width: 150px;">Department Number: </div>
+        <input name="userdata[op_digits_departmentnumber_Department+Number]" type="text" dojoType="dijit.form.ValidationTextBox" 
+            size="16" maxlength="64" regExp="<?php echo $regexLib->exp->digits; ?>" required="false" 
+            invalidMessage="Invalid characters in field value." class="zfgenField" 
+            value="" />
+        <div class="cboth"></div>
+
+        <div class="zflabel" style="width: 150px;">Mobile Phone: </div>
+        <input name="userdata[op_phonenumber_mobile_Mobile+Phone]" type="text" dojoType="dijit.form.ValidationTextBox" 
+            size="16" maxlength="64" regExp="<?php echo $regexLib->exp->phonenumber; ?>" required="false" 
+            invalidMessage="Invalid characters in field value." class="zfgenField" 
+            value="" />
+        <div class="cboth"></div>
+
+        <div class="zflabel" style="width: 150px;">Home Phone: </div>
+        <input name="userdata[op_phonenumber_homephone_Home+Phone]" type="text" dojoType="dijit.form.ValidationTextBox" 
+            size="16" maxlength="64" regExp="<?php echo $regexLib->exp->phonenumber; ?>" required="false" 
+            invalidMessage="Invalid characters in field value." class="zfgenField" 
+            value="" />
+        <div class="cboth"></div>
+
+        <div class="zflabel" style="width: 150px;">Office Phone: </div>
+        <input name="userdata[op_phonenumber_telephonenumber_Office+Phone]" type="text" dojoType="dijit.form.ValidationTextBox" 
+            size="16" maxlength="64" regExp="<?php echo $regexLib->exp->phonenumber; ?>" required="false" 
+            invalidMessage="Invalid characters in field value." class="zfgenField" 
+            value="" />
+        <div class="cboth"></div>
+
+        <div class="zflabel" style="width: 150px;">Home Address: </div>
+        <input name="userdata[op_postaladdress_homepostaladdress_Home+Address]" type="text" dojoType="dijit.form.SimpleTextarea" style="width: 220px; height: 80px;" 
+            class="zfgenField" required="false" value=""/>
+        <div class="cboth"></div>
+
+        <div class="note notecl" style="width: 500px;">
+            The Primary Group field will auto-complete based on existing Groups
+            available for User subscription. Zivios will discover groups based on its hierarchy approach.
+            <br /><br />
+            <b>Note:</b> If no groups are available, you will not be able to add user accounts!
+        </div>
+
+        <div class="zflabel" style="width: 150px;">Primary Group</div>      
+        <!-- auto complete store -->
+        <div dojotype="zivios.AutocompleteReadStore" jsid="groupsearch" 
+            url="/user/getavailablegroups/dn/<?php echo urlencode($this->parentdn); ?>/" 
+            requestmethod="get"></div>
+
+        <input dojoType="dijit.form.FilteringSelect" class="zfgenField"
+            store="groupsearch" name="userdata[rq_dn_agsearch_Primary+Group_enc]" hasDownArrow="false"/>
+        <div class="cboth">
+
+        <div class="zflabel" style="width: 150px;">User Login: </div>
+        <input name="userdata[rq_uid_uid_User+Login]" type="text" dojoType="dijit.form.ValidationTextBox" 
+            size="16" maxlength="64" regExp="<?php echo $regexLib->exp->uid; ?>" required="false" 
+            invalidMessage="Invalid characters in field value." class="zfgenField" 
+            value="" />
+        <div class="cboth"></div>
+
+        <div class="zflabel" style="width: 150px;">Password: </div>
+        <input name="userdata[rq_password_password_User+Password]" type="password" dojoType="dijit.form.ValidationTextBox" size="16" maxlength="64" 
+            regExp="<?php echo $regexLib->exp->password; ?>" required="true" 
+            invalidMessage="Invalid password specified" class="genField" 
+            value="" />
+        <div class="cboth"></div>
+
+        <div class="zflabel" style="width: 150px;">Confirm Password: </div>
+        <input name="userdata[cmp_password_cpassword_Confirm+User+Password]" type="password" dojoType="dijit.form.ValidationTextBox" size="16" maxlength="64" 
+            regExp="<?php echo $regexLib->exp->password; ?>" required="true" 
+            invalidMessage="Invalid password specified" class="genField"
+            value="" />
+        <div class="cboth"></div>
+
+        <div class="zflabel" style="width: 150px;">Home Directory: </div>
+        <input name="userdata[rq_homedirectory_homedirectory_Home+Directory]" type="text" dojoType="dijit.form.ValidationTextBox" 
+            size="16" maxlength="64" regExp="<?php echo $regexLib->exp->homedirectory; ?>" required="false" 
+            invalidMessage="Invalid characters in field value." class="zfgenField" 
+            value="" />
+        <div class="cboth"></div>
+        
+        <div class="zflabel" style="width: 150px;">&nbsp;</div>
+        <input onclick="zivios.postxhr('/default/user/doadd', '', '<?php echo $formid; ?>',
+            'form', 'json', [], [], [], [], this.id); return false;" 
+            name="zvadduser" value="Add User Account"
+            type="submit" label="Add User Account" dojoType="dijit.form.Button"/>
+        <div class="cboth"></div>
+
+        <input type="hidden" name="userdata[rq_dn_dn_Distinguished+Name_enc]" value="<?php echo urlencode($this->parentdn); ?>"/>
+        </form>
+        </div>
+    </div>
+</div>
+

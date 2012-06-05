@@ -1,0 +1,92 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		mod_ntp
+ * @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ * @version		$Id: serviceconfig.phtml 915 2008-08-25 11:32:48Z fkhan $
+ * @lastchangeddate $LastChangedDate: 2008-08-25 17:32:48 +0600 (Mon, 25 Aug 2008) $
+ **/
+?>
+<form id="entp" name="editntpconfig" method="post" action="#" onsubmit="return false;"
+	style="padding-left: 10px; width: 540px;">
+<fieldset>
+	<legend>External NTP Servers</legend>
+	<div class="notice">Enter one NTP Server per line.</div>
+	<label for="extntpservers">External NTP Servers: </label>
+	<textarea name="defntpservers" rows="5" cols="25"><?php
+	foreach ($this->serviceSettings["ntpServers"] as $ntpServer) {
+		echo $ntpServer . "\n";
+	}
+	?></textarea>
+</fieldset>
+<br />
+<fieldset>
+	<?php
+	/**
+	 * Figure out what settings are currently enabled and populate
+	 * form accordingly.
+	 */
+	if (!empty($this->serviceSettings["statSettings"])) {
+		$enableStats = ' CHECKED';
+		$clockstats = ''; $loopstats = ''; $peerstats = '';
+		foreach ($this->serviceSettings["statSettings"] as $stat) {
+			switch ($stat) {
+				case "clockstats":
+					$clockstats = ' CHECKED';
+				break;
+
+				case "loopstats":
+					$loopstats = ' CHECKED';
+				break;
+
+				case "peerstats":
+					$peerstats = ' CHECKED';
+				break;
+			}
+		}
+	} else {
+		$enableStats = '';
+	}
+	?>
+	<legend>Advanced Options</legend>
+	<label for="enablestats">Enable Statistics: </label>
+		<input type="checkbox" value="1" name="enbstats" <?php echo $enableStats; ?>/>
+		<div style="padding-left: 150px; background: #eee; font-size: 10px;">
+			<input type="checkbox" value="1" name="clstats" <?php echo $clockstats; ?> /> Clock Stats
+			<input type="checkbox" value="1" name="lostats" <?php echo $loopstats; ?> /> Loop Stats
+			<input type="checkbox" value="1" name="prstats" <?php echo $peerstats; ?> /> Peer Stats
+		</div>
+	<br />
+
+	<label for="broadcast">Broadcast To Subnets: </label>
+		<textarea name="broadcastto" rows="3" cols="25"><?php
+		if (!empty($this->serviceSettings["broadcastSettings"])) {
+			foreach ($this->serviceSettings["broadcastSettings"] as $bcSubnet) {
+				echo $bcSubnet . "\n";
+			}
+		}
+		?></textarea>
+
+<br /><br />
+<input type="submit" value="Update Service Configuration"
+	onclick="javascript:callFormUpdate('entp', '/ntp/service/serviceConfig/');" />
+<input type="hidden" name="operate_dn" value="<?php echo $this->obj->getdn();?>" />
+<input type="hidden" name="process" value="1" />
+</form>

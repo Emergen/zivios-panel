@@ -1,0 +1,75 @@
+#!/usr/bin/perl -w
+#
+# Copyright (c) 2008 Zivios, LLC.
+#
+# This file is part of Zivios.
+#
+# Zivios is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Zivios is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+#
+# @package		Zivios
+# @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+# @license		http://www.zivios.org/legal/license
+# @version		$Id: addattendant 1019 2008-09-08 07:26:34Z gmustafa $
+#
+use lib "/opt/zivios/asterisk/lib";
+use Asterisk::config;
+use Getopt::Long;
+
+GetOptions ("bindport:s" 	=> \$bindport,
+	    "allowguest:s"	=> \$allowguest,
+  	    "bindaddr:s"	=> \$bindaddr,
+	    "maxexpiry:s"	=> \$maxexpiry,
+	    "minexpiry:s"	=> \$minexpiry,
+	    "defaultexpiry:s"	=> \$defaultexpiry,
+	    "allow:s"		=> \$allowc,
+	    "relaxdtmf:s"	=> \$relaxdtmf,
+	    "videosupport:s"	=> \$videosupport,
+	    "context:s" 	=> \$context,
+	    "listall"		=> \$listall);
+
+
+my $rc = new Asterisk::config(file=>'/etc/asterisk/sip.conf',keep_resource_array=>0);
+if ($listall == 1) {
+	$listsip = $rc->fetch_keys_hashref(section=>'general');
+	    while ( my ($key, $value) = each(%$listsip) ) {
+		print "$key => ";
+		print "@$value";
+		print "\n";
+		}
+
+} else {
+
+if ($bindport ne "") { $rc->assign_editkey(section=>'general',key=>'bindport',new_value=>$bindport); }
+if ($context ne "")  { $rc->assign_editkey(section=>'general',key=>'context',new_value=>$context);   }
+if ($bindaddr ne "")  { $rc->assign_editkey(section=>'general',key=>'bindaddr',new_value=>$bindaddr);   }
+if ($maxexpiry ne "")  { $rc->assign_editkey(section=>'general',key=>'maxexpiry',new_value=>$maxexpiry);   }
+if ($minexpiry ne "")  { $rc->assign_editkey(section=>'general',key=>'minexpiry',new_value=>$minexpiry);   }
+if ($defaultexpiry ne "")  { $rc->assign_editkey(section=>'general',key=>'defaultexpiry',new_value=>$defaultexpiry);   }
+if ($relaxdtmf ne "")  { $rc->assign_editkey(section=>'general',key=>'relaxdtmf',new_value=>$relaxdtmf);   }
+if ($allowguest ne "")  { $rc->assign_editkey(section=>'general',key=>'allowguest',new_value=>$allowguest);   }
+if ($videosupport ne "")  { $rc->assign_editkey(section=>'general',key=>'videosupport',new_value=>$videosupport);   }
+
+if ($allowc ne "")  { 
+	@allow = split(' ',$allowc);
+	$rc->assign_delkey(section=>'general',key=>'allow');
+	$rc->assign_delkey(section=>'general',key=>'disallow');
+	$rc->assign_append(point=>'foot',section=>'general',data=>"disallow=all");
+	foreach (@allow) {
+	     $rc->assign_append(point=>'foot',section=>'general',data=>"allow=$_");
+	}
+}
+
+$rc->save_file();
+}
+

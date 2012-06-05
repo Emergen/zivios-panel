@@ -1,0 +1,76 @@
+<?php
+/**
+ * Copyright (c) 2008-2010 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     Zivios
+ * @copyright   Copyright (c) 2008-2010 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+
+$formid   = Zivios_Util::randomString(8);
+$regexLib = Zivios_Util::getRegexLibrary();
+?>
+<div dojoType="dijit.layout.TabContainer" id="tc_addserver" class="u-tab">
+    <div id="cp_addservercontainer" dojoType="dijit.layout.ContentPane" title="Add Server" 
+        selected="true" style="width: 100%; padding: 0px; margin: 0px; border: 0px;">
+
+        <div class="heading">Servers in your Organizational Tree</div>
+
+        <div class="content">
+            <div class="info infocl" style="width: 500px;">
+                A Zivios managed server allows for remote management and provisioning of various Zivios
+                supported services. After you have added a server successfully, Zivios services compatible
+                with the server operating system will be available for provisioning and management.
+                <br /><br />
+                For additional information regarding Zivios managed servers as well as Zivios hierarchies, 
+                please consult the <a href="http://wiki.zivios.org" target="_blank">Zivios Wiki</a>.
+            </div>
+        </div>
+
+        <div class="subheading">Add a Server</div>
+        <div class="content">
+
+        <div class="note notecl" style="width: 500px;">
+            Parent DN: <?php echo $this->parentdn; ?>
+        </div>
+
+        <form id='<?php echo $formid; ?>' enctype="application/x-www-form-urlencoded" method="post" 
+            action="#" dojoType="dijit.form.Form">
+
+        <div class="zflabel" style="width: 150px;">Select Operating System: </div>
+
+        <select dojoType="dijit.form.FilteringSelect" name="addserver[rq_alnumnospaces_osselect_Select+Operating+System]" 
+            style="margin-top: 10px;">
+            <option value="linux" selected>Linux</option>
+            <option value="windows">Windows</option>
+        </select>
+        <div class="cboth"></div>
+
+        <div class="zflabel" style="width: 150px;">&nbsp;</div>
+        <input onclick="zivios.postxhr('/default/server/addserver', '', '<?php echo $formid; ?>',
+            'form', 'json', [], [], [], [], this.id); return false;" 
+            name="zvaddserver" value="Proceed to Server Probe" 
+            type="submit" label="Proceed to Server Probe" dojoType="dijit.form.Button"/>
+        <div class="cboth"></div>
+
+        <input type="hidden" name="addserver[rq_dn_dn_Distinguished+Name_enc]" value="<?php echo urlencode($this->parentdn); ?>"/>
+        </form>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,25 @@
+<?php
+$mailplug = $this->user->getPlugin('MailUser');
+$quota = $mailplug->getQuotaUsage();
+$maxquota = $quota['limit'];
+$used = $quota['usage'];
+if ($mailplug->getProperty('emsmailactive'))
+    $status = '<font color="green">Active</font>';
+else
+    $status = '<font color="red">Disabled</font>';
+    
+?>
+
+<div class="note">
+<div class="floatleft" style="margin: 10px; width: 120px; "><b>Account Status : </div>
+<div class="floatleft" style="margin: 10px;"></b><?php echo $status;?></div>
+<div class="clearboth"></div>
+<div class="floatleft" style="margin: 10px; width: 120px; "><b>Email Address : </div>
+<div class="floatleft" style="margin: 10px;"></b><?php echo $this->user->getProperty('mail');?></div>
+    <div class="clearboth"></div>
+    <div class="floatleft" style="margin: 10px; width: 120px;"><b>Quota Usage : </b></div><div dojoType="dijit.ProgressBar" style="width:100px; float: left; margin: 10px;"
+         jsId="jsProgress" id="downloadProgress" maximum="<?php echo $maxquota;?>" progress="<?php echo $used;?>"></div></b>
+    <div class="floatleft" style="margin: 10px;"><?php echo round($used/1024,2);  ?> Mb / <?php echo $maxquota/1024;?> Mb</div>
+     <div class="clearboth"></div>
+ 
+</div>

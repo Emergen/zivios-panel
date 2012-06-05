@@ -1,0 +1,100 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     mod_dns
+ * @copyright   Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+?>
+<div style="width: 98.3%; border-bottom: 1px solid #477795; 
+    background: #7c849c; padding: 5px; color: #fff;"><b>Search for a Zone:</b></div>
+
+<?php
+echo $this->szform;
+?>
+<br /><br />
+<div style="width: 98.3%; border-bottom: 1px solid #477795; border-top: 1px solid #477795; 
+    background: #7c849c; padding: 5px; color: #fff;"><b>Listing last 5 Zones Added:</b></div>
+
+<div class="listHeader listingStart">Zone</div>
+<div class="listHeader listingMid">Type</div>
+<div class="listHeader listingEnd" style="width: 150px;">Options</div>
+
+<?php
+if (!empty($this->zoneListing)) {
+    foreach ($this->zoneListing as $zone) {
+        ?>
+        <div class="listingGeneral listingStart"><?php echo $zone->getProperty('cn');?></div>
+        <div class="listingGeneral listingMid"><?php echo ucfirst($zone->getProperty('emsdnszonetype')); ?></div>
+        <div class="listingGeneral listingEnd" style="width: 150px; text-align: center">
+
+        <button dojoType="dijit.form.Button">Manage Zone
+            <script type="dojo/connect" event="onClick">
+                zivios.loadApp('/dns/service/managezone/dn/<?php echo $this->service->getdn();?>/zonedn/<?php echo $zone->getdn(); ?>',
+                               'dnssrvtabs01','ze_<?php echo $zone->getProperty('cn'); ?>',
+                               '<?php echo $zone->getProperty('cn'); ?>');
+            </script>
+        </button>
+        </div>
+        <?php
+    }
+}
+?>
+<style type="text/css">
+.listHeader {
+    float: left;
+    width: 110px;
+    padding: 5px;
+    margin-top: 10px;
+    border-bottom: 4px solid #bfc7ce;
+    border-top: 1px solid #bfc7ce;
+    background-color: #dfe0e4;
+    font-weight: bold;
+    line-height: 23px;
+}
+
+.listingGeneral {
+    float: left;
+    width: 110px;
+    padding: 5px;
+    height: 25px;
+    border-bottom: 1px solid #bfc7ce;
+    line-height: 23px;
+}
+
+.listingStart {
+    clear: left;
+    border-left: 1px solid #bfc7ce;
+    margin-left: 5px;
+    line-height: 23px;
+}
+
+.listingMid {
+    border-left: 1px solid #bfc7ce;
+    line-height: 23px;
+}
+
+.listingEnd {
+    border-right: 1px solid #bfc7ce;
+    border-left: 1px solid #bfc7ce;
+    clear: right;
+    margin-right: 5px;
+    line-height: 23px;
+}
+</style>

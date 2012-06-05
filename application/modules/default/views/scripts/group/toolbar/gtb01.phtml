@@ -1,0 +1,69 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		Zivios
+ * @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ **/
+?>
+<p class="toolbar">
+<div id="gtoolbar01" dojoType="dijit.Toolbar" style="width:30%; height: 23px; float: left;">
+    <div dojoType="dijit.form.DropDownButton">
+        <span><b>Group Menu</b></span>
+        <ul dojoType="dijit.Menu" class="dropdownmenu">
+            <li dojoType="dijit.PopupMenuItem">
+            <span>Active Plugins</span>
+            <ul dojoType="dijit.Menu" class="dropdownmenu">
+            <?php
+            foreach ($this->plugins as $plugin) { Zivios_Log::debug($plugin->displayname);?>
+                <li dojoType="dijit.MenuItem" label="<?php echo $plugin->displayname; ?>"
+                    onclick="javascript:zivios.loadApp('<?php echo $plugin->url; ?>/dn/<?php echo urlencode($this->entry->getdn()); ?>',
+                        'grouptabs','<?php echo $plugin->tabid; ?>',
+                        '<?php echo $plugin->displayname; ?>');" iconClass="<?php echo $plugin->icon; ?>"></li>
+             <?php
+                } ?>
+            </ul>
+            </li>
+            <?php
+            if (is_array($this->availPlugins) && !empty($this->availPlugins)) {
+                ?>
+            <li dojoType="dijit.PopupMenuItem">
+            <span>Available Plugins</span>
+            <ul dojoType="dijit.Menu" class="dropdownmenu">
+            <?php
+            foreach ($this->availPlugins as $plugin) {?>
+                <li dojoType="dijit.MenuItem" label="<?php echo $plugin->displayname;?>" iconClass="<?php echo $plugin->icon; ?>">
+                    <script type="dojo/method" event="onClick">
+                    zivios.loadApp('<?php echo $plugin->url; ?>/dn/<?php echo $this->entry->getdn();?>' +
+                            '/srvdn/<?php echo $plugin->srvdn;?>','grouptabs','<?php echo $plugin->tabid; ?>',
+                        '<?php echo $plugin->displayname; ?>'); 
+                     </script>
+                </li>
+             <?php
+                } ?>
+            </ul>
+            </li>
+            <?php } ?>
+        </ul>
+    </div>
+</div>
+<div id="gtoolbar02" dojoType="dijit.Toolbar" style="width:70%; height: 23px; float: left; text-align: right;">
+    <?php echo $this->entry->getProperty("cn"); ?> &nbsp;&nbsp;
+</div>
+</p>

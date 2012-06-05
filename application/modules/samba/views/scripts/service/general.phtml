@@ -1,0 +1,66 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		mod_samba
+ * @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ * @version		$Id$
+ * @lastchangeddate $LastChangedDate$
+ **/
+
+$ts = "";
+$ws = "";
+if ($this->obj->getProperty('emssambacfgtimeserver') == 'yes') $ts="CHECKED";
+if ($this->obj->getProperty('emssambacfgwinssupport') == 'yes') $ws="CHECKED";
+?>
+<form id="sambageneral" name="sambageneral" method="post" action="#" onsubmit="return false;"
+	style="padding-left: 0px;">
+
+<input type="hidden" name="operate_dn" value="<?php echo $this->obj->getdn();?>" />
+<input type="hidden" name="action" value="update" />
+
+<fieldset>
+    <legend>Samba Service Details</legend>
+    <label>Netbios Name:</label>
+    <input type="text" size="32" name="sambanetbiosname" value="<?php echo $this->obj->getProperty('emssambacfgnetbiosname');?>"/>
+    <br />
+
+    <label>Log Level:</label>
+    <input type="text" size="32" name="sambaloglevel" value="<?php echo $this->obj->getProperty('emssambacfgloglevel');?>"/>
+    <br />
+
+    <label>Time Server Support:</label>
+    <input type="checkbox" name="sambatimesupport" value='1' <?php echo $ts;?>/>
+    <br />
+
+    <label>Wins Support:</label>
+    <input type="checkbox" name="sambawinssupport" value='1' <?php echo $ws;?>/>
+    <br />
+
+    <label>Netlogon Path:</label>
+    <input type="text" size="32" name="sambanetlogonpath" value="<?php echo $this->obj->getProperty('emssambacfgnetlogonpath');?>"/>
+    <br />
+
+    <label>Profile Path:</label>
+    <input type="text" size="32" name="sambaprofilepath" value="<?php echo $this->obj->getProperty('emssambacfgprofilepath');?>"/>
+    <br />
+
+<input type="submit" value="Update"
+	onclick="javascript:callAjaxRender('sambageneral', '/samba/service/general/','pgupdate');" />
+    </fieldset>

@@ -1,0 +1,110 @@
+<?php
+/**
+ * Copyright (c) 2008-2010 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		Zivios
+ * @copyright	Copyright (c) 2008-2010 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ **/
+?>
+<p class="headline">Squid Service Control</p>
+<?php 
+if (!$this->service->pingZiviosAgent()):
+?>
+    <div class="dashboarddl">Zivios Agent Status:</div>
+    <div class="dashboarddr"><span style="color: red; font-weight: bold;">Offline</span>
+    <br />
+    <font size="1">You can start the Zivios Agent from the <a href="#" 
+        onclick="zivios.cpaneRefresh('dirdata', '/default/server/view/dn/<?php echo 
+        $this->masterComputer->getdn(); ?>'); return false;">Server Dashboard</a>.</font>
+
+    </div>
+    <div class="clearline"></div>
+<?php 
+else:
+?>
+    <div class="dashboarddl">Zivios Agent Status:</div>
+    <div class="dashboarddr"><span style="color: green; font-weight: bold;">Online</span></div>
+    <div class="clearline"></div>
+
+    <div class="dashboarddl">Squid Service Status:</div>
+    <div class="dashboarddr">
+        <?php
+        if ($this->service->getServiceStatus()) {
+            $srvstatus     = '<span style="color: green; font-weight: bold;">Running</span>';
+            $serviceOption = 'Stop Service';
+        } else {
+            $srvstatus     = '<span style="color: red; font-weight: bold;">Stopped</span>';
+            $serviceOption = 'Start Service';
+        }
+        echo $srvstatus;
+        ?>
+    </div>
+    <div class="clearline"></div>
+
+    <div class="dashboarddl">Service Control:</div>
+    <div class="dashboarddr">
+        <button id="stopsquid" class="smallbutton" dojoType="dijit.form.Button">Stop
+        <script type="dojo/connect" event="onClick">
+            zivios.callAction('/squid/service/servicectrl',{
+            dn: '<?php echo urlencode($this->service->getdn());?>',
+            action: 'stop'},'stopsquid');
+        </script>
+        </button>
+        <button id="startsquid" class="smallbutton" dojoType="dijit.form.Button">Start
+        <script type="dojo/connect" event="onClick">
+            zivios.callAction('/squid/service/servicectrl',{
+            dn: '<?php echo urlencode($this->service->getdn());?>',
+            action: 'start'},'startsquid');
+        </script>
+        </button>
+
+    </div>
+    <div class="clearline"></div>
+    
+    <div class="dashboarddl">Squid Server:</div>
+    <div class="dashboarddr" style="font-weight: bold;"><a href="#" 
+        onclick="zivios.cpaneRefresh('dirdata', 
+        '/default/server/view/dn/<?php echo $this->masterComputer->getdn(); ?>'); return false;"><?php 
+        echo $this->masterComputer->getProperty("cn"); ?></a></div>
+    <div class="clearline"></div>
+<?php
+endif;
+?>
+<style type="text/css">
+.dashboarddl {
+    float: left; 
+    width: 125px;
+    padding: 5px;
+    clear: left;
+    vertical-align: middle;
+    text-align: right;
+}
+
+.dashboarddr {
+    float: left;
+    clear: right;
+    padding: 5px;
+}
+
+.clearline {
+    clear: both;
+    border-bottom: 1px solid #e7e7e7;
+}
+</script>
+

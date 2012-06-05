@@ -1,0 +1,53 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		Zivios
+ * @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ **/
+
+Zend_Dojo_View_Helper_Dojo::setUseDeclarative();
+$this->dojo()->enable();
+
+// start border layout container for group entry.
+$this->borderContainer()->captureStart('mailentry', array('design' => 'headline', 
+    'style' => 'width: 99%; padding: 0px; margin: 0px; border: 0px;'));
+
+// Content pane for group toolbar
+$this->contentPane()->captureStart('mailtb01', array('region' => 'top', 'style' => 'padding: 0px; margin: 0px;'));
+
+echo $this->render('service/toolbar/main.phtml');
+
+echo $this->contentPane()->captureEnd('mailtb01');
+
+
+$this->contentPane()->captureStart('maildata',array ('region' => 'center', 'style' => 'padding: 0px; margin: 0px;'));
+
+$this->tabContainer()->captureStart('mailservicetabs', array('class' => 'u-tab'));
+
+$this->contentPane()->captureStart('mailmain',array('region' => 'center', 'style' => 'padding: 0px; margin: 0px;',
+                                                    'title' => 'Mail Service Dashboard',
+                                                    'href' => '/mail/service/dashview/dn/'.urlencode($this->entry->getdn())));
+
+echo $this->contentPane()->captureEnd('mailmain');
+
+echo $this->tabContainer()->captureEnd('mailservicetabs');
+
+echo $this->contentPane()->captureEnd('maildata');
+echo $this->borderContainer()->captureEnd('mailentry');

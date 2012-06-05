@@ -1,0 +1,79 @@
+<?php
+/**
+ * Copyright (c) 2008-2010 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		ZiviosInstaller
+ * @copyright	Copyright (c) 2008-2010 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ **/
+$formid   = Zivios_Util::randomString(8);
+$regexLib = Zivios_Util::getRegexLibrary();
+?>
+<div class="heading">Bind DNS Initialization</div>
+<div class="content">
+    Zivios is ready to configure the DNS service. DNS, or Domain Name System, 
+    translates domain names meaningful to humans into the numerical (binary)
+    identifiers associated with networking equipment for the purpose of locating and 
+    addressing these devices.
+    <br /><br />
+</div>
+
+<div class="subheading">Bind DNS Configuration</div>
+<div class="content">
+
+    <form id='<?php echo $formid; ?>' enctype="application/x-www-form-urlencoded" method="post" 
+        action="#" dojoType="dijit.form.Form">
+
+    <label>Master Zone: </label>
+    <input name="bindsetup[rq_hostname_zone_DNS+Zone]" type="text" dojoType="dijit.form.ValidationTextBox" size="16" maxlength="64" 
+            regExp="<?php echo $regexLib->exp->hostname; ?>" required="true" 
+            invalidMessage="Invalid characters in DNS Zone." class="genField" disabled="true"
+            value="<?php echo $this->localSysInfo['bindzone']; ?>" />
+    <div class="cboth"></div>
+
+    <div class="info" style="margin-top: 10px;">
+        <b>This section is optional</b><br/>
+        DNS Forwarders can be specified if you would like Zivios DNS to forward all
+        DNS queries to other DNS Services on your network.
+    </div>
+
+    <label>Forwarder 1: </label>
+    <input name="bindsetup[op_ip_forwarder1_DNS+Forwarder+1]" type="text" dojoType="dijit.form.ValidationTextBox" size="16" maxlength="64" 
+            regExp="<?php echo $regexLib->exp->ip; ?>" required="false" 
+            invalidMessage="Invalid characters in IP Address." class="genField"
+            value="" />
+    <div class="cboth"></div>
+
+    <label>Forwarder 2: </label>
+    <input name="bindsetup[op_ip_forwarder2_DNS+Forwarder+2]" type="text" dojoType="dijit.form.ValidationTextBox" size="16" maxlength="64" 
+            regExp="<?php echo $regexLib->exp->ip; ?>" required="false" 
+            invalidMessage="Invalid characters in IP Address." class="genField"
+            value="" />
+    <div class="cboth"></div>
+
+    <label></label>
+    <input onclick="installer.postxhr('/installer/index/processinibind', '', '<?php echo $formid; ?>',
+        'form', 'json', [], ['loadingmsg'], ['loadingmsg'], [], this.id); return false;" 
+        name="inibind" value="Initialize Bind DNS" 
+        type="submit" label="Initialize Bind DNS" dojoType="dijit.form.Button"/>
+    <div class="cboth"></div>
+
+    <input type="hidden" name="bindsetup[rq_alnumnospaces_initializeBind_Initialize+Bind]" value="1"/>
+    </form>
+
+</div>

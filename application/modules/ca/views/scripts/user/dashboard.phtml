@@ -1,0 +1,41 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     mod_ca
+ * @copyright   Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+?>
+<br />
+<ul id="pluginnavmenu" style="padding-left: 10px;">
+    <li><a href="#" onclick="javascript:callAction('/ca/user/dashview/', 'pgupdate','<?php
+        echo $this->obj->getdn(); ?>');">Dashboard</a></li>
+    <li><a href="#" onclick="javascript:callAction('/ca/user/downloadcert/','pgupdate','<?php
+        echo $this->obj->getdn(); ?>');">Download Certificate</a></li>
+    <li><a href="#">Certificate Management</a>
+        <ul>
+            <li><a href="#" onclick="javascript:callAction('/ca/user/revokecert/','pgupdate','<?php
+            echo $this->obj->getdn(); ?>');">Revoke Certificate</a></li>
+            <li><a href="#" onclick="javascript:callAction('/ca/user/requestrenewal/','pgupdate','<?php
+            echo $this->obj->getdn(); ?>');">Request Renewal</a></li>
+        </ul>
+    </li>
+</ul>
+<br />
+<?php echo $this->render("user/dashview.phtml"); ?>

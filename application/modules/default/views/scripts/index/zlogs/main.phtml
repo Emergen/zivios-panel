@@ -1,0 +1,51 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     Zivios
+ * @copyright   Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+
+$this->dojo()->enable();
+?>
+<script language="text/javascript">
+    zivios.feedConsole();
+</script>
+<div class="info">Select the log file below. 
+    <br />
+
+    <input type=radio name=logs onClick="javascript:zivios.feedConsole('logfile');"> Zpanel </input>
+    <input type=radio name=logs onClick="javascript:zivios.feedConsole('errorlog');"> Error </input>
+    <input type=radio name=logs onClick="javascript:zivios.feedConsole('syslog');"> System </input>
+    &nbsp;&nbsp;&nbsp;
+    <button dojoType="dijit.form.Button" id="clear_logs">Clear Logs
+         <script type="dojo/method" event="onClick">
+            document.getElementById("consoleLog").innerHTML = '';
+         </script>
+    </button>
+    <button dojoType="dijit.form.Button" id="stop_logger">Stop Logger
+         <script type="dojo/method" event="onClick">
+            zivios.stopFeed();
+         </script>
+    </button>
+</div>
+
+<?php echo $this->form; ?>
+
+<div id="consoleLog"> </div>

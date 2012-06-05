@@ -1,0 +1,165 @@
+<style type="text/css">
+.labell {
+    margin-top: 0px;
+    line-height: 18px;
+}
+</style>
+
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     mod_asterisk
+ * @copyright   Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+
+ 
+$formid   = Zivios_Util::randomString(8);
+$regexLib = Zivios_Util::getRegexLibrary();
+$plugin = $this->plugin;
+
+$locked = $plugin->getProperty('pwdaccountlockedtime');
+if ($locked != "") {
+    $locked = true;
+    $unlock = "";
+    $lock = "disabled";
+    $status = "<font color='red'>Locked</font>";
+}
+else { 
+    $locked = false;
+    $unlock = "disabled";
+    $lock = "";
+    $status = "<font color='green'>Active</font>";
+}
+
+
+if ($plugin->isAdminLock()) {
+    $status = "<font color='red'>Administrativly Locked</font>";
+}
+
+ 
+
+?>
+<form id='<?php echo $formid; ?>' enctype="application/x-www-form-urlencoded" method="post" 
+        action="#" dojoType="dijit.form.Form">
+        
+<div class="subheading">Openldap PPolicy Plugin</div>
+<div style="float: left; width: 600px;">
+<div class="content">
+
+<div class="labell">Account Unlock Options:</div>
+<select class="genField" <?php echo $unlock;?> dojoType="dijit.form.FilteringSelect" name="ldap[op_noval_pwdreset_PRD]">
+<option value="" SELECTED>No Action</option>
+<option value="TRUE">Unlock and Force password Change</option>
+<option value="FALSE">Unlock only</option>
+</select>
+<div class="cboth"></div>
+
+<div class="labell">Forceful password change: </div>
+<input dojoType="dijit.form.CheckBox" <?php echo $lock; ?> name="ldap[op_noval_pwdmustchange_PWE]" value='1' class="genField"/>
+<div class="cboth"></div>
+
+<div class="labell">Password Policy:</div>
+<select class="genField" dojoType="dijit.form.FilteringSelect" name="ldap[op_noval_pwdpolicydn_PRD]">
+<?php
+    $policy =trim($plugin->getProperty('pwdpolicysubentry'));
+    Zivios_Log::error("policy is : *".$policy."*");
+    if ($policy == '') {
+        Zivios_Log::error("Marking default policy selected");
+        $defpolicy = "SELECTED";
+    } else {
+        $defpolicy = "";
+    }
+
+?>
+<option  <?php echo $defpolicy;?> value="-" >Default Policy</option>
+
+<?php 
+foreach ($this->policies as $pol) {
+    if (strtolower($pol->getdn()) != strtolower($plugin->getDefaultPolicy())) {
+        if (strtolower(trim($policy)) == strtolower(trim($pol->getdn()))) {   
+            Zivios_Log::debug("Marking ".$pol->getdn()." selected");
+            $selected = "SELECTED";
+        } else {
+            $selected = "";
+        }
+    
+    
+    ?>
+    <option <?php echo $selected;?> value="<?php echo urlencode($pol->getdn());?>" > <?php echo $pol->getProperty('cn'); ?></option>
+    <?php
+    }
+}
+?>
+
+
+</select>
+<div class="cboth"></div>
+
+
+    
+<br />
+    <div class="labell"></div>
+    <input type="hidden" name="ldap[rq_noval_dn_dn]" value="<?php echo $this->dn;?>"/>
+
+    <input onclick="zivios.postxhr('/openldap/ppolicy/userupdate', '', '<?php echo $formid; ?>',
+        'form', 'json', [], [], [], [], this.id); return false;" 
+        name="inica" value="Apply" 
+        class="genField" type="submit" label="Apply" dojoType="dijit.form.Button"/>
+    <div class="cboth"></div>
+    </form>
+
+</div>
+
+</div>
+
+<div class="info" style="float: left; width: 300px;"?>
+<?php
+$date = $plugin->getProperty('pwdchangedtime');
+$flags = array();
+if (strtolower($plugin->getProperty('pwdreset')) == 'true')
+    $flags[]="Password must be changed on next login";
+
+$expiry = $plugin->getExpiryDate();
+if ($expiry != null && $expiry != "") {
+    $exp = Zivios_Util::tsRender($expiry->getTimeStamp());
+} else {
+    $exp = "N/A";
+}
+?>
+<table class="general">
+<tr><td>Account Status:</td><td><?php echo $status;?></td></tr>
+<?php if ($locked) { ?>
+<tr><td>Account Locked Time: </td><td><?php echo Zivios_Util::ldapDateRender($plugin->getProperty('pwdaccountlockedtime'));?></td></tr>
+<?php } ?>
+<tr><td>Password Last Changed: </td><td><?php echo Zivios_Util::ldapDateRender($date);?></td></tr>
+<tr><td>Password Expires: </td><td><?php echo $exp;?></td></tr>
+<tr><td>Consecutive Password Failures: </td><td><?php echo sizeof($plugin->getProperty('pwdfailuretime'));?></td></tr>
+<tr><td>Grace Logins: </td><td><?php echo sizeof($plugin->getProperty('pwdgraceusetime'));?></td></tr>
+<tr><td>Flags: </td><td><?php echo implode(',',$flags);?></td></tr>
+<tr><td>Applied Policy: </td><td><?php echo $plugin->getPolicy()->getProperty('cn')?></td></tr>
+
+
+</table>
+
+
+</div>
+
+<div class="cboth"></div>
+

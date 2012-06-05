@@ -1,0 +1,52 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     mod_package
+ * @copyright   Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+ 
+ 
+?>
+
+<div class="floatleft">
+      <input dojoType="dijit.form.ValidationTextBox" id="pnamesearch" />
+</div>
+
+<div class="floatleft">
+    <button dojoType="dijit.form.Button">Search!
+    <script type="dojo/method" event="onClick">
+            searchval = dojo.byId('pnamesearch').value;
+            zivios.cpaneRefresh('packagedisplay','/package/computer/searchpackages/dn/<?php echo urlencode($this->computer->getdn());?>/searchname/'+searchval);
+        </script>
+      </button>
+</div>
+
+    
+<div class="floatleft">
+    <button dojoType="dijit.form.Button">Refresh Package Listing
+        <script type="dojo/method" event="onClick">
+            zivios.callAction('/package/computer/repopulatepackages',
+                {dn: '<?php echo urlencode($this->computer->getdn());?>'},
+                this.id);
+        </script>
+      </button>
+</div>
+<div class="clearboth"> </div>
+    

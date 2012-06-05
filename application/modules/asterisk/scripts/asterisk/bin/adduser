@@ -1,0 +1,90 @@
+#!/usr/bin/perl -w
+#
+# Copyright (c) 2008 Zivios, LLC.
+#
+# This file is part of Zivios.
+#
+# Zivios is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Zivios is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+#
+# @package		Zivios
+# @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+# @license		http://www.zivios.org/legal/license
+# @version		$Id: addattendant 1019 2008-09-08 07:26:34Z gmustafa $
+#
+use lib "/opt/zivios/asterisk/lib";
+use Asterisk::config;
+use Getopt::Long;
+##--timeoutrestart='1' --reportholdtime='1' --retry='10' --name='eclq' --timeoutdest='' --announce_holdtime='1' --exten='3000' --qtimeout='90' --strategy='ringall' 
+#--maxlen='0' --joinempty='yes' --members='1002' --wrapuptime='0' --memberdelay='0' --musiconhold='default'
+
+##args from cmd line
+GetOptions ("name=s" 		=> \$name,
+			"exten:s"		=> \$exten,
+			"joinempty:s"	=> \$joinempty,
+			"musiconhold:s"	=> \$musiconhold,
+			"memberdelay:s"	=> \$memberdelay,
+			"strategy:s"	=> \$strategy,
+			"reportholdtime:s"	=> \$reportholdtime,
+			"context:s"		=> \$context,
+			"timeout:s"		=> \$timeout,
+			"retry:s"		=> \$retry,
+			"qtimeout:s"	=> \$qtimeout,
+			"timeoutrestart:s"	=> \$timeoutrestart,
+			"maxlen:s"		=> \$maxlen,
+			"timeoutdest:s"	=> \$timeoutdest,
+			"wrapuptime:s"	=> \$wrapuptime,
+			"announce_frequency:s"	=> \$announce_frequency,
+			"announce_holdtime:s"	=> \$announce_holdtime,
+			"members:s"	=> \$members);  
+##
+
+@memberz = split(' ',$members);
+
+my $rc = new Asterisk::config(file=>'/etc/asterisk/queues.conf',keep_resource_array=>0);
+
+$rc->assign_addsection(section=>$name);
+if ($musiconhold ne "")   { $rc->assign_append(point=>'foot',section=>$name,data=>"musicclass=$musiconhold"); }
+if ($strategy ne "")   { $rc->assign_append(point=>'foot',section=>$name,data=>"strategy=$strategy"); }
+if ($timeout ne "")   { $rc->assign_append(point=>'foot',section=>$name,data=>"timeout=$timeout"); }
+if ($timeoutrestart ne "")   { $rc->assign_append(point=>'foot',section=>$name,data=>"timeoutrestart=$timeoutrestart"); }
+if ($context ne "")   { $rc->assign_append(point=>'foot',section=>$name,data=>"context=$context"); }
+if ($retry ne "")   { $rc->assign_append(point=>'foot',section=>$name,data=>"retry=$retry"); }
+if ($maxlen ne "")   { $rc->assign_append(point=>'foot',section=>$name,data=>"maxlen=$maxlen"); }
+if ($joinempty ne "")   { $rc->assign_append(point=>'foot',section=>$name,data=>"joinempty=$joinempty"); }
+if ($reportholdtime ne "")   { $rc->assign_append(point=>'foot',section=>$name,data=>"reportholdtime=$reportholdtime"); }
+if ($wrapuptime ne "")   { $rc->assign_append(point=>'foot',section=>$name,data=>"wrapuptime=$wrapuptime"); }
+if ($announce_frequency ne "")   { $rc->assign_append(point=>'foot',section=>$name,data=>"announce\-frequency=$announce_frequency"); }
+if ($announce_holdtime ne "")   { $rc->assign_append(point=>'foot',section=>$name,data=>"announce\-holdtime=$announce_holdtime"); }
+if ($memberdelay ne "")   { $rc->assign_append(point=>'foot',section=>$name,data=>"memberdelay=$memberdelay"); }
+
+foreach (@memberz) {
+	     $rc->assign_append(point=>'foot',section=>$name,data=>"member => $_");
+}
+
+
+##exten entry
+my $rcexten = new Asterisk::config(file=>'/etc/asterisk/extensions.conf',keep_resource_array=>0);
+$rcexten->assign_append(point=>'foot',section=>'queues',data=>"exten => $exten,1,Queue($name||||$qtimeout)");
+if ($timeoutdest ne "") {
+	$rcexten->assign_append(point=>'foot',section=>'queues',data=>"exten => $exten,2,Goto($timeoutdest)");
+	$rcexten->assign_append(point=>'foot',section=>'queues',data=>"exten => $exten,3,Hangup()");
+} else {
+	$rcexten->assign_append(point=>'foot',section=>'queues',data=>"exten => $exten,2,Hangup()");
+}
+
+$rcexten->save_file();
+##end exten entry
+
+
+$rc->save_file();

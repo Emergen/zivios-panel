@@ -1,0 +1,171 @@
+;;
+;/**
+; * Copyright (c) 2008 Zivios, LLC.
+; *
+; * This file is part of Zivios.
+; *
+; * Zivios is free software: you can redistribute it and/or modify
+; * it under the terms of the GNU General Public License as published by
+; * the Free Software Foundation, either version 3 of the License, or
+; * (at your option) any later version.
+; *
+; * Zivios is distributed in the hope that it will be useful,
+; * but WITHOUT ANY WARRANTY; without even the implied warranty of
+; * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+; * GNU General Public License for more details.
+; *
+; * You should have received a copy of the GNU General Public License
+; * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+; *  
+; * @package        Zivios
+; * @copyright      Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+; * @license        http://www.zivios.org/legal/license
+; **/
+;;
+
+;
+; General application parameters
+;
+[general]
+appname                         = "Zivios EMS"
+appnameshort                    = "Zivios"
+basePath                        = "%%%BASE_PATH%%%"
+appPath                         = "../application"
+modules                         = "../application/modules"
+status                          = "../application/status"
+tmpdir                          = "../application/tmp"
+ziviosTheme                     = "tundra"
+
+[phpenv]
+renderexceptions                = 0
+displayerrors                   = 0
+timezone                        = "UTC"
+reporting                       = "8191"
+
+[session]
+save_path                       = "tcp://localhost:11211?persistent=1&weight=2&timeout=2&retry_interval=10"
+save_handler                    = "memcache"
+name                            = ziviospanel
+use_only_cookies                = on
+strict                          = true
+remember_me_seconds             = 864000
+cookie_lifetime                 = 864000
+gc_probability                  = 1
+gc_divisor                      = 100
+gc_maxlifetime                  = 1440
+
+[web]
+baseUrl                         =
+jsBase                          = "/public/scripts"
+imgBase                         = "/public/imgs"
+
+[primarylayout]
+layout                          = "default"
+layoutPath                      = "../application/layouts/scripts/zpanel"
+contentKey                      = "content"
+title                           = "Zivios :: Open Source Enterprise Management"
+
+[loginlayout]
+layout                          = "default"
+layoutPath                      = "../application/layouts/scripts/login"
+contentKey                      = "content"
+title                           = "Zivios :: Open Source Enterprise Management"
+
+[selfservicelayout]
+layout                          = "default"
+layoutPath                      = "../application/layouts/scripts/selfservice"
+contentKey                      = "content"
+title                           = "Zivios :: Open Source Enterprise Management"
+
+[view]
+encoding                        = "UTF-8"
+escape                          = "htmlentities"
+strictvars                      = 1
+dojo.isDebug                    = false
+
+; valid values are: yes, no. @todo: implement 'probe'
+; Use "yes" in production.
+dojo.buildDirectory             = "/release"
+dojo.useBuild                   = "yes"
+
+[database]
+host                            = "%%%DB_HOST%%%"
+name                            = "%%%DB_NAME%%%"
+username                        = "%%%DB_USER%%%"
+password                        = "%%%DB_PASS%%%"
+socket                          = "%%%DB_SOCKET%%%"
+
+[ldap]
+host                            = "%%%MASTER_COMPUTER%%%"
+port                            = 389
+basedn                          = "%%%BASE_DN%%%"
+protocol                        = 3
+deref                           = 0
+sizelimit                       = 500
+timelimit                       = 300
+admindnprefix                   = "uid=zadmin,ou=zUsers,ou=Core Control,ou=Zivios"
+allowparamovrwrite              = 1
+transactiondebug                = 0
+placeholder                     = "cn=placeholder,%%%BASE_DN%%%"
+ldap_gid_min                    = 2000
+ldap_gid_max                    = 4999
+ldap_uid_min                    = 5000
+ldap_uid_max                    = 100000
+
+[cache]
+host                            = "localhost"
+port                            = 11211
+expiretime                      = 3600
+transexptime                    = 10000
+
+[kerberosmaster]
+host                            = "%%%MASTER_COMPUTER%%%"
+realm                           = "%%%KRB5_REALM%%%"
+kdcport                         = 88
+kadminport                      = 749
+kdcflags                        = 586
+encryptiontype                  = 23
+kdchostflags                    = 126
+
+[security]
+secret_key                      = "%%%SECURITY_KEY%%%"
+encryption_type                 = "tripledes"
+zadminaclbypass                 = 1
+strictacls                      = 1
+inactivity_timeout              = 3600
+
+[casystem]
+CA_pubkey                       = "%%%CA_PUBCERT%%%"
+webservice_pubkey               = "%%%HOST_PUBCERT%%%"
+webservice_prvkey               = "%%%HOST_PRVKEY%%%"
+
+[log]
+;
+; The log levels defined below should be set as desired.
+; Production level environments are encouraged to not run in DEBUG
+; mode.
+;
+; EMERG   = 0;  // Emergency: system is unusable
+; ALERT   = 1;  // Alert: action must be taken immediately
+; CRIT    = 2;  // Critical: critical conditions
+; ERR     = 3;  // Error: error conditions
+; WARN    = 4;  // Warning: warning conditions
+; NOTICE  = 5;  // Notice: normal but significant condition
+; INFO    = 6;  // Informational: informational messages
+; DEBUG   = 7;  // Debug: debug messages
+;
+; Per class loglevels can also be chosen.
+; In the example below we instruct the logger to :
+; 1) Keep a default loglevel of 4
+; 2) All Inherited classes of Ecl_Ldap_Engine and Ecl_Plugin have their logging set to 7
+; 3) Ecl_Parameter specifically has debugging set to 7
+; 4) EMSSecurityObject (which inherits from Ecl_Ldap_Engine) has logging turned to 4
+
+productionmode                      = 1
+loglevel                            = 4
+childrenof.Zivios_Ldap_Engine       = 3
+childrenof.Zivios_Plugin            = 3
+childrenof.Zivios_Controller        = 3
+Zivios_Parameter                    = 3
+EMSSecurityObject                   = 3
+logfile                             = "%%%APP_LOG%%%"

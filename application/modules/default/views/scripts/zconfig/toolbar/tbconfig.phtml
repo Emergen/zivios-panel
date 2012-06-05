@@ -1,0 +1,57 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     Zivios
+ * @copyright   Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+?>
+<p class="toolbar">
+<div dojoType="dijit.Toolbar" style="width:100%;height:23px;float:left;">
+     <div id="zvconfig.gen" dojoType="dijit.form.Button" iconClass="genericIcon configIcon" class="smtxt"
+        showLabel="true" 
+        onClick="zivios.cpaneAction('zvconfigcenter','default/zconfig/general/','','zvconfig.gen');">
+        <span class="smtxt">General Settings</span></div>
+
+     <div id="zvconfig.dir" dojoType="dijit.form.Button" iconClass="genericIcon directoryIcon" class="smtxt"
+        showLabel="true" 
+        onClick="zivios.cpaneAction('zvconfigcenter','default/zconfig/directory/','','zvconfig.dir');">
+        <span class="smtxt">Directory Settings</span></div>
+
+     <div id="zvconfig.sec" dojoType="dijit.form.Button" iconClass="treeIcon treeManageAclsIcon" class="smtxt"
+        showLabel="true" 
+        onClick="zivios.cpaneAction('zvconfigcenter','default/zconfig/security/','','zvconfig.sec');">
+        <span class="smtxt">Security Settings</span></div>
+
+     <div id="zvconfig.db" dojoType="dijit.form.Button" iconClass="genericIcon configIcon" class="smtxt"
+        showLabel="true" 
+        onClick="zivios.cpaneAction('zvconfigcenter','default/zconfig/database/','','zvconfig.db');">
+        <span class="smtxt">Database Settings</span></div>        
+
+     <div id="zvconfig.log" dojoType="dijit.form.Button" iconClass="genericIcon clipboardIcon" class="smtxt"
+        showLabel="true" 
+        onClick="zivios.cpaneAction('zvconfigcenter','default/zconfig/loglevel/','','zvconfig.log');">
+        <span class="smtxt">Log Level</span></div>
+
+     <div id="zvconfig.info" dojoType="dijit.form.Button" iconClass="genericIcon helpIcon" class="smtxt"
+        showLabel="true" 
+        onClick="zivios.cpaneAction('zvconfigcenter','default/zconfig/info','','zvconfig.info');">
+        <span class="smtxt">Information</span></div>
+</div>
+</p>

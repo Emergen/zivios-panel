@@ -1,0 +1,83 @@
+<table class="general">
+<th>From</th>
+<th>From CLI</th>
+<th>To</th>
+<th>Duration</th>
+<th>Last State</th>
+<th>Last Application</th>
+<th>Bridged To</th>
+<th>Action</th>
+
+<?php 
+$matches = array();
+if (sizeof($this->chanstatus == 0)) {
+    ?>
+    <tr><td style="text-align: center;" colspan=8>No Active Channels</td></tr>
+    <?php
+}
+foreach ($this->chanstatus as $call) {
+    $matches = array();
+    preg_match_all('/\/([\s\S]+?)-/',$call[0],$matches);
+    $uid = $matches[1][0];
+    $user = new EMSUser();
+    $newuser = $user->getByUid($uid);
+    if ($newuser != null) {
+        $fromname = $newuser->getProperty('cn');
+    } else {
+        $fromname = $call[0];
+    }
+        
+    ?>
+    <tr>
+    <td><?php echo $fromname;?></td>
+    <td><?php echo $call[7];?></td>
+    <td><?php echo $call[2];?></td>
+    <td><?php echo $call[10];?></td>
+    <td><?php echo $call[4];?></td>
+    <td><?php echo $call[5];?></td>
+    <td><?php echo $call[11];?></td>
+    <td><button dojoType="dijit.form.Button" type="button">
+        Hangup
+        <script type="dojo/method" event="onClick">
+        jsonobj = {
+                srvdn: '<?php echo urlencode($this->service->getdn());?>',
+                channel: '<?php echo urlencode($call[0]);?>',
+                command: 'hangup'};
+        zivios.postxhr('/asterisk/service/docallmonitor','astmonitor',jsonobj,
+                'text','json',[],[],[],[],this.id);
+        </script>
+        </button></td>
+    </tr>
+    <?php
+}
+/*
+array(1) {
+  [0] => array(13) {
+    [0] => string(18) "SIP/fkhan-00000000"  << From
+    [1] => string(8) "from-sip"
+    [2] => string(5) "10000"  << to
+    [3] => string(1) "2"
+    [4] => string(4) "Ring"   << Last State
+    [5] => string(4) "Wait"  << Last Application
+    [6] => string(3) "250"
+    [7] => string(4) "6666"  << Callerid Num
+    [8] => string(0) ""
+    [9] => string(1) "3"
+    [10] => string(2) "18"  << Duration
+    [11] => string(6) "(None)" << Bridged to Channel
+    [12] => string(12) "1273586611.1"
+  }
+}
+*/
+
+
+
+?>
+</table>
+<br />
+<button dojoType="dijit.form.Button" type="button">
+        Refresh
+        <script type="dojo/method" event="onClick">
+        zivios.cpaneRefresh('astmonitor','/asterisk/service/callmonitor/dn/<?php echo $this->service->getdn();?>');
+        </script>
+        </button>

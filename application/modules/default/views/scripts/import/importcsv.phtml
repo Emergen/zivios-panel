@@ -1,0 +1,75 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     Zivios
+ * @copyright   Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+?>
+<div class="note notecl" style="width: 450px;">
+    If you have a formatted CSV file to import under this dn, please upload it here
+</div>
+<P><b>CSV Import</b></p>
+<form id="csvimport" enctype="multipart/form-data" action="/import/docsvimport" method="POST">
+<fieldset>
+<input type="hidden" name="MAX_FILE_SIZE" value="100000" />
+<input type="hidden" name="parentdn" value="<?php echo urlencode($this->dn);?>"/>
+<labeL>Choose a file to upload: </label> <input name="uploadedfile" type="file"/>
+<br />
+<div style="float: left; width: 200px;">
+ <label for="">Convert To: </label>        
+<select dojoType="dijit.form.FilteringSelect" name="convertto" size="10">
+  <script type="dojo/method" event="onChange">
+    el = dojo.byId('csvgroupac');
+    display = el.style.display;
+    if (this.value == 'user') {
+        dojo.fx.wipeIn({
+            node: "csvgroupac",
+            duration: 300}).play();
+    } else if (display != 'none') {
+        dojo.fx.wipeOut({
+            node: "csvgroupac",
+            duration: 300}).play();
+    }  
+        
+  </script>
+  <option value="user" selected="selected">Users</option>
+  <option value="group">Groups</option>
+  <option value="bcontainer">Branch containers</option>
+  <option value="locality">Locality</option>
+  <option value="custom">Customer Containers</option>
+</select>
+</div>
+<div id="csvgroupac" style="float: left; width: 300px;">
+    <div dojoType="zivios.AutocompleteReadStore" jsId="csvstateStore" 
+            url="/user/getavailablegroups/dn/<?php echo urlencode($this->dn);?>"></div>
+    <b>Default Group: </b> 
+    <input dojoType="dijit.form.FilteringSelect" value="" store="csvstateStore" name="defaultgroup" required="false">
+</div>
+<div style="clear: both;"></div>
+ <div class="note">Import all selected entries? 
+    <button dojoType="dijit.form.Button" id="csvimport-submit"> Start Import
+        <script type="dojo/method" event="onClick">
+        zivios.ioIframeGetJson('csvimport','/import/docsvimport');
+        </script>
+    </button>
+</div>
+</fieldset>
+</form>
+

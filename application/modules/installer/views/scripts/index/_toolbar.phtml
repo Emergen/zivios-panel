@@ -1,0 +1,65 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		ZiviosInstaller
+ * @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ **/
+?>
+<p class="toolbar">
+<div id="itoolbar" dojoType="dijit.Toolbar" style="width: 700px;">
+    <div dojoType="dijit.form.DropDownButton" id="itoolbar.notifications" iconClass="dijitToolbarIcon dijitToolbarIconNotifications">
+        <span></span>
+        <div dojoType="dijit.TooltipDialog" id="system-notifications" title="Notifications">
+            <div id="notifyarea">System Notifications</div>
+            <div class="toolbarcdiv"><a href="#" onClick="javascript:installer.clearDiv('notifydata');"
+            ><img src="public/scripts/dijit/themes/tundra/images/tabCloseHover.png" align="absmiddle"/></a>
+            <a href="#" onClick="javascript:installer.clearDiv('notifydata');">Clear Notifications</a></div>
+            <div id="notifydata"></div>
+        </div>
+    </div>
+
+     <div dojoType="dijit.form.DropDownButton" id="itoolbar.alerts" iconClass="dijitToolbarIcon dijitToolbarIconAlerts">
+        <span></span>
+        <div dojoType="dijit.TooltipDialog" id="system-alerts" title="Alerts" style="display: none;">
+            <div id="alertarea">System Alerts</div>
+            <div class="toolbarcdiv"><a href="#" onClick="javascript:installer.clearDiv('alertdata');"
+            ><img src="public/scripts/dijit/themes/tundra/images/tabCloseHover.png" align="absmiddle"/></a>
+            <a href="#" onClick="javascript:installer.clearDiv('alertdata');">Clear Alerts</a></div>
+            <div id="alertdata"></div>
+        </div>
+    </div>
+   
+     <div dojoType="dijit.form.DropDownButton" id="itoolbar.exceptions" iconClass="dijitToolbarIcon dijitToolbarIconExceptions">
+        <span></span>
+        <div dojoType="dijit.TooltipDialog" id="system-exceptions" title="Exceptions">
+            <div id="exceptionarea">System Exceptions</div>
+            <div class="toolbarcdiv"><a href="#" onClick="javascript:installer.clearDiv('exceptiondata');"
+            ><img src="public/scripts/dijit/themes/tundra/images/tabCloseHover.png" align="absmiddle"/></a>
+            <a href="#" onClick="javascript:installer.clearDiv('exceptiondata');">Clear Exceptions</a></div>
+            <div id="exceptiondata"></div>
+        </div>
+    </div>
+</div>
+
+<div dojoType="dijit.Tooltip" connectId="itoolbar.notifications" showDelay="0" position="top">System Notifications</div>
+<div dojoType="dijit.Tooltip" connectId="itoolbar.exceptions" showDelay="0" position="top">System Exceptions</div>
+<div dojoType="dijit.Tooltip" connectId="itoolbar.alerts" showDelay="0" position="top">System Alerts</div>
+</p>
+

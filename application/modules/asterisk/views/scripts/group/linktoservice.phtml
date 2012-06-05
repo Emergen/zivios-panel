@@ -1,0 +1,50 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     mod_kerberos
+ * @copyright   Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+
+ 
+$formid   = Zivios_Util::randomString(8);
+$regexLib = Zivios_Util::getRegexLibrary();
+?>
+
+<div class="subheading">Link Group to Asterisk</div>
+<div class="content">
+    <form id='<?php echo $formid; ?>' enctype="application/x-www-form-urlencoded" method="post" 
+        action="#" dojoType="dijit.form.Form">
+    
+    
+     
+    <br />
+    <input onclick="zivios.postxhr('/asterisk/group/dolinktoservice', '', '<?php echo $formid; ?>',
+        'form', 'json', [], [], [], [], this.id); return false;" 
+        name="inica" value="Link Group to Asterisk" 
+        type="submit" label="Link Group to Asterisk" dojoType="dijit.form.Button"/>
+    <div class="cboth"></div>
+
+    <input type="hidden" name="ast[rq_noval_dn_dn]" value="<?php echo $this->entry->getdn();?>"/>
+	<input type="hidden" name="ast[rq_noval_srvdn_dn]" value="<?php echo $this->srvdn;?>"/>
+
+
+    </form>
+</div>
+ 

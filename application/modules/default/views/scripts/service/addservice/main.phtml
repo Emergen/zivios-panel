@@ -1,0 +1,73 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		Zivios
+ * @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ **/
+if (!empty($this->serviceConfigs)) {
+    ?>
+    <p>
+    <div class="note notecl" style="width: 576px; margin-left: 10px;">
+    You are adding a service in the DN: <b><?php echo $this->srvcntDn; ?></b>. Please note that
+    Zivios is going to search for servers added to the Zivios system running operating systems
+    compatible with the service you are about to add.
+    <br/><br/>
+    Servers will be searched for with the base DN set to: <b><?php echo $this->parentDn; ?></b>.
+    <br /><br />
+    If no compatible operating systems are found, Zivios will display a list of compatible 
+    operating systems for the service in question.
+    </div>
+
+    <div style="padding-left: 5px;">
+
+        <div class="gtbsheader colstart hdext">Service</div>
+        <div class="gtbsheader colmid hdext">Version</div>
+        <div class="gtbsheader colend hdext">Options</div>
+
+    <?php
+    foreach ($this->serviceConfigs as $service) {
+        if (!$service->general->iscore && !$service->general->isdisabled) {
+            echo '<div class="gtbscol colstart clext">' . $service->general->displayname . '</div>';
+            echo '<div class="gtbscol colmid clext">' . $service->general->moduleversion . '</div>';
+            echo '<div class="gtbscol colend clext">
+            <button dojoType="dijit.form.Button" id="' . $service->general->modulename . '_install">Install
+                 <script type="dojo/method" event="onClick">
+                    zivios.cpaneRefresh("dirdata", "/service/addservice/dn/'.
+                        urlencode($this->srvcntDn).'/service/'.
+                        $service->general->modulename.'/install/1");
+
+                 </script>
+            </button>&nbsp;
+            </div>';
+        }
+    }
+    ?>
+    </div>
+    </p>
+    <?php
+} else {
+    echo '<div class="alert">No services are available for activation.</div>';
+}
+?>
+<style type="text/css">
+.hdext {width: 200px;}
+.clext {width: 200px;}
+</style>
+

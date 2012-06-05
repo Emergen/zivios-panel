@@ -1,0 +1,73 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		mod_samba
+ * @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ * @version		$Id$
+ * @lastchangeddate $LastChangedDate$
+ **/
+
+$pwdchange = "";
+$pwdmustchange = "";
+if ($this->plug->getProperty('sambapwdcanchange') == 1) {
+    $pwdchange = "CHECKED";
+}
+
+if ($this->plug->getProperty('sambapwdmustchange') == 1) {
+    $pwdmustchange = "CHECKED";
+}
+?>
+<div id="pgupdate">
+<br />
+
+<form id="editplugin" onsubmit="javascript:return false;">
+<input type="hidden" name="operate_dn" value="<?php echo $this->obj->getdn();?>" />
+<input type="hidden" name="action" value="update" />
+<fieldset>
+<legend>Samba Plugin</legend>
+<br />
+<label>Home Drive</label>
+<input type="text" size="32" name="homedrive" value="<?php echo $this->plug->getProperty('sambahomedrive');?>"/>
+
+<br />
+<label>User Changeable Password</label>
+<input type="checkbox" name="pwdcanchange" value="1" <?php echo $pwdchange;?>/>
+
+<br />
+<label>Force Password Change on Next Login</label>
+<input type="checkbox" name="pwdmustchange" value="1" <?php echo $pwdmustchange;?> />
+
+<br />
+<label>Profile Path</label>
+<input type="text" size="32" name="profilepath" value="<?php echo $this->plug->getProperty('sambaprofilepath');?>"/>
+
+</fieldset>
+<br />
+<fieldset>
+<legend>Samba Server Share Access</legend>
+TODO: Display Share Access Info
+</fieldset>
+<br />
+<input type="submit" value="Apply" onclick="javascript:callAjaxRender('editplugin','/samba/user/edit','pgupdate');"/>
+</form>
+</div>
+
+
+

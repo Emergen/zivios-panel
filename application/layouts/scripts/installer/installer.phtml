@@ -1,0 +1,115 @@
+<?php
+/**
+ * Copyright (c) 2008-2010 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		ZiviosInstaller
+ * @copyright	Copyright (c) 2008-2010 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ **/
+echo $this->doctype() . "\n";
+?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <?php echo $this->headTitle(); ?> 
+    <?php echo $this->headMeta(); ?> 
+    <style type="text/css">
+    <!--
+    <?php echo $this->css . "\n"; ?>
+    -->
+    </style>
+    <?php echo $this->headLink(array(
+        'rel' => 'icon', 
+        'href' => 'public/imgs/favicon.ico', 
+        'type' => 'image/x-icon'));
+    ?>
+    <noscript>
+        <meta http-equiv="refresh" content="0; url=/public/jsdisabled.html"/>
+    </noscript>
+</head>
+
+<body class="tundra">
+
+<div id="preloader" style="display: block;">Loading, please wait...</div>
+
+<div id="installScreen" style="display: none; width: 100%; height: 100%;">
+    <div dojoType="dijit.layout.BorderContainer" design="headline" gutters="true" liveSplitters="true" id="primaryLayout">
+        <div dojoType="dijit.layout.ContentPane" splitter="false" region="top" id="headerContent">
+            <div id="headerLeft"></div>
+            <div id="headerRight">
+                <div id="loadingmsg" class="loadingmsg" style="display: none;">Loading...</div>
+                <div id="flashmsg" style="border: 1px solid #ccc;"></div>
+            </div>
+            <div class="cboth"></div>
+        </div>
+
+        <div dojoType="dijit.layout.ContentPane" splitter="false" region="center">
+            <div dojoType="dijit.layout.TabContainer" style="width: 100%; height: 100%;" tabPosition="bottom">
+
+                <div title="Installer" dojoType="dijit.layout.ContentPane" splitter="false" region="center" 
+                id="primaryContent"></div>
+
+                <div dojoType="dijit.layout.ContentPane" region="center" style="min-width: 400px;" title="About Zivios">
+                    <?php echo $this->aboutZivios(); ?>
+                </div>
+
+            </div>
+        </div>
+
+        <div dojoType="dijit.layout.ContentPane" region="trailing" id="mainRight">
+            <div class="heading">Install Log</div>
+            <div class="content" style="border-bottom: 1px solid #e5e5e5; margin-bottom: 5px;">
+                The installation log reports general progress updates periodically in the area below. 
+                <br />
+                <br />Note: Not all steps log data.
+                <br /><br />
+            </div>
+            <div style="margin-left: 10px; width: 270px;" id="consoleLog"></div>
+            <div class="content" style="border-bottom: 1px solid #e5e5e5; margin-top: 5px;"></div>
+        </div>
+
+        <div dojoType="dijit.layout.ContentPane" splitter="false" region="bottom" id="footerContent">
+            &copy; 2008-<?php echo date('Y'); ?>. All Rights Reserved. 
+        </div>
+    </div>
+</div>
+
+<div dojoType="dijit.Dialog" id="systemError" title="Zivios Internal Error" style="display: none;">
+    <div class="alert">
+    Zivios encountered an error and cannot proceed with your request. Details regarding the error message
+    are be displayed below. If you do not see an error message, please check Zivios log files.
+    </div>
+    <div style="margin: 10px;" id="errorMessage"></div>
+    <a href="#" onclick="dijit.byId('systemError').hide(); return false;">[x] Close Error Window</a>
+</div>
+
+</body>
+<?php 
+// Initialize dojo & installer JS layer
+echo $this->dojo()->enable();
+
+// check if installation session needs to be resumed
+if (isset($this->layout()->resumeInstall) && $this->layout()->resumeInstall == true) {
+    ?>
+    <script type="text/javascript">
+        window.location.hash = "/installer/index/<?php echo $this->layout()->nextAction; ?>";
+    </script>
+    <?php
+}
+?>
+</html>
+

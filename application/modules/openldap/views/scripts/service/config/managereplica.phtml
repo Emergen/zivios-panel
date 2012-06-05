@@ -1,0 +1,186 @@
+<?php
+/**
+ * Copyright (c) 2008-2010 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     mod_openldap
+ * @copyright   Copyright (c) 2008-2010 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+
+$replicaLdapOffline = false;
+
+try {
+    $replicaStatus = $this->replicaService->getReplicationStatus();
+} catch (Exception $e) {
+
+    $replicaStatus = array(
+        'syncStatus' => false,
+        'masterContextCsn' => '<em>Not Available</em>',
+        'replicaContextCsn' => '<em>Not Available</em>'
+    );
+
+    $replicaLdapOffline = true;
+}
+?>
+<div class="heading">OpenLDAP Replica Management</div>
+<div class="content">
+
+    <?php
+    if ($replicaLdapOffline) {
+        echo '<div class="alert alertcl" style="width: 550px;">';
+        echo 'Could not connect to LDAP Replica Host: <b>' . $this->replicaService->getProperty('cn') .'</b>.';
+        echo 'Please check the <b>Service Status</b> below.';
+        echo '</div>';
+    }
+    ?>
+
+    <div class="tbstyle">
+        <div class="tbrow">
+            <div class="colone">Service Label: </div>
+            <div class="coltwo"><?php echo $this->replicaService->getProperty('cn'); ?></div>
+        </div>
+
+
+        <div class="tbrow">
+            <div class="colone">Replica Hostname: </div>
+            <div class="coltwo"><?php echo $this->replicaServer->getProperty('cn'); ?></div>
+        </div>
+
+        <div class="tbrow">
+            <div class="colone">Sync Status</div>
+            <div class="coltwo"><?php 
+                if ($replicaStatus['syncStatus'] == true) { 
+                    echo '<span class="green bold">In Sync</span>';
+                } else { 
+                    echo '<span class="red bold">Out of Sync</span>';
+                }
+            ?>
+            </div>
+        </div>
+
+        <div class="tbrow">
+            <div class="colone">Master Server ContextCSN</div>
+            <div class="coltwo"><?php echo $replicaStatus['masterContextCsn']; ?></div>
+        </div>
+
+        <div class="tbrow">
+            <div class="colone">Replica Server ContextCSN</div>
+            <div class="coltwo"><?php echo $replicaStatus['replicaContextCsn']; ?></div>
+        </div>
+
+        <div class="tbrow">
+            <div class="colone">Service Status</div>
+            <div class="coltwo">&nbsp;
+            <?php
+                // probe service status (ldap, heimdal & sasl). All should be listed individually.
+                if ($this->replicaServer->pingAgent()) {
+                    $status = $this->replicaService->getReplicaServiceStatus();
+                    ?>
+                    <!-- slapd status -->
+                    <div class="servicename">OpenLDAP</div>
+                    <div class="servicestatus">:
+                    <?php 
+                    if ($status['slapd'] == 1) {
+                        echo '<span class="green bold">Running</span>';
+                    } else {
+                        echo '<span class="red bold">Stopped</span>';    
+                    }?></div>
+                    <div class="cboth"></div>
+
+                    <!-- heimdal status -->
+                    <div class="servicename">Kerberos</div>
+                    <div class="servicestatus">:
+                    <?php 
+                    if ($status['krb'] == 1) {
+                        echo '<span class="green bold">Running</span>';
+                    } else {
+                        echo '<span class="red bold">Stopped</span>';    
+                    }?></div>
+                    <div class="cboth"></div>                    
+                    
+                    <!-- cyrus-sasl status -->
+                    <div class="servicename">Cyrus-SASL</div>
+                    <div class="servicestatus">:
+                    <?php 
+                    if ($status['sasl'] == 1) {
+                        echo '<span class="green bold">Running</span>';
+                    } else {
+                        echo '<span class="red bold">Stopped</span>';    
+                    }?></div>
+                    <div class="cboth"></div>
+
+                    <!-- bind-dns status -->
+                    <div class="servicename">Bind DNS</div>
+                    <div class="servicestatus">:
+                    <?php 
+                    if ($status['bind'] == 1) {
+                        echo '<span class="green bold">Running</span>';
+                    } else {
+                        echo '<span class="red bold">Stopped</span>';    
+                    }?></div>
+                    <div class="cboth"></div>
+
+                    <?php
+                } else {
+                    ?>
+                    <span class="red">Zivios Agent Offline</span>
+                    <br />
+                    <font size="1">You can start the Zivios Agent from the <a href="#" 
+                        onclick="zivios.cpaneRefresh('dirdata', '/default/server/view/dn/<?php echo $this->replicaServer->getdn(); ?>'); return false;">Server Dashboard</a>.</font>
+                    <?php
+                }
+            ?> 
+            </div>
+        </div>
+    </div>
+</div>
+
+<style type="text/css">
+.tbrow div.colone {
+    width: 200px;
+    border-bottom: 1px solid #ccc;
+    text-align: right;
+    border-right: 1px dotted #ccc;
+    padding: 10px;
+    padding-right: 5px;
+}
+.tbrow div.coltwo {
+    padding: 10px;
+    padding-left: 3px;
+    border-bottom: 1px solid #ccc;
+    font-weight: normal;
+    width: auto;
+}
+
+.servicename {
+    float: left;
+    width: 100px;
+    text-align: right;
+    padding-right: 2px;
+    background-color: #eee;
+    line-height: 18px;
+}
+
+.servicestatus {
+    float: left;
+    width: 250px;
+    line-height: 18px;
+    background-color: #eee;
+}
+</style>
+

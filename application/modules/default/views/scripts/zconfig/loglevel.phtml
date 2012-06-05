@@ -1,0 +1,98 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     Zivios
+ * @copyright   Copyright (c) 2008-2010 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+
+$formid   = Zivios_Util::randomString(8);
+$regexLib = Zivios_Util::getRegexLibrary();
+?>
+<div class="heading">Log Level configuration</div>
+<div class="content">
+    <div class="info infocl" style="margin-left: 5px; width: 450px;">
+    <b>Note:</b> To get object level dumps in the log file, ensure production mode is switched off. 
+    <br /><br />
+    <b>Caution:</b> Switching production mode off and increasing the log level will produce
+    copious amounts of debug notices and quickly generate very large files. Increase the
+    log level only when debugging Zivios!
+    </div>
+
+    <form id='<?php echo $formid; ?>' enctype="application/x-www-form-urlencoded" method="post" 
+        action="#" dojoType="dijit.form.Form">
+
+    <div class="zflabel" style="width: 150px;">Log Level:  </div>
+    <input dojoType="dijit.form.NumberSpinner" value="<?php echo $this->config->log->loglevel; ?>" smallDelta="1"
+        largeDelta="3" defaultTimeout="500" timeoutChangeRate="100" maxLength="1" constraints="{min:0,max:7,places:0}"
+        name="zcfggeneral[rq_digits_loglevel_Log+Level]" class="zfgenField" style="width: 230px;"/>
+    <div class="cboth"></div>
+
+    <div class="zflabel" style="width: 150px;">Ldap Engine:  </div>
+    <input dojoType="dijit.form.NumberSpinner" value="<?php echo $this->config->log->childrenof->Zivios_Ldap_Engine; ?>" smallDelta="1"
+        largeDelta="3" defaultTimeout="500" timeoutChangeRate="100" maxLength="1" constraints="{min:0,max:7,places:0}"
+        name="zcfggeneral[rq_digits_logldapengine_Ldap+Engine]" class="zfgenField" style="width: 230px;"/>
+    <div class="cboth"></div>
+
+    <div class="zflabel" style="width: 150px;">Zivios Controllers:  </div>
+    <input dojoType="dijit.form.NumberSpinner" value="<?php echo $this->config->log->childrenof->Zivios_Controller; ?>" smallDelta="1"
+        largeDelta="3" defaultTimeout="500" timeoutChangeRate="100" maxLength="1" constraints="{min:0,max:7,places:0}"
+        name="zcfggeneral[rq_digits_logcontroller_Zivios+Controllers]" class="zfgenField" style="width: 230px;"/>
+    <div class="cboth"></div>
+
+    <div class="zflabel" style="width: 150px;">Zivios Plugins:  </div>
+    <input dojoType="dijit.form.NumberSpinner" value="<?php echo $this->config->log->childrenof->Zivios_Plugin; ?>" smallDelta="1"
+        largeDelta="3" defaultTimeout="500" timeoutChangeRate="100" maxLength="1" constraints="{min:0,max:7,places:0}"
+        name="zcfggeneral[rq_digits_logplugin_Zivios+Plugin]" class="zfgenField" style="width: 230px;"/>
+    <div class="cboth"></div>    
+
+    <div class="zflabel" style="width: 150px;">Zivios Parameters:  </div>
+    <input dojoType="dijit.form.NumberSpinner" value="<?php echo $this->config->log->Zivios_Parameter; ?>" smallDelta="1"
+        largeDelta="3" defaultTimeout="500" timeoutChangeRate="100" maxLength="1" constraints="{min:0,max:7,places:0}"
+        name="zcfggeneral[rq_digits_logparameters_Zivios+Parameters]" class="zfgenField" style="width: 230px;"/>
+    <div class="cboth"></div>
+
+    <div class="zflabel" style="width: 150px;">Security Objects:  </div>
+    <input dojoType="dijit.form.NumberSpinner" value="<?php echo $this->config->log->EMSSecurityObject; ?>" smallDelta="1"
+        largeDelta="3" defaultTimeout="500" timeoutChangeRate="100" maxLength="1" constraints="{min:0,max:7,places:0}"
+        name="zcfggeneral[rq_digits_logsecurity_Security+Objects]" class="zfgenField" style="width: 230px;"/>
+    <div class="cboth"></div> 
+
+
+    <?php
+    $prdMode = false;
+    if ($this->config->log->productionmode == "1") {
+        $prdMode = true;
+    }
+    ?>
+    <div class="zflabel" style="width: 150px;">Production Mode:  </div>
+    <input name="zcfggeneral[rq_digits_productionmode_Production+Mode]" dojoType="dijit.form.CheckBox" value="1" class="zfgenField"
+    <?php if ($prdMode === true) echo 'checked'; ?> style="margin-top: 10px;"/>
+    <div class="cboth"></div>
+
+    <div class="zflabel" style="width: 150px;">&nbsp;</div>
+    <input onclick="zivios.postxhr('/default/zconfig/update', '', '<?php echo $formid; ?>',
+        'form', 'json', [], [], [], [], this.id); return false;" 
+        name="zcfgupdate" value="Update Configuration"
+        type="submit" label="Update Configuration" dojoType="dijit.form.Button"/>
+    <div class="cboth"></div>
+    <input type="hidden" name="zcfggeneral[rq_alnospaces_section_Update+Section]" value="log"/>
+    </form>
+</div>
+

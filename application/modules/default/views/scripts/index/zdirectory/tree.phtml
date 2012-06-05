@@ -1,0 +1,114 @@
+<?php
+/**
+ * Copyright (c) 2008-2010 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     Zivios
+ * @copyright   Copyright (c) 2008-2010 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+?>
+<ul dojoType="dijit.Menu" id="tree_menu" style="display: none;"></ul>
+            
+<div dojoType="dijit.Tree" id="ztreedir" model="zivios.treeHandler" openOnClick="false" persist="false">
+
+    <script type="dojo/method" event="getIconClass" args="item">
+        var icon = "treeIcon tree" + item.type + "Icon";
+        return icon;
+    </script>
+
+    <script type="dojo/method" event="onClick" args="item, node">
+        zivios.treeHandler.loadItem(item, 'dirdata', node);
+    </script>
+    
+    <script type="dojo/connect">
+        // right click menu
+        var menu = dijit.byId("tree_menu");
+        menu.bindDomNode(this.domNode);
+        dojo.connect(menu, "_openMyself", this, function(e){
+            //Destroy the existing children in the menu
+            menu.getChildren().forEach(function(i) { menu.removeChild(i); });
+            
+            // get a hold of, and log out, the tree node that was the source of this open event
+            var tn = dijit.getEnclosingWidget(e.target);
+            name = tn.item.name;
+
+            // Lookup the menu server side by type
+            var url  = '/index/generateContextMenu/type/' + escape(encodeURI(tn.item.type));
+            url += '/dn/' + escape(encodeURI(tn.item.key));
+            dojo.xhrGet({
+                url: url,
+                timeout: 0,
+
+                load: function(response, ioArgs) {
+                    try {
+                        response = dojo.fromJson(response) || null;
+                        for (var i in response) {
+                            // @todo: nested menus should be checked for as well.
+                            menu.addChild(new dijit.MenuItem({
+                                label: response[i].name,
+                                iconClass: response[i].icon,
+                                onClick: dojo.hitch(this, function(action,key){
+                                    var dirdata = dijit.byId('dirdata');
+                                    
+                                    if (dirdata) {
+                                        dojo.forEach(dirdata.getDescendants(), function(widget){
+                                            widget.destroyRecursive();
+                                        });
+                                    }
+                                                                   
+                                    dojo.xhrGet({
+                                        url: action,
+                                        content: {dn: encodeURI(tn.item.key)},
+                                        timeout: 0,
+                                        headers: {
+                                            XHR_ERROR_HANDLEAS: "text",
+                                        },
+
+                                        load: dojo.hitch(this, function(response, ioArgs) {
+                                            dirdata.attr('content', response);
+                                            return response;
+                                        }),
+
+                                        error: function(response, ioArgs) {
+                                            dirdata.attr('content', "An error occurred. Please check system logs.");
+                                            console.error("HTTP status code: ", ioArgs.xhr.status);
+                                            return response;
+                                        }
+                                    });
+                                },
+                                response[i].action,tn.item.key)
+                            }));
+                        }
+                        return response;
+                    } catch (ex) {
+                        return response;
+                    }
+                },
+ 
+                error: function(response, ioArgs) {
+                    dojo.byId('alertdata').innerHTML += "<div style=\"margin-top: 5px; padding: 5px; border-bottom: 1px solid #7eabcd;\">"
+                        + "An error occured during communication. Please check Zivios logs.</div>";
+                    dijit.byId('ztoolbar.alerts')._openDropDown();
+                    console.error("HTTP status code: ", ioArgs.xhr.status);
+                    return response;
+                }
+            });
+        });
+    </script>
+</div>
+

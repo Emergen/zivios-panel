@@ -1,0 +1,56 @@
+<?php
+/**
+ * Copyright (c) 2008-2010 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     mod_openldap
+ * @copyright   Copyright (c) 2008-2010 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+?>
+<div class="ldapreplicas">
+    <div class="heading">LDAP Replicas</div>
+    <div class="content">
+        Welcome to the Zivios Directory Replication Management Console. You can view your existing
+        directory replicas, add new replicas, as well as check replication status and directory
+        consistency across your network.
+    </div>
+
+    <div class="content">
+        Zivios uses <b>Delta Syncrepl</b> to deploy additional directories to your local and remote
+        networks, alongside Heimdal Kerberos and Bind DNS. The replication system is designed to allow
+        remote desktops and servers to authenticate and make use of replicated services, as opposed to 
+        contacting primary Zivios Directory. 
+    </div>
+
+    <div class="content">
+        For additional information, please consult the Zivios documentation.
+    </div>
+
+    <div class="subheading">Zivios Replica Options</div>
+
+    <div class="content">
+        <button dojoType="dijit.form.Button" type="button">
+        List Directory Replicas
+        <script type="dojo/method" event="onClick" args="evt">
+            zivios.postxhr('/openldap/service/listreplicas','ldapreplicas','<?php echo urlencode($this->service->getdn());?>',
+                           'json','text',[],[],[],[],this.id);
+        </script>
+        </button>
+    </div>
+</div>
+

@@ -1,0 +1,150 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		mod_mail
+ * @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ * @version		$Id: edit.phtml 914 2008-08-25 11:31:06Z fkhan $
+ * @lastchangeddate $LastChangedDate: 2008-08-25 17:31:06 +0600 (Mon, 25 Aug 2008) $
+ **/
+
+
+$email = $this->mailplugin->getProperty('mail');
+$quota = $this->mailplugin->getProperty('emsmailmboxquota') / 1024;
+$seccclass = $this->secclasses;
+$maxmailsize = $this->mailplugin->getProperty('amavismessagesizelimit') / 1024 /1024;
+$blacklist = $this->blacklist;
+$whitelist = $this->whitelist;
+$active = $this->mailplugin->getProperty('emsmailactive');
+$spamtagone = $this->mailplugin->getProperty('amavisspamtaglevel');
+$spamtagtwo = $this->mailplugin->getProperty('amavisspamtag2level');
+$spamkill = $this->mailplugin->getProperty('amavisspamkilllevel');
+
+$service = $this->mailplugin->getService();
+$quotausage = $service->getStorageQuota($this->mailplugin->getProperty('emscyrusmboxroot'));
+$mailboxes = $service->getChildMailboxes($this->mailplugin->getProperty('emscyrusmboxroot'));
+
+$percentuse = ($quotausage["usage"] / $quotausage["limit"]) * 100;
+if ($active == MailUser::MAIL_ACTIVE) {
+    $active = "CHECKED";
+} else $active = "";
+?>
+
+
+<br> <br>
+<form id="edit" method="post" action="#" onsubmit="return false;" width="400">
+
+
+<fieldset>
+    <legend>Status</legend>
+    Quota Usage:
+    <b><?php echo round($quotausage['usage']/1024,2);?> MB  of <?php echo round($quotausage['limit']/1024,2);?> MB :::    <?php echo round($percentuse,2);?>%</b>
+
+</fieldset>
+
+<fieldset>
+	<legend>Mail Details</legend>
+
+
+	<label for="">Active? : </label>
+		<input id="active" type="checkbox" size="38" <?php echo $active;?> value="1" name="active" /><br />
+
+	<label for="">Email Address: </label>
+		<input id="email" type="text" size="38" value="<?php echo $email;?>" name="email" /><br />
+
+    <label for="">Email Quota (MB): </label>
+		<input id="quota" type="text" size="38" value="<?php echo $quota;?>" name="quota" maxlength="8"/><br />
+
+    <label for="">Security Class: </label>
+        <select name="secclass">
+        <?php
+        foreach ($this->secclasses as $secclass) {
+        ?>
+        <option value="<?php echo $secclass;?>"><?php echo $secclass;?></option>
+        <?php
+        }
+        ?>
+        </select>
+
+
+    <br />
+    <label for="">Max Message Size (MB): </label>
+		<input id="maxmailsize" type="text" size="38" value="<?php echo $maxmailsize;?>" name="maxmailsize" maxlength="8" ></input><br />
+
+
+    <label for="">User Black Lists (one address per line): </label>
+        <textarea rows=6 cols=33 name="blacklist"><?php echo $blacklist;?></textarea><br />
+
+        <label for="">User White Lists (one address per line): </label>
+        <textarea rows=6 cols=33 name="whitelist"><?php echo $whitelist;?></textarea><br />
+
+
+    <label for="">Spam Tag 1 Level: </label>
+		<input id="spamtagone" type="text" size="38" value="<?php echo $spamtagone;?>" name="spamtagone" maxlength="8" ></input><br />
+
+    <label for="">Add **SPAM** Level: </label>
+		<input id="spamtagtwo" type="text" size="38" value="<?php echo $spamtagtwo;?>" name="spamtagtwo" maxlength="8" ></input><br />
+
+
+     <label for="">Spam Block Level: </label>
+		<input id="spamkill" type="text" size="38" value="<?php echo $spamkill;?>" name="spamkill" maxlength="8" ></input><br />
+
+     <br />
+     <br />
+
+      <input type=hidden name="operate_dn" value="<?php echo $this->obj->getdn(); ?>" />
+     <input type=hidden name="action" value="update" />
+
+
+
+
+
+</fieldset>
+
+<br />
+<br />
+
+
+<fieldset width="400">
+    <legend>Mailboxes</legend>
+    <table class="general" border=0 width="400">
+    <th>Mailbox Name</th><th>Full Path</th>
+    <?php
+    foreach ($mailboxes as $mbox) {
+        $name = explode('.',$mbox);
+        $name = $name[sizeof($name)-1];
+
+        ?>
+    <tr>
+    <td><b><?php echo $name;?></b></td>
+    <td><?php echo $mbox;?></td>
+    </tr>
+    <?php
+    }
+    ?>
+
+    </table>
+
+
+</fieldset>
+
+<input type="submit" value="Apply" name="submit" onclick="javascript:callFormUpdate('edit','/mail/user/edit');"><br />
+
+</form>
+

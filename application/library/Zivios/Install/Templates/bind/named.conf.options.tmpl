@@ -1,0 +1,8 @@
+options {
+	directory "/opt/zivios/bind/etc";
+	auth-nxdomain no;
+	dnssec-enable yes;
+	forwarders {
+%%%FORWARDERS%%%
+	};
+};

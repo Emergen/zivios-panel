@@ -1,0 +1,39 @@
+http_port %%%port%%%
+debug_options ALL,%%%debug_level%%%
+hierarchy_stoplist cgi-bin ?
+acl QUERY urlpath_regex cgi-bin \?
+no_cache deny QUERY
+cache_mem %%%cache_mem%%% MB
+maximum_object_size %%%max_obj_size%%% KB
+maximum_object_size_in_memory %%%max_obj_size_in_mem%%% KB
+fqdncache_size %%%fqdncache_size%%%
+cache_dir ufs %%%cache_dir%%% %%%cache_size%%% %%%cache_dirs_l1%%% %%%cache_dirs_l2%%%
+cache_access_log %%%cache_access_log%%%
+cache_log %%%cache_log%%%
+cache_store_log %%%cache_store_log%%%
+hosts_file %%%hosts_file%%%
+visible_hostname %%%visible_host%%%
+
+%%%auth_param%%% basic program %%%auth_ldap_program%%% -v 3 -b "%%%base_dn%%%" -f uid=%s -h %%%ldap_host%%%
+%%%auth_param%%% basic children 5
+%%%auth_param%%% basic realm Squid proxy-caching web server
+%%%auth_param%%% basic credentialsttl 2 hours
+
+%%%external_acl_type%%% zivios ttl=60 %LOGIN %DST /opt/zivios/squid/bin/zvaclhelper %%%ldap_host%%% %%%base_dn%%%
+%%%acl%%% zcheck external zivios
+
+%%%acl%%% local src "%%%trusted_net_config%%%"
+%%%acl%%% webauth proxy_auth REQUIRED
+acl localhost src 127.0.0.1/255.255.255.255
+acl Safe_ports port 80 21 443 563 70 210 1025-65535 %%%safe_ports%%%
+
+
+acl all src 0.0.0.0/0.0.0.0
+http_access deny !Safe_ports
+http_access allow %%%acl_allow%%%
+deny_info ERR_INVALID_REQ zcheck
+deny_info ERR_INVALID_REQ zivios
+deny_info ERR_INVALID_REQ webauth
+http_reply_access allow all
+http_access deny all
+icp_access allow all

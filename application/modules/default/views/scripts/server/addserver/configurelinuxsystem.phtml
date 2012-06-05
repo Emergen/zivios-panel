@@ -1,0 +1,154 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     Zivios
+ * @copyright   Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+$formid   = Zivios_Util::randomString(8);
+$regexLib = Zivios_Util::getRegexLibrary();
+?>
+<?php
+if ($this->systemDetails['zvcompatible'] == 1) {
+?>
+
+<div class="heading">Service Subscription Options</div>
+
+<div class="content">
+    The Linux Server being added requires subscription to Zivios Services. The services
+    may be provided by the Zivios primary server, or, via replicated services.
+</div>
+
+<div class="subheading">Available Core Services</div>
+<div class="content">
+    <form id='<?php echo $formid; ?>' enctype="application/x-www-form-urlencoded" method="post" 
+        action="#" dojoType="dijit.form.Form">
+
+    <div class="zflabel" style="width: 180px;">DNS Provider: </div>
+    <div class="zflabel">
+        <select dojoType="dijit.form.FilteringSelect" name="zvaddserverdata[rq_dn_dnsprovider_DNS+Provider_enc]" 
+            style="width: 230px;">
+            <?php
+            foreach ($this->coreServices['dns'] as $serviceDetails) {
+                foreach ($serviceDetails as $serviceDn => $serviceLabel) {
+                    echo '<option class="zfgenField" value="'.urlencode($serviceDn).'">'.$serviceLabel.'</option>';
+                }
+            }
+            ?>
+        </select>
+    </div>
+    <div class="cboth" style="margin-bottom: 10px;"></div>
+
+    <div class="zflabel" style="width: 180px;">Directory Service Provider: </div>
+    <div class="zflabel">
+        <select dojoType="dijit.form.FilteringSelect" name="zvaddserverdata[rq_dn_ldapprovider_Directory+Service+Provider_enc]" 
+            style="width: 230px;">
+            <?php
+            foreach ($this->coreServices['openldap'] as $serviceDetails) {
+                foreach ($serviceDetails as $serviceDn => $serviceLabel) {
+                    echo '<option class="zfgenField" value="'.urlencode($serviceDn).'">'.$serviceLabel.'</option>';
+                }                
+            }
+            ?>
+        </select>
+    </div>
+    <div class="cboth" style="margin-bottom: 10px;"></div>
+
+    <div class="zflabel" style="width: 180px;">NTP Service Provider: </div>
+    <div class="zflabel">
+        <select dojoType="dijit.form.FilteringSelect" name="zvaddserverdata[rq_dn_ntpprovider_NTP+Service+Provider_enc]" 
+            style="width: 230px;">
+            <?php
+            foreach ($this->coreServices['ntp'] as $serviceDetails) {
+                foreach ($serviceDetails as $serviceDn => $serviceLabel) {
+                    echo '<option class="zfgenField" value="'.urlencode($serviceDn).'">'.$serviceLabel.'</option>';
+                } 
+            }
+            ?>
+        </select>
+    </div>
+    <div class="cboth" style="margin-bottom: 10px;"></div>
+
+
+    <div class="zflabel" style="width: 180px;">Kerberos Service Provider: </div>
+    <div class="zflabel">
+        <select dojoType="dijit.form.FilteringSelect" name="zvaddserverdata[rq_dn_krbprovider_Kerberos+Service+Provider_enc]" 
+            style="width: 230px;">
+            <?php
+            foreach ($this->coreServices['kerberos'] as $serviceDetails) {
+                foreach ($serviceDetails as $serviceDn => $serviceLabel) {
+                    echo '<option class="zfgenField" value="'.urlencode($serviceDn).'">'.$serviceLabel.'</option>';
+                } 
+            }
+            ?>
+        </select>
+    </div>
+    <div class="cboth" style="margin-bottom: 10px;"></div>
+
+    <div class="zflabel" style="width: 180px;">Certificate Authority Provider: </div>
+    <div class="zflabel">
+        <select dojoType="dijit.form.FilteringSelect" name="zvaddserverdata[rq_dn_caprovider_Certificate+Authority+Provider_enc]" 
+            style="width: 230px;">
+            <?php
+            foreach ($this->coreServices['ca'] as $serviceDetails) {
+                foreach ($serviceDetails as $serviceDn => $serviceLabel) {
+                    echo '<option class="zfgenField" value="'.urlencode($serviceDn).'">'.$serviceLabel.'</option>';
+                }
+            }
+            ?>
+        </select>
+    </div>
+    <div class="cboth" style="margin-bottom: 10px;"></div>
+
+    <div class="zflabel" style="width: 180px;">Package Management Provider: </div>
+    <div class="zflabel">
+        <select dojoType="dijit.form.FilteringSelect" name="zvaddserverdata[rq_dn_pkgprovider_Package+Management+Provider_enc]" 
+            style="width: 230px;">
+            <?php
+            foreach ($this->coreServices['package'] as $serviceDetails) {
+                 foreach ($serviceDetails as $serviceDn => $serviceLabel) {
+                    echo '<option class="zfgenField" value="'.urlencode($serviceDn).'">'.$serviceLabel.'</option>';
+                }
+            }
+            ?>
+        </select>
+    </div>
+    <div class="cboth" style="margin-bottom: 10px;"></div>
+
+    <div class="zflabel" style="width: 180px;">&nbsp;</div>
+    <input onclick="zivios.postxhr('/default/server/doaddlinuxserver/probeid/<?php echo $this->probeId; ?>', '', '<?php echo $formid; ?>',
+        'form', 'json', [], [], [], [], this.id); return false;" 
+        name="zvaddlinuxserver" value="Add Server" 
+        type="submit" label="Add Server" dojoType="dijit.form.Button"/>
+    <div class="cboth"></div>
+    </form>
+</div>
+<?php
+} else {
+?>
+<div class="heading">Distribution Incompatible with Zivios</div>
+<div class="content">
+    The distribution (and/or release) of Linux that you are running is not currently supported by Zivios. You may 
+    request support for this distribution on our <a href="http://lists.zivios.org" target="_new">mailing list</a>, 
+    however, please do note that our road-map is driven by our clients and community. There must be enough demand 
+    for a particular distribution for it to be added to Zivios. 
+</div>
+<?php
+}
+

@@ -1,0 +1,106 @@
+<?php
+/**
+ * Copyright (c) 2008-2010 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		ZiviosInstaller
+ * @copyright	Copyright (c) 2008-2010 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ **/
+
+$formid   = Zivios_Util::randomString(8);
+$regexLib = Zivios_Util::getRegexLibrary();
+?>
+<div class="heading">Database Initialization</div>
+<div class="content">
+    Zivios is ready to initialize its database. Please note that all form fields are required. 
+    <div class="note">
+    <ul>
+        <li/> The Admin password requested is the MySQL admin user password.
+        <li/> The Zivios database name, database username and database password will be setup using
+              the MySQL admin account.
+    </ul>
+    </div>
+
+    <div class="subheading">Database Setup</div>
+
+    <!-- render db initialization form -->
+    <form id='<?php echo $formid; ?>' enctype="application/x-www-form-urlencoded" method="post" 
+        action="#" dojoType="dijit.form.Form">
+
+
+    <label>Database Host: </label>
+    <input name="dbsetup[rq_hostname_dbhost_Database+Hostname]" type="text" dojoType="dijit.form.ValidationTextBox" size="16" maxlength="64" 
+            regExp="<?php echo $regexLib->exp->hostname; ?>" required="true" 
+            invalidMessage="Invalid characters in DB Hostname." class="genField" 
+            value="localhost" />
+    <div class="cboth"></div>
+    
+    <label>Database Admin: </label>
+    <input name="dbsetup[rq_uid_dbuser_Database+Admin]" type="text" dojoType="dijit.form.ValidationTextBox" size="16" maxlength="64" 
+            regExp="<?php echo $regexLib->exp->uid;?>" required="true" 
+            invalidMessage="Invalid characters in DB Admin User" class="genField" 
+            value="root" />
+    <div class="cboth"></div>
+
+    <label>Admin Password: </label>
+    <input name="dbsetup[rq_password_dbpass_Admin+Password]" type="password" dojoType="dijit.form.ValidationTextBox" size="16" maxlength="64" 
+            regExp="<?php echo $regexLib->exp->password; ?>" required="true" 
+            invalidMessage="Invalid password. Should be at least 3 characters." class="genField" 
+            value="" />
+    <div class="cboth"></div>
+
+    <label>Zivios Database: </label>
+    <input name="dbsetup[rq_alnumnospaces_dbname_Zivios+Database]" type="text" dojoType="dijit.form.ValidationTextBox" size="16" maxlength="64" 
+            regExp="<?php echo $regexLib->exp->alnumnospaces; ?>" required="true" 
+            invalidMessage="Invalid characters in database name." class="genField" 
+            value="zivios" />
+    <div class="cboth"></div>
+
+    <label>Zivios Database User: </label>
+    <input name="dbsetup[rq_uid_zdbuser_Zivios+Database+User]" type="text" dojoType="dijit.form.ValidationTextBox" size="16" maxlength="64" 
+            regExp="<?php echo $regexLib->exp->uid; ?>" required="true" 
+            invalidMessage="Invalid characters. Only alphabets and numbers permitted." class="genField" 
+            value="zvdbuser" />
+    <div class="cboth"></div>
+
+    <label>Zivios Database Password: </label>
+    <input name="dbsetup[rq_password_zdbpass_Zivios+Database+Password]" type="password" dojoType="dijit.form.ValidationTextBox" size="16" maxlength="64" 
+            regExp="<?php echo $regexLib->exp->password; ?>" required="true" 
+            invalidMessage="Invalid password. Should be at least 3 characters." class="genField" 
+            value="" />
+    <div class="cboth"></div>
+
+
+    <label>Confirm Password: </label>
+    <input name="dbsetup[cmp_zdbpass_czdbpass_Database+Password+Confirm]" type="password" dojoType="dijit.form.ValidationTextBox" size="16" maxlength="64" 
+            regExp="<?php echo $regexLib->exp->password; ?>" required="true" 
+            invalidMessage="Invalid password. Should be at least 3 characters." class="genField"
+            value="" />
+    <div class="cboth"></div>
+
+    <label></label>
+    <input onclick="installer.postxhr('/installer/index/processinidb', '', '<?php echo $formid; ?>',
+        'form', 'json', [], ['loadingmsg'], ['loadingmsg'], [], this.id); return false;" 
+        name="inidb" value="Initialize Database" 
+        type="submit" label="Initialize Database" dojoType="dijit.form.Button"/>
+    <div class="cboth"></div>
+
+    <input type="hidden" name="dbsetup[rq_alnumnospaces_dbtype_Database+Type]" value="mysql"/>
+    </form>
+</div>
+

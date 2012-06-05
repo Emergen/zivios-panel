@@ -1,0 +1,99 @@
+##
+# Beta configuration
+##
+smtpd_banner=$myhostname ESMTP $mail_name (Debian/GNU)
+biff=no
+append_dot_mydomain=no
+myhostname=%%%MYHOSTNAME%%%
+myorigin=/etc/mailname
+mydestination=%%%MYDESTINATION%%%
+mynetworks=%%%MYNETWORKS%%%
+localroute=%%%LOCALROUTE%%%
+relayhost=%%%RELAYHOST%%%
+mail_spool_directory=/var/spool/mail/
+mailbox_size_limit=0
+message_size_limit=104857600
+recipient_delimiter=+
+inet_interfaces=all
+mailbox_transport=cyrus
+owner_request_special=no
+unknown_local_recipient_reject_code=550
+smtpd_delay_reject=yes
+broken_sasl_auth_clients=yes
+#
+# Distribution LIST maps
+#
+#alias_maps=ldap:ldapalias
+virtual_alias_maps=ldap:ldapalias ldap:ldapdistlists
+#transport_maps=
+# SASL Options
+smtpd_sasl_auth_enable=yes
+smtpd_sasl_security_options=noanonymous
+smtpd_sasl_local_domain=
+smtpd_require_helo=yes
+smtpd_helo_restrictions=permit_mynetworks,reject_invalid_hostname
+#smtpd_sender_login_maps = ldap:ldaplocal ldap:ldapalias $alias_maps
+#smtpd_sender_restrictions =
+#	reject_authenticated_sender_login_mismatch
+
+smtpd_recipient_restrictions =
+	 permit_mynetworks,
+	 permit_sasl_authenticated,
+	 reject_non_fqdn_sender,
+	 reject_non_fqdn_recipient,
+	 reject_unknown_sender_domain,
+	 reject_unknown_recipient_domain,
+	 %%%REJECT_RBL_CLIENT_LIST%%%
+	 reject_unauth_destination,
+
+
+local_recipient_maps=ldap:ldaplocal
+
+ldapdistlists_version=3
+ldapdistlists_server_host=%%%LDAP_SERVER%%%
+ldapdistlists_server_port=389
+ldapdistlists_search_base=%%%LDAP_BASE%%%
+ldapdistlists_query_filter=(&(mail=%s)(emsmailactive=1)(objectclass=emsmailgroup))
+ldapdistlists_special_result_attribute=member
+ldapdistlists_result_attribute=uid
+
+ldapalias_version=3
+ldapalias_server_host=%%%LDAP_SERVER%%%
+ldapalias_server_port=389
+ldapalias_search_base=%%%LDAP_BASE%%%
+ldapalias_query_filter=(&(mailAlternateAddress=%s)(emsmailactive=1)(objectclass=emsmailuser))
+ldapalias_result_attribute=uid
+
+
+ldaplocal_version=3
+ldaplocal_server_host=%%%LDAP_SERVER%%%
+ldaplocal_search_base=%%%LDAP_BASE%%%
+ldaplocal_query_filter=(&(mail=%s)(emsmailactive=1)(objectclass=emsmailuser))
+ldaplocal_result_attribute=uid
+ldaplocal_dereference=3
+
+
+ldapsecclass_version=3
+ldapsecclass_server_host=%%%LDAP_SERVER%%%
+dapsecclass_search_base=%%%LDAP_BASE%%%
+ldapsecclass_query_filter=(&(mail=%s)(emsmailactive=1)(objectclass=emsmailuser))
+ldapsecclass_result_attribute=emspostfixsecurityclass
+ldapsecclass_dereference=3
+# common TLS parameters
+tls_random_source=dev:/dev/urandom
+tls_daemon_random_source=dev:/dev/urandom
+
+# Client side TLS
+smtp_use_tls=yes
+smtp_tls_key_file=%%%TLS_KEY_FILE%%%
+smtp_tls_cert_file=%%%TLS_CERT_FILE%%%
+smtp_tls_CAfile=%%%TLS_CA_FILE%%%
+smtp_tls_loglevel=1
+# Server side TLS
+smtpd_use_tls=yes
+smtpd_tls_loglevel=1
+smtpd_tls_received_header=yes
+smtpd_tls_key_file=%%%TLS_KEY_FILE%%%
+smtpd_tls_cert_file=%%%TLS_CERT_FILE%%%
+smtpd_tls_CAfile=%%%TLS_CA_FILE%%%
+content_filter=smtp-amavis:[127.0.0.1]:10024

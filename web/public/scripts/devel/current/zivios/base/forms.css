@@ -1,0 +1,176 @@
+/**
+ * Copyright (c) 2008-2010 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     Zivios
+ * @copyright   Copyright (c) 2008-2010 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+
+form dl {
+    font:normal 11px Arial,Verdana,sans-serif;
+    position: relative;
+}
+
+form dt {
+    clear: both;
+    float:left;
+    width: 130px;
+    padding: 4px 0 2px 2px;
+    text-align: right;
+}
+
+form dd {
+    float: left;
+    width: 200px;
+    margin: 0 0 8px 0;
+    padding-left: 6px;
+}
+
+.smallbutton .dijitButtonNode
+{
+    color: #333;
+    font-size: 8.5px;
+    height: 13px;
+    padding: 2px;
+    text-align: center;
+    vertical-align: middle;
+    margin: 0px; !important;
+    font-weight: bold;
+}
+
+form .descfrm
+{
+    color: #000;
+    border: 1px solid #ccc;
+    background-color: #ECF1EF;
+    margin-top: 0px;
+    margin-bottom: 1px;
+    padding: 5px;
+    width: 156px;
+    clear: both;
+}
+
+.tundra .genField.dijitTextBox,                   
+.tundra .genField.dijitSpinner,                 
+.genField.dijitTextBox.dijitTimeTextBox,
+.tundra .dijitTextArea.genField
+{
+        margin:5px 0 0 0;
+        font-size: 11px;
+        width: 220px;
+        line-height: 16px;
+}
+
+.tundra .genField.dijitSpinner
+{
+}
+
+.genField.dijitTextBox,                                         
+.genField.dijitSpinner .dijitInputField,        
+.genField.dijitTextBox.dijitTimeTextBox,        
+.tundra .dijitTextArea.genField
+{
+        padding:5px;
+}
+
+.genField .dijitSpinnerButtonContainer
+{
+        line-height:24px;
+}
+
+.labell {
+    float: left;
+    line-height: 24px;
+    margin-top: 6px;
+    padding-right: 2px;
+    text-align: right;
+    width: 250px;
+}
+
+label {
+    float: left;
+    line-height: 24px;
+    margin-top: 6px;
+    padding-right: 2px;
+    text-align: right;
+    width: 80px;
+}
+
+/** updated css for forms **/
+
+.zflabel {
+    float: left;
+    line-height: 24px;
+    margin-top: 6px;
+    padding-right: 2px;
+    text-align: right;
+    width: 180px;
+}
+
+.zflabelshort {
+    width: 50px !important;
+}
+
+.zffieldshort {
+    width: 50px !important;
+}
+
+.zfdisabledInput {
+    float: left;
+    line-height: 24px;
+    margin-top: 6px;
+    text-align: left;
+    padding-left: 2px;
+    width: 220px;
+    background-color: #e2e2e2;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.tundra .zfgenField.dijitTextBox,
+.tundra .zfgenField.dijitSpinner,
+.tundra .zfgenField.dijitFilteringSelect,
+.zfgenField.dijitTextBox.dijitTimeTextBox,
+.tundra .dijitTextArea.zfgenField
+{
+        margin:5px 0 0 0;
+        font-size: 11px;
+        width: 220px;
+        line-height: 16px;
+}
+
+.tundra .zfgenField.dijitSpinner
+{}
+
+.zfgenField.dijitTextBox,
+.zfgenField.dijitSpinner .dijitInputField,
+.zfgenField.dijitTextBox.dijitTimeTextBox,
+.tundra .dijitTextArea.zfgenField
+{
+        padding:5px;
+}
+
+.zfgenField .dijitSpinnerButtonContainer
+{
+        line-height:26px;
+}
+
+.zfgenField .dijitFilteringSelectButtonContainer
+{
+    line-height: 26px;
+}
+

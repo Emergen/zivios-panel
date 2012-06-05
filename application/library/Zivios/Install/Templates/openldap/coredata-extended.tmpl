@@ -1,0 +1,464 @@
+#
+# Core data LDIF for Zivios
+#
+dn: %%%BASE_DN%%%
+o: %%%ORG%%%
+dc: %%%DC_PART%%%
+emsdescription: Ems OLC Databse
+emstype: DirectoryContainer
+cn: %%%SHORT_COMPANY_NAME%%%
+emsmodelclass: EMSObject
+objectClass: dcObject
+objectClass: organization
+objectClass: emsObject
+emspermission: subtree:grant:all:all
+emspermission: subtree:deny:CORE_USER_CANCHANGEPW:all
+emspermission: subtree:grant:CORE_USER_CANCHANGEPW:user;uid=zadmin,ou=zuser
+ s,ou=core control,ou=zivios,%%%BASE_DN%%%
+OpenLDAPaci: 1#subtree#grant;r,s,c;[all]#public#
+OpenLDAPaci: 2#entry#grant;r,w,s,c;[all]#access-id#uid=zadmin,ou=zusers,ou=cor
+ e control,ou=zivios,%%%BASE_DN%%%
+OpenLDAPaci: 3#subtree#grant;r,w,s,c;[all]#access-id#uid=zadmin,ou=zusers,ou=c
+ ore control,ou=zivios,%%%BASE_DN%%%
+
+dn: ou=zivios,%%%BASE_DN%%%
+emscontainertype: EmsControl
+emsdescription: EMS Control
+objectClass: organizationalUnit
+objectClass: emsOrganizationalUnit
+ou: Zivios
+cn: Zivios
+emstype: ZiviosContainer
+emsmodelclass: EMSOrganizationalUnit
+
+dn: ou=core control,ou=zivios,%%%BASE_DN%%%
+cn: Core Control
+emsdescription: Core Control OU
+objectClass: organizationalUnit
+objectClass: emsOrganizationalUnit
+ou: Core Control
+emscontainertype: CoreContainer
+emstype: ControlContainer
+emsmodelclass: EMSOrganizationalUnit
+
+dn: ou=master services,ou=core control,ou=zivios,%%%BASE_DN%%%
+emscontainertype: ServiceContainer
+emsdescription: Service OU
+emsmodelclass: EMSOrganizationalUnit
+emstype: ServiceContainer
+objectClass: organizationalUnit
+objectClass: emsOrganizationalUnit
+ou: Master Services
+cn: Master Services
+
+dn: cn=zivios ca,ou=master services,ou=core control,ou=zivios,%%%BASE_DN%%%
+cn: Zivios CA
+emsmastercomputerdn: cn=%%%MASTER_COMPUTER%%%,ou=zservers,ou=core control,ou=ziv
+ ios,%%%BASE_DN%%%
+emsdependson: cn=%%%MASTER_COMPUTER%%%,ou=zservers,ou=core control,ou=ziv
+ ios,%%%BASE_DN%%%
+emstype: ServiceEntry
+emsdescription: Zivios CA Service
+emsmodelclass: CaService
+emsmodulename: ca
+emscaserver: %%%MASTER_COMPUTER%%%
+objectClass: namedObject
+objectClass: emscaservice
+
+dn: cn=zivios directory,ou=master services,ou=core control,ou=zivios,
+ %%%BASE_DN%%%
+cn: Zivios Directory
+emsdescription: Zivios Directory Service
+emsldapserver: %%%MASTER_COMPUTER%%%
+emsmastercomputerdn: cn=%%%MASTER_COMPUTER%%%,ou=zservers,ou=core control,ou=
+ zivios,%%%BASE_DN%%%
+emsdependson: cn=%%%MASTER_COMPUTER%%%,ou=zservers,ou=core control,ou=ziv
+ ios,%%%BASE_DN%%%
+emsmodelclass: OpenldapService
+emsmodulename: openldap
+emstype: ServiceEntry
+objectClass: namedObject
+objectClass: emsldapservice
+
+dn: cn=zivios dns,ou=master services,ou=core control,ou=zivios,%%%BASE_DN%%%
+cn: Zivios DNS
+objectClass: namedObject
+objectClass: emsdnsservice
+emsdescription: Zivios DNS
+emsmodelclass: DnsService
+emstype: ServiceEntry
+emsmodulename: dns
+emsdnsmastercomputerdn: cn=%%%MASTER_COMPUTER%%%,ou=zservers,ou=core control,
+ ou=zivios,%%%BASE_DN%%%
+emsdependson: cn=%%%MASTER_COMPUTER%%%,ou=zservers,ou=core control,ou=ziv
+ ios,%%%BASE_DN%%%
+emsdnsreplicationmode: DELTA-SYNCREPL
+emsdnsrootzone: %%%ROOT_ZONE%%%
+emsmastercomputerdn: cn=%%%MASTER_COMPUTER%%%,ou=zservers,ou=core control,ou=
+ zivios,%%%BASE_DN%%%
+
+dn: dlzZoneName=%%%ROOT_ZONE%%%,cn=zivios dns,ou=master services,ou=core cont
+ rol,ou=zivios,%%%BASE_DN%%%
+objectClass: emsDnsZone
+objectClass: dlzZone
+objectClass: emsIgnore
+cn: %%%ROOT_ZONE%%%
+emsdescription: DNS Zone Entry
+emsmodelclass: EMSDnsZone
+emstype: EmsIgnore
+dlzZoneName: %%%ROOT_ZONE%%%
+emsdnszonetype: forward
+
+dn: dlzHostName=@,dlzZoneName=%%%ROOT_ZONE%%%,cn=zivios dns,ou=master services,
+ ou=core control,ou=zivios,%%%BASE_DN%%%
+objectClass: emsDnsHostName
+objectClass: dlzHost
+cn: @
+emsdescription: DNS Host Name Entry
+emsmodelclass: EMSDnsHostName
+emstype: EmsIgnore
+dlzHostName: @
+
+dn: dlzRecordID=1,dlzHostName=@,dlzZoneName=%%%ROOT_ZONE%%%,cn=zivios dns,ou=ma
+ ster services,ou=core control,ou=zivios,%%%BASE_DN%%%
+objectClass: dlzSOARecord
+objectClass: emsDnsRecord
+cn: @
+emsdescription: DNS Record Entry
+emsmodelclass: EMSDnsRecord
+emstype: EmsIgnore
+dlzHostName: @
+dlzRecordID: 1
+dlzTTL: 10
+dlzType: SOA
+dlzSerial: 1
+dlzRefresh: 2800
+dlzExpire: 604800
+dlzMinimum: 86400
+dlzRetry: 7200
+dlzAdminEmail: zadmin.%%%ROOT_ZONE%%%.
+dlzPrimaryNS: ns1
+
+dn: dlzHostName=%%%MASTER_HOST%%%,dlzZoneName=%%%ROOT_ZONE%%%,cn=zivios dns,ou=
+ master services,ou=core control,ou=zivios,%%%BASE_DN%%%
+objectClass: emsDnsHostName
+objectClass: dlzHost
+emsdescription: DNS Host Name Entry
+emsmodelclass: EMSDnsHostName
+emstype: EmsIgnore
+dlzHostName: %%%MASTER_HOST%%%
+cn: %%%MASTER_HOST%%%
+
+dn: dlzRecordID=1,dlzHostName=%%%MASTER_HOST%%%,dlzZoneName=%%%ROOT_ZONE%%%,cn=zivios dns,ou
+ =master services,ou=core control,ou=zivios,%%%BASE_DN%%%
+objectClass: dlzARecord
+objectClass: emsDnsRecord
+emsdescription: DNS Record Entry
+emsmodelclass: EMSDnsRecord
+emstype: EmsIgnore
+dlzRecordID: 1
+dlzTTL: 10
+dlzType: A
+cn: %%%MASTER_HOST%%%
+dlzHostName: %%%MASTER_HOST%%%
+dlzIPAddr: %%%MASTER_IP%%%
+
+dn: dlzHostName=ns1,dlzZoneName=%%%ROOT_ZONE%%%,cn=zivios dns,ou=master services,
+ ou=core control,ou=zivios,%%%BASE_DN%%%
+objectClass: emsDnsHostName
+objectClass: dlzHost
+emsdescription: DNS Host Name Entry
+emsmodelclass: EMSDnsHostName
+emstype: EmsIgnore
+dlzHostName: ns1
+cn: ns1
+
+dn: dlzRecordID=1,dlzHostName=ns1,dlzZoneName=%%%ROOT_ZONE%%%,cn=zivios dns,ou=ma
+ ster services,ou=core control,ou=zivios,%%%BASE_DN%%%
+objectClass: dlzARecord
+objectClass: emsDnsRecord
+emsdescription: DNS Record Entry
+emsmodelclass: EMSDnsRecord
+emstype: EmsIgnore
+dlzRecordID: 1
+dlzTTL: 10
+dlzType: A
+cn: ns1
+dlzHostName: ns1
+dlzIPAddr: %%%MASTER_IP%%%
+
+dn: cn=zivios kerberos,ou=master services,ou=core control,ou=zivios,%%%BASE_DN%%%
+objectClass: namedObject
+objectClass: emskerberosservice
+objectClass: krb5Realm
+cn: Zivios Kerberos
+emsdescription: Zivios Kerberos Service
+emsmodelclass: KerberosService
+emstype: ServiceEntry
+emsmastercomputerdn: cn=%%%MASTER_COMPUTER%%%,ou=zservers,ou=core control,ou=ziv
+ ios,%%%BASE_DN%%%
+emsdependson: cn=%%%MASTER_COMPUTER%%%,ou=zservers,ou=core control,ou=ziv
+ ios,%%%BASE_DN%%%
+emsmodulename: kerberos
+emskrbserver: %%%MASTER_COMPUTER%%%
+krb5RealmName: %%%KRB5REALM%%%
+
+dn: o=kerberos,cn=zivios kerberos,ou=master services,ou=core control,ou=zivi
+ os,%%%BASE_DN%%%
+cn: kerberos
+emsdescription: Kerberos Registry
+emsmodelclass: EMSSecurityObject
+emstype: ServicePlugin
+o: kerberos
+objectClass: organization
+objectClass: emsSecurityObject
+objectClass: emsIgnore
+
+dn: cn=zivios time,ou=master services,ou=core control,ou=zivios,%%%BASE_DN%%%
+cn: Zivios Time
+emsdescription: Zivios NTP Service
+emsmastercomputerdn: cn=%%%MASTER_COMPUTER%%%,ou=zservers,ou=core control,ou
+ =zivios,%%%BASE_DN%%%
+emsdependson: cn=%%%MASTER_COMPUTER%%%,ou=zservers,ou=core control,ou=ziv
+ ios,%%%BASE_DN%%%
+emsmodelclass: NtpService
+emsmodulename: ntp
+emsstatistics: clockstats
+emsstatistics: loopstats
+emsstatistics: peerstats
+emsstatisticsenable: 1
+emstype: ServiceEntry
+objectClass: namedObject
+objectClass: emsntpservice
+emsntpserver: %%%MASTER_NTP_SERVER%%%
+
+dn: cn=zivios package service,ou=master services,ou=core control,ou=zivios,%%%BASE_DN%%%
+emstype: ServiceEntry
+emsdescription: Zivios Package Service
+emsmodulename: package
+objectClass: emsservice
+objectClass: namedObject
+emsmodelclass: PackageService
+cn: Zivios Package Service
+
+dn: ou=zgroups,ou=core control,ou=zivios,%%%BASE_DN%%%
+emscontainertype: EGroupContainer
+emsdescription: EMS Group Container
+emstype: GroupContainer
+objectClass: organizationalUnit
+objectClass: emsOrganizationalUnit
+ou: zGroups
+cn: zGroups
+emsmodelclass: EMSOrganizationalUnit
+
+dn: cn=zdns,ou=zgroups,ou=core control,ou=zivios,%%%BASE_DN%%%
+cn: zdns
+emsdescription: Group
+emsplugins: PosixGroup
+emsplugins: KerberosGroup
+emstype: GroupEntry
+gidNumber: 952
+objectClass: groupOfNames
+objectClass: emsGroup
+objectClass: posixGroup
+emsmodules: kerberos
+emsmodules: posix
+emsservicemap: KerberosGroup:cn=zivios kerberos,ou=master services,ou=core c
+ ontrol,ou=zivios,%%%BASE_DN%%%:KerberosService
+member: cn=placeholder,%%%BASE_DN%%%
+member: uid=zdnsuser,ou=zusers,ou=core control,ou=zivios,%%%BASE_DN%%%
+member: uid=zdnsreplica,ou=zusers,ou=core control,ou=zivios,%%%BASE_DN%%%
+emsmodelclass: EMSGroup
+
+dn: cn=zadmin,ou=zgroups,ou=core control,ou=zivios,%%%BASE_DN%%%
+cn: zadmin
+emsdescription: Group
+emsplugins: PosixGroup
+emsplugins: KerberosGroup
+emstype: GroupEntry
+gidNumber: 951
+objectClass: groupOfNames
+objectClass: emsGroup
+objectClass: posixGroup
+emsmodules: kerberos
+emsmodules: posix
+emsservicemap: KerberosGroup:cn=zivios kerberos,ou=master services,ou=core c
+ ontrol,ou=zivios,%%%BASE_DN%%%:KerberosService
+member: cn=placeholder,%%%BASE_DN%%%
+member: uid=zadmin,ou=zusers,ou=core control,ou=zivios,%%%BASE_DN%%%
+member: uid=zldapreplica,ou=zusers,ou=core control,ou=zivios,%%%BASE_DN%%%
+emsmodelclass: EMSGroup
+
+dn: ou=zservers,ou=core control,ou=zivios,%%%BASE_DN%%%
+emscontainertype: ComputerContainer
+emsdescription: Computer OU
+emstype: ServerContainer
+objectClass: organizationalUnit
+objectClass: emsOrganizationalUnit
+ou: zServers
+cn: zServers
+emsmodelclass: EMSOrganizationalUnit
+
+dn: cn=%%%MASTER_COMPUTER%%%,ou=zservers,ou=core control,ou=zivios,
+ %%%BASE_DN%%%
+cn: %%%MASTER_COMPUTER%%%
+emscomputercpumhz: %%%CPUMHZ%%%
+emscomputerdistrorelease: %%%CODE_RELEASE%%%
+emsdistrodesc: %%%DISTRO_DESC%%%
+emsdistrocodename: %%%CODE_NAME%%%
+emscomputersystem: %%%OS%%%
+emscomputerarch: %%%ARCH%%%
+emscomputervendormodel: %%%CPUMODEL%%%
+emscomputercpucount: %%%CPUCOUNT%%%
+emscomputerram: %%%RAM%%%
+emscomputerswap: %%%SWAP%%%
+emsdescription: Server
+emsmodelclass: %%%OS%%%_%%%DISTRO%%%
+emstype: ServerEntry
+emsplugins: %%%PKG_PLUGIN%%%
+emsplugins: CaComputer
+emsmodules: package
+emsmodules: ca
+emsservicemap: %%%PKG_PLUGIN%%%:cn=zivios package service,ou=master services,
+ ou=core control,ou=zivios,%%%BASE_DN%%%:PackageService
+emsservicemap: CaComputer:cn=zivios ca,ou=master services,
+ ou=core control,ou=zivios,%%%BASE_DN%%%:CaService
+objectClass: device
+objectClass: ipHost
+objectClass: emsComputer
+emscomputerdistro: %%%DISTRO%%%
+ipHostNumber: %%%MASTER_IP%%%
+
+dn: ou=zusers,ou=core control,ou=zivios,%%%BASE_DN%%%
+emscontainertype: EUserContainer
+emsdescription: EMS User Container
+emstype: UserContainer
+objectClass: organizationalUnit
+objectClass: emsOrganizationalUnit
+ou: zUsers
+cn: zUsers
+emsmodelclass: EMSOrganizationalUnit
+
+dn: uid=zdnsuser,ou=zusers,ou=core control,ou=zivios,%%%BASE_DN%%%
+cn: Zivios DNS Administrator
+emsdescription: DNS User Entry
+emsprimarygroupdn: cn=zdns,ou=zgroups,ou=core control,ou=zivios,
+ %%%BASE_DN%%%
+emstype: UserEntry
+gidNumber: 952
+givenName: Zivios DNS
+homeDirectory: /home/zdnsuser
+krb5KDCFlags: 586
+krb5PrincipalName: zdnsuser@%%%KRB5REALM%%%
+krb5RealmName: %%%KRB5REALM%%%
+objectClass: inetOrgPerson
+objectClass: krb5Realm
+objectClass: krb5Principal
+objectClass: krb5KDCEntry
+objectClass: emsUser
+objectClass: posixAccount
+ou: Administrative
+sn: Administrator
+uid: zdnsuser
+userPassword: {K5KEY}
+uidNumber: 952
+krb5KeyVersionNumber: 0
+krb5EncryptionType: 23
+emsmodules: kerberos
+emsmodules: posix
+emsmodelclass: EMSUser
+emsplugins: KerberosUser
+emsplugins: PosixUser
+
+dn: uid=zadmin,ou=zusers,ou=core control,ou=zivios,%%%BASE_DN%%%
+cn: Zivios Administrator
+emsdescription: Admin User Entry
+emsprimarygroupdn: cn=zadmin,ou=zgroups,ou=core control,ou=zivios,
+ %%%BASE_DN%%%
+emstype: UserEntry
+gidNumber: 951
+givenName: Zivios
+homeDirectory: /home/zadmin
+krb5KDCFlags: 586
+krb5PrincipalName: zadmin@%%%KRB5REALM%%%
+krb5RealmName: %%%KRB5REALM%%%
+objectClass: inetOrgPerson
+objectClass: krb5Realm
+objectClass: krb5Principal
+objectClass: krb5KDCEntry
+objectClass: emsUser
+objectClass: posixAccount
+ou: Administrative
+sn: Administrator
+uid: zadmin
+userPassword: {K5KEY}
+uidNumber: 951
+emsmodules: kerberos
+emsmodules: posix
+emsmodelclass: EMSUser
+emsplugins: KerberosUser
+emsplugins: PosixUser
+krb5KeyVersionNumber: 0
+krb5EncryptionType: 23
+
+dn: uid=zldapreplica,ou=zusers,ou=core control,ou=zivios,%%%BASE_DN%%%
+cn: Zivios LDAP Replica
+emsdescription: LDAP Replicator Entry
+emsprimarygroupdn: cn=zadmin,ou=zgroups,ou=core control,ou=zivios,
+ %%%BASE_DN%%%
+emstype: UserEntry
+gidNumber: 951
+givenName: Zivios LDAP
+homeDirectory: /home/zldapreplica
+krb5KDCFlags: 586
+krb5PrincipalName: zldapreplica@%%%KRB5REALM%%%
+krb5RealmName: %%%KRB5REALM%%%
+objectClass: inetOrgPerson
+objectClass: krb5Realm
+objectClass: krb5Principal
+objectClass: krb5KDCEntry
+objectClass: emsUser
+objectClass: posixAccount
+ou: Administrative
+sn: Replica
+uid: zldapreplica
+userPassword: {K5KEY}
+uidNumber: 953
+emsmodules: kerberos
+emsmodules: posix
+emsmodelclass: EMSUser
+emsplugins: KerberosUser
+emsplugins: PosixUser
+krb5KeyVersionNumber: 0
+krb5EncryptionType: 23
+
+dn: uid=zdnsreplica,ou=zusers,ou=core control,ou=zivios,%%%BASE_DN%%%
+cn: Zivios DNS Replica
+emsdescription: DNS Replica User
+emsprimarygroupdn: cn=zdns,ou=zgroups,ou=core control,ou=zivios,
+ %%%BASE_DN%%%
+emstype: UserEntry
+gidNumber: 952
+givenName: Zivios DNS
+homeDirectory: /home/zdnsreplica
+krb5KDCFlags: 586
+krb5PrincipalName: zdnsreplica@%%%KRB5REALM%%%
+krb5RealmName: %%%KRB5REALM%%%
+objectClass: inetOrgPerson
+objectClass: krb5Realm
+objectClass: krb5Principal
+objectClass: krb5KDCEntry
+objectClass: emsUser
+objectClass: posixAccount
+ou: Administrative
+sn: Replica
+uid: zdnsreplica
+userPassword: {K5KEY}
+uidNumber: 954
+emsmodules: kerberos
+emsmodules: posix
+emsmodelclass: EMSUser
+emsplugins: KerberosUser
+emsplugins: PosixUser
+krb5KeyVersionNumber: 0
+krb5EncryptionType: 23

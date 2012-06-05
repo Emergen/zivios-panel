@@ -1,0 +1,69 @@
+<?php
+/**
+ * Copyright (c) 2008-2010 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		Zivios
+ * @copyright	Copyright (c) 2008-2010 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ **/
+echo $this->doctype();
+?>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <?php echo $this->headTitle(); ?>
+    <?php echo $this->headMeta();  ?>
+    <style type="text/css">
+    <!--
+    <?php echo $this->css . "\n"; ?>
+    -->
+    </style>
+    <noscript>
+        <meta http-equiv="refresh" content="0; url=/public/jsdisabled.html"/>
+    </noscript>
+</head>
+
+<body class="tundra">
+<div id="preloader" style="display: block;">Loading, Please wait...</div>
+
+<div id="zvPrimaryContainer" style="display: none; width: 100%; height: 100%;">
+
+    <div dojoType="dijit.layout.BorderContainer" design="headline" gutters="false" liveSplitters="false" id="layout">
+        <div dojoType="dijit.layout.ContentPane" splitter="false" region="top" id="loginHeader">
+            <div class="loginHeaderContent">
+                <div id="loadingmsg" style="display: none;">Loading...</div>
+                <div class="flashmsg"></div>
+            </div>
+        </div>
+
+        <div dojoType="dijit.layout.ContentPane" splitter="false" region="center">
+           <?php echo $this->layout()->content; ?>
+        </div>
+
+        <div dojoType="dijit.layout.ContentPane" splitter="false" region="bottom" id="loginFooter">
+            The <a href="http://www.zivios.org/" target="_new">Zivios Project</a> is &copy; Zivios, LLC. All Rights Reserved, 2008-<?php echo date('Y'); ?>.
+        </div>
+    </div>
+</div>
+</body>
+<?php 
+// Initialize dojo & Zivios core
+echo $this->dojo()->enable() . "\n";
+?>
+</html>
+

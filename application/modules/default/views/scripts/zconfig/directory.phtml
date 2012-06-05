@@ -1,0 +1,99 @@
+<?php
+/**
+ * Copyright (c) 2008-2010 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     Zivios
+ * @copyright   Copyright (c) 2008-2010 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+
+$formid   = Zivios_Util::randomString(8);
+$regexLib = Zivios_Util::getRegexLibrary();
+?>
+<div class="heading">Directory Configuration</div>
+
+<div class="content">
+
+    <form id='<?php echo $formid; ?>' enctype="application/x-www-form-urlencoded" method="post" 
+        action="#" dojoType="dijit.form.Form">
+
+    <div class="zflabel" style="width: 150px;">Directory Server Hostname: </div>
+    <input name="zcfggeneral[rq_hostname_ldaphost_Directory+Server]" type="text" dojoType="dijit.form.ValidationTextBox" 
+        size="16" maxlength="64" regExp="<?php echo $regexLib->exp->hostname; ?>" required="true" 
+        invalidMessage="Invalid characters in field value." class="zfgenField" 
+        value="<?php echo $this->config->ldap->host; ?>" />
+    <div class="cboth"></div>
+
+    <div class="zflabel" style="width: 150px;">Directory Server Port:  </div>
+    <input dojoType="dijit.form.NumberSpinner" value="<?php echo $this->config->ldap->port; ?>" smallDelta="1"
+        largeDelta="1" defaultTimeout="500" timeoutChangeRate="100" maxLength="5" constraints="{min:1,max:65535,places:0}"
+        name="zcfggeneral[rq_digits_ldapport_Directory+Server+Port]" class="zfgenField" style="width: 230px;"/>
+    <div class="cboth"></div>
+
+    <div class="info infocl" style="width: 320px; margin-left: 10px; margin-top: 15px;">
+        Specify the minimum User ID number. Zivios will search for free ids starting from the number specified. 
+    </div>
+    <div class="zflabel" style="width: 150px;">Start UID Number:  </div>
+    <input dojoType="dijit.form.NumberSpinner" value="<?php echo $this->config->ldap->ldap_uid_min; ?>" smallDelta="1"
+        largeDelta="10" defaultTimeout="500" timeoutChangeRate="100" maxLength="6" constraints="{min:1,max:100000,places:0}"
+        name="zcfggeneral[rq_digits_uidmin_Start+UID+Number]" class="zfgenField" style="width: 230px;"/>
+    <div class="cboth"></div>
+
+    <div class="zflabel" style="width: 150px;">Max UID Number:  </div>
+    <input dojoType="dijit.form.NumberSpinner" value="<?php echo $this->config->ldap->ldap_uid_max; ?>" smallDelta="1"
+        largeDelta="10" defaultTimeout="500" timeoutChangeRate="100" maxLength="6" constraints="{min:1,max:100000,places:0}"
+        name="zcfggeneral[rq_digits_uidmax_Max+UID+Number]" class="zfgenField" style="width: 230px;"/>
+    <div class="cboth"></div>
+
+    <div class="info infocl" style="width: 320px; margin-left: 10px; margin-top: 15px;">
+        Specify the minimum Group ID number. Zivios will search for free ids starting from the number specified. 
+    </div>
+    <div class="zflabel" style="width: 150px;">Start Gid Number:  </div>
+    <input dojoType="dijit.form.NumberSpinner" value="<?php echo $this->config->ldap->ldap_gid_min; ?>" smallDelta="1"
+        largeDelta="10" defaultTimeout="500" timeoutChangeRate="100" maxLength="6" constraints="{min:1,max:100000,places:0}"
+        name="zcfggeneral[rq_digits_gidmin_Start+GID+Number]" class="zfgenField" style="width: 230px;"/>
+    <div class="cboth"></div>
+
+    <div class="zflabel" style="width: 150px;">Max GID Number:  </div>
+    <input dojoType="dijit.form.NumberSpinner" value="<?php echo $this->config->ldap->ldap_gid_max; ?>" smallDelta="1"
+        largeDelta="10" defaultTimeout="500" timeoutChangeRate="100" maxLength="6" constraints="{min:1,max:100000,places:0}"
+        name="zcfggeneral[rq_digits_gidmax_Max+UID+Number]" class="zfgenField" style="width: 230px;"/>
+    <div class="cboth"></div>
+
+    <div class="zflabel" style="width: 150px;">Max Resultset:  </div>
+    <input dojoType="dijit.form.NumberSpinner" value="<?php echo $this->config->ldap->sizelimit; ?>" smallDelta="1"
+        largeDelta="10" defaultTimeout="500" timeoutChangeRate="100" maxLength="6" constraints="{min:1,max:100000,places:0}"
+        name="zcfggeneral[rq_digits_sizelimit_Maximum+Resultset]" class="zfgenField" style="width: 230px;"/>
+    <div class="cboth"></div>    
+
+    <div class="zflabel" style="width: 150px;">Directory Timeout:  </div>
+    <input dojoType="dijit.form.NumberSpinner" value="<?php echo $this->config->ldap->timelimit; ?>" smallDelta="1"
+        largeDelta="10" defaultTimeout="500" timeoutChangeRate="100" maxLength="4" constraints="{min:1,max:3600,places:0}"
+        name="zcfggeneral[rq_digits_timelimit_Directory+Timeout]" class="zfgenField" style="width: 230px;"/>
+    <div class="cboth"></div>
+
+    <div class="zflabel" style="width: 150px;">&nbsp;</div>
+    <input onclick="zivios.postxhr('/default/zconfig/update', '', '<?php echo $formid; ?>',
+        'form', 'json', [], [], [], [], this.id); return false;" 
+        name="zcfgupdate" value="Update Configuration"
+        type="submit" label="Update Configuration" dojoType="dijit.form.Button"/>
+    <div class="cboth"></div>
+    <input type="hidden" name="zcfggeneral[rq_alnospaces_section_Update+Section]" value="ldap"/>
+    </form>
+</div>
+

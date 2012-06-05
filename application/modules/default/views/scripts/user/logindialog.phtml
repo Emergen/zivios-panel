@@ -1,0 +1,95 @@
+<style type="text/css">
+.labell {
+    margin-top: 0px;
+    line-height: 18px;
+}
+</style>
+
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     mod_asterisk
+ * @copyright   Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+
+ 
+$formid   = Zivios_Util::randomString(8);
+$regexLib = Zivios_Util::getRegexLibrary();
+?>
+<div id='logindialog'>
+
+<?php 
+
+
+if ($this->success) {
+    $url = 'https://'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'/'.WEB_ROOT;
+    ?>
+    <div class="info"><?php echo $this->success;?></div>
+    <button dojoType="dijit.form.Button">Click to Relogin
+        <script type="dojo/method" event="onClick">
+            zivios.logout()
+        </script>
+    </button>
+    
+    <?php
+    
+}
+?>
+
+
+<?php 
+if ($this->error) {
+    ?>
+    <div class="alert"><?php echo $this->error;?></div>
+    <?php
+    
+}
+
+if ($this->pwdmustchange) {
+    ?>
+<div class="alert">You are required to change your password immediately</div>
+<form id='<?php echo $formid; ?>' enctype="application/x-www-form-urlencoded" method="post" 
+        action="#" dojoType="dijit.form.Form">
+        
+<div class="subheading">Openldap PPolicy Plugin</div>
+<div class="content">
+
+<div class="labell">New Password:</div>
+<input dojoType="dijit.form.ValidationTextBox" type="password" name="pw[op_noval_newpw_OPWD]" class="genField"/>
+<div class="cboth"></div>
+
+<div class="labell">Confirm New Pw:</div>
+<input dojoType="dijit.form.ValidationTextBox" type="password" name="pw[op_noval_cnewpw_OPWD]" class="genField"/>
+<div class="cboth"></div>
+
+<div class="labell"></div>
+    
+
+    <input onclick="zivios.postxhr('/default/user/logindialogupdate', 'logindialog', '<?php echo $formid; ?>',
+        'form', 'text', [], [], [], [], this.id); return false;" 
+        name="inica" value="Apply" 
+        class="genField" type="submit" label="Apply" dojoType="dijit.form.Button"/>
+    <div class="cboth"></div>
+    </form>
+</div>
+<?php
+}
+?>
+</div>

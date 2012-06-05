@@ -1,0 +1,72 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		Zivios
+ * @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ **/
+?>
+<p class="toolbar">
+<div id="setb01" dojoType="dijit.Toolbar" style="width:30%; height: 23px; float: left;">
+    <div dojoType="dijit.form.DropDownButton">
+        <span><b>Server Menu</b></span>
+        <ul dojoType="dijit.Menu" id="linuxservermenu" class="ddm">
+            <?php 
+            if (is_array($this->existingServices) && !empty($this->existingServices)):
+            ?>
+            <li dojoType="dijit.PopupMenuItem">
+            <span>Active Client Services</span>
+            <ul dojoType="dijit.Menu" id="lsactsrv">
+                <?php
+                foreach ($this->existingServices as $module => $serviceListing) {
+                    foreach ($serviceListing as $serviceDetails) {
+                        $url = '/' . $module . '/computer/dashboard/dn/' . $this->entry->getdn() . 
+                               '/srvdn/' . $serviceDetails['dn'];
+                        ?>
+                        <li dojoType="dijit.MenuItem" label="<?php echo $serviceDetails['label']; ?>">
+                        <script type="dojo/method" event="onClick">
+                        zivios.loadApp('<?php echo $url; ?>', 'serverentrytabs', 
+                            '<?php echo $serviceDetails['dn']; ?>', '<?php echo $serviceDetails['label']; ?>');
+                        </script>
+                        </li>
+                        <?php
+                    }
+                }
+                ?>
+            </ul>
+            </li>
+            <?php 
+            endif;
+            ?>
+            <li dojoType="dijit.MenuSeparator"></li>
+            <li dojoType="dijit.MenuItem" label="Remove Server">
+                <script type="dojo/method" event="onClick">
+                    zivios.loadApp('/default/server/deleteserver/dn/<?php echo urlencode($this->entry->getdn());?>',
+                                   'serverentrytabs','deletelserverentry', 'Remove Server');
+                </script>
+            </li>
+        </ul>
+    </div>
+    <div dojoType="dijit.form.Button" id="setb01.help" iconClass="genericIcon helpIcon"
+        showLabel="false" onClick="javascript:zivios.loadApp('/index/zhelp/tid/020','ztabs','zhelp','Help Center');">Help</div>
+</div>
+<div id="setb02" dojoType="dijit.Toolbar" style="width:70%; height: 23px; float: left; text-align: right;">
+    <b><?php echo $this->entry->getProperty("cn"); ?></b> &nbsp;&nbsp;
+</div>
+</p>

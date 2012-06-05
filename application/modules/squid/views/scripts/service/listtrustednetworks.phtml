@@ -1,0 +1,82 @@
+<?php
+/**
+ * Copyright (c) 2008-2010 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		Zivios
+ * @copyright	Copyright (c) 2008-2010 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ **/
+?>
+<p class="headline">Trusted IP Networks</p>
+<div class="note notecl" style="width: 650px; margin-left: 10px;">
+    Removing a trusted IP network requires a service restart.
+</div>
+
+<?php
+if (null === ($trustedNets = $this->service->getProperty('emssquidtrustednetworks'))) {
+    echo '<div style="margin-left: 12px; margin-top: 10px;">No trusted networks are currently defined.</div>';
+} else {
+    if (!is_array($trustedNets)) {
+        $trustedNets = array($trustedNets);
+    }
+    ?>
+
+    <form action="#" method="post" id="removetnets" onsubmit="return false;">
+    <?php
+    $c = 0;
+    foreach ($trustedNets as $tnet) {
+        if ($c == 4) {
+            echo '<div class="clearboth"></div>';
+            $c = 0;
+        }
+        ?>
+        <div class="cbox">
+        <input type="checkbox" dojoType="dijit.form.CheckBox" value="1" name="trustednet[<?php
+            echo urlencode($tnet);
+        ?>]"/>
+        </div>
+        <div class="cval"><?php echo $tnet; ?></div>
+        <?php
+        $c++;
+    }
+    ?>
+    <div class="cboth">&nbsp;</div>
+    <hr size="1" color="#cccccc"/> 
+    <div style="margin-left: 10px;">
+        <input type="hidden" name="dn" value="<?php echo urlencode($this->service->getdn()); ?>"/>
+        <input type="submit" id="removetnets-submit" dojoType="dijit.form.Button" label="Remove Networks"
+            onclick="zivios.doXhrPost('removetnets', '/squid/service/removetrustednetworks');"/>
+    </div>
+</form>
+
+<style type="text/css">
+.cbox {
+    float: left;
+    margin-left: 10px;
+    padding: 5px;
+    padding-right: 2px;
+}
+.cval {
+    float: left;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    width: 150px;
+}
+</style>
+<?php
+}

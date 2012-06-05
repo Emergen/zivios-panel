@@ -1,0 +1,50 @@
+<?php
+/**
+ * Copyright (c) 2008-2010 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     Zivios
+ * @copyright   Copyright (c) 2008-2010 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+
+$this->borderContainer()->captureStart('groupdatalayout', array(
+    'design' => 'sidebar',
+    'style' => 'width: 100%; padding: 0px; margin: 0px; border: 0px;'));
+
+    $this->contentPane()->captureStart('groupdataleft', array(
+        'region' => 'left', 
+        'style'  => 'width: 300px; padding: 0px; margin: 0px; border-left: 0px; border-top: 0px; border-bottom: 0px;', 
+        'href'   => 'group/loadaccountdata/dn/'.urlencode($this->entry->getdn())));
+    echo $this->contentPane()->captureEnd('groupdataleft');
+
+    $this->contentPane()->captureStart('searchinput', array(
+        'region' => 'top', 
+        'style'  => 'height: 178px; padding: 0px; margin: 0px; border-right: 0px; border-top: 0px;'));
+
+    echo $this->render('group/dashboard/searchinput.phtml');
+    echo $this->contentPane()->captureEnd('searchinput');
+
+    $this->contentPane()->captureStart('searchresults', array(
+        'region' => 'center',
+        'style'  => 'padding: 0px; margin: 0px; border-right: 0px; border-bottom: 0px;', 
+        'href'   => 'group/search/dn/'.urlencode($this->entry->getdn())));
+    echo $this->contentPane()->captureEnd('searchresults');
+
+// End border container layout
+echo $this->borderContainer()->captureEnd('groupdatalayout');
+

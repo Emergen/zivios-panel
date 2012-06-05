@@ -1,0 +1,52 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     Zivios
+ * @copyright   Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+?>
+<p class="headline">Activate/Deactivate Members</p>
+
+<p class="content">
+Activating or deactivating group members will provision/deprovision the Squid 
+User plugin. Squid settings will be inherited from the group; with individual
+user settings taking precedence. 
+</p>
+
+<div style="margin-left: 10px; margin-top: 5px;">
+    <button dojoType="dijit.form.Button" id="dosqmemact">Activate Group Members
+        <script type="dojo/method" event="onClick">
+            zivios.callAction('/squid/group/doactivatemembers', {dn: '<?php echo urlencode($this->entry->getdn());?>'},'dosqmemact');
+        </script>
+    </button>
+</div>
+<?php 
+if ($this->deactivateOption) {
+    ?>
+<div style="margin-left: 10px; margin-top: 5px;">
+    <button dojoType="dijit.form.Button" id="dosqmemdeact">Deactivate Group Members
+        <script type="dojo/method" event="onClick">
+            zivios.callAction('/squid/group/dodeactivatemembers', {dn: '<?php echo urlencode($this->entry->getdn());?>'},'dosqmemdeact');
+        </script>
+    </button>
+</div>
+<?php
+}
+

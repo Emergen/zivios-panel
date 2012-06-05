@@ -1,0 +1,72 @@
+dn: cn=config
+objectClass: olcGlobal
+cn: config
+olcPidFile: %%%RUN_DIR%%%/slapd.pid
+olcArgsFile: %%%RUN_DIR%%%/slapd.args
+olcLogLevel: stats
+olcAttributeOptions: lang-
+olcAuthzRegexp: {0}"^uid=([^,]+),cn=[^,]+,cn=gssapi+,cn=auth$"
+  "ldap:///%%%BASE_DN%%%??sub?(&(uid=$1)(objectClass=posixAccount))"
+olcConcurrency: 0
+olcConfigDir: %%%CONF_DIR%%%
+olcConnMaxPending: 100
+olcConnMaxPendingAuth: 1000
+olcIdleTimeout: 0
+olcIndexIntLen: 4
+olcIndexSubstrAnyLen: 4
+olcIndexSubstrAnyStep: 2
+olcIndexSubstrIfMaxLen: 4
+olcIndexSubstrIfMinLen: 2
+olcLocalSSF: 71
+olcSaslHost: %%%REPLICA_HOST%%%
+olcSaslRealm: %%%KRB5_REALM%%%
+olcSaslSecProps: noplain,noanonymous
+olcSockbufMaxIncoming: 262143
+olcSockbufMaxIncomingAuth: 16777215
+olcThreads: 16
+olcTLSCACertificateFile: %%%CA_CERT%%%
+olcTLSCertificateFile: %%%PUB_KEY%%%
+olcTLSCertificateKeyFile: %%%PRV_KEY%%%
+olcTLSCRLCheck: none
+olcTLSVerifyClient: never
+olcToolThreads: 1
+olcWriteTimeout: 0
+
+dn: olcDatabase={-1}frontend,cn=config
+objectClass: olcDatabaseConfig
+objectClass: olcFrontendConfig
+olcDatabase: {-1}frontend
+olcSizeLimit: 500
+olcAccess: {0}to * by dn.exact=gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth manage by * break
+olcAccess: {1}to dn.base="" by * read
+olcAccess: {2}to dn.base="cn=subschema" by * read
+
+dn: olcDatabase=config,cn=config
+objectClass: olcDatabaseConfig
+olcDatabase: config
+olcAccess: to * by dn.exact=gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth manage by * break
+olcRootDn: cn=config
+olcRootPw: %%%CNCONFIG_PASS%%%
+
+dn: cn=schema,cn=config
+objectClass: olcSchemaConfig
+cn: schema
+
+include: file:///opt/zivios/openldap/etc/openldap/schema/core.ldif
+include: file:///opt/zivios/openldap/etc/openldap/schema/misc.ldif
+include: file:///opt/zivios/openldap/etc/openldap/schema/cosine.ldif
+include: file:///opt/zivios/openldap/etc/openldap/schema/inetorgperson.ldif
+include: file:///opt/zivios/openldap/etc/openldap/schema/rfc2307bis.ldif
+include: file:///opt/zivios/openldap/etc/openldap/schema/rfc2739.ldif
+include: file:///opt/zivios/openldap/etc/openldap/schema/samba.ldif
+include: file:///opt/zivios/openldap/etc/openldap/schema/hdb.ldif
+include: file:///opt/zivios/openldap/etc/openldap/schema/dlz.ldif
+include: file:///opt/zivios/openldap/etc/openldap/schema/dhcp.ldif
+include: file:///opt/zivios/openldap/etc/openldap/schema/amavis.ldif
+include: file:///opt/zivios/openldap/etc/openldap/schema/asterisk.ldif
+include: file:///opt/zivios/openldap/etc/openldap/schema/zivios-core.ldif
+include: file:///opt/zivios/openldap/etc/openldap/schema/zivios-mail.ldif
+include: file:///opt/zivios/openldap/etc/openldap/schema/zivios-samba.ldif
+include: file:///opt/zivios/openldap/etc/openldap/schema/zivios-asterisk.ldif
+include: file:///opt/zivios/openldap/etc/openldap/schema/zivios-squid.ldif
+include: file:///opt/zivios/openldap/etc/openldap/schema/ppolicy.ldif

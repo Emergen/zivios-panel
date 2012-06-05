@@ -1,0 +1,75 @@
+<?php
+/**
+ * Copyright (c) 2008-2010 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		Zivios
+ * @copyright	Copyright (c) 2008-2010 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ **/
+$formid   = Zivios_Util::randomString(8);
+$regexLib = Zivios_Util::getRegexLibrary();
+?>
+
+<div dojoType="dijit.layout.TabContainer" id="tc_adducontainer" class="u-tab">
+    <div id="cp_adducontainer" dojoType="dijit.layout.ContentPane" title="Add User Container" 
+        selected="true" style="width: 100%; padding: 0px; margin: 0px; border: 0px;">
+
+        <div class="heading">User Containers in your Organizational Tree</div>
+
+        <div class="content">
+            <div class="info infocl" style="width: 500px;">
+                A User Container is required for the creation of user accounts. Upon adding a User
+                Container to your organizational tree, right click on the container for User Add 
+                and other options.
+                <br /><br />
+                For additional information regarding User Containers and Zivios hierarchies,
+                please consult the <a href="http://wiki.zivios.org" target="_blank">Zivios Wiki</a>.
+            </div>
+        </div>
+
+        <div class="subheading">Add a User Container</div>
+        <div class="content">
+
+        <div class="note notecl" style="width: 500px;">
+            Parent DN: <?php echo $this->parentdn; ?>
+        </div>
+
+        <form id='<?php echo $formid; ?>' enctype="application/x-www-form-urlencoded" method="post" 
+            action="#" dojoType="dijit.form.Form">
+
+        <div class="zflabel" style="width: 100px;">Container Name: </div>
+        <input name="usercontainerdata[rq_alnumwithspaces_cn_User+Container+Name]" type="text" dojoType="dijit.form.ValidationTextBox" 
+            size="16" maxlength="64" regExp="<?php echo $regexLib->exp->alnumwithspaces; ?>" required="true" 
+            invalidMessage="Invalid characters. Only alphabets, numbers and spaces are permitted." class="zfgenField" 
+            value="" />
+        <div class="cboth"></div>
+
+        <div class="zflabel" style="width: 100px;">&nbsp;</div>
+        <input onclick="zivios.postxhr('/default/user/doaddcontainer', '', '<?php echo $formid; ?>',
+            'form', 'json', [], [], [], [], this.id); return false;" 
+            name="zvadducontainer" value="Add User Container" 
+            type="submit" label="Add User Container" dojoType="dijit.form.Button"/>
+        <div class="cboth"></div>
+
+        <input type="hidden" name="usercontainerdata[rq_dn_dn_Distinguished+Name_enc]" value="<?php echo urlencode($this->parentdn); ?>"/>
+        </form>
+        </div>
+    </div>
+</div>
+
+

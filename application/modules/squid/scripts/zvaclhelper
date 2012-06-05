@@ -1,0 +1,395 @@
+#!/usr/bin/python -u
+#
+# Copyright (c) 2008 Zivios, LLC.
+#
+# This file is part of Zivios.
+#
+# Zivios is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Zivios is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+#
+# @package      Zivios
+# @copyright    Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+# @license      http://www.zivios.org/legal/license
+#
+
+import sys
+import socket
+import ldap
+import datetime
+import time
+import re
+from time import gmtime, strftime
+
+"""
+    Debug level should ALWAYS be 0 in production.
+    If the debug level is changed, be sure to restart the 
+    Squid service.
+    """
+debug = 0
+
+def logmsg(msg):
+    if debug is not 0:
+        f = "/tmp/sqhelper.log"
+        fh = open(f, "a")
+        fh.write(msg + "\n")
+        fh.close
+
+def checkAccess(data):
+    line = data.split(' ')
+    cred = line[0]
+    durl = line[1]
+    host = sys.argv[1]
+    base_dn = sys.argv[2]
+
+    logmsg("LDAP Host is: " + host)
+    logmsg("Base DN is: " + base_dn)
+    logmsg("uid is: "  + cred)
+    logmsg("Destination URL: " + durl)
+
+    scope = ldap.SCOPE_SUBTREE
+    uidfilter = "uid="+cred
+    dn = ""
+    passwd = ""
+    groupfilter = ""
+    getattrs = None
+    result_set = []
+    timeout = 0
+    
+    try:
+        l = ldap.open(host)
+        l.simple_bind_s("","")
+        logmsg("Ldap Connection established")
+    except ldap.LDAPError, error_message:
+        logmsg("LDAP ERR: %s" % error_message)
+        return 0
+    
+    try:
+        result_id = l.search(base_dn, scope, uidfilter, getattrs)
+    except:
+        logmsg("LDAP ERR: %s" % error_message)
+
+    while 1:
+        try:
+            result_type, result_data = l.result(result_id, timeout)
+        except ldap.LDAPError, error_message:
+            logmsg("LDAP ERR: %s" % error_message)
+            return 0
+
+        if (result_data == []):
+            logmsg("uid: "+uid+" was not found. Access denied.")
+            return 0
+
+        if result_type == ldap.RES_SEARCH_ENTRY:
+            result_set.append(result_data)
+            userdn = result_set[0][0][0];
+            user   = result_set[0][0];
+
+            if (checkUserAccess(user)):
+                logmsg("Squid access is enabled for: " + cred)
+
+                upriv = getPrivileges(user)
+                ugrps = getSquidGroups(l, userdn, base_dn, scope)
+                gpriv = []
+
+                for i in range(len(ugrps)):
+                    gpriv.append(getPrivileges(ugrps[i]))
+
+                conprivs = getConsolidatedPrivileges(upriv, gpriv)
+                
+                if (checkNetAccess(conprivs, durl)):
+                    return 1
+                else:
+                    return 0
+        else:
+            return 0
+    
+    return 0
+
+def getConsolidatedPrivileges(uprivs, gprivs):
+    """
+    Method of operation: 
+        Privileges set on a squid group (or groups) will be merged with access
+        set on the user object.
+
+        If no privileges are found on the user object, group privileges will
+        be merged. 
+
+        Though Zivios (panel) does not allow whitelists and blacklists to be 
+        defined simultaneously, the helper will consolidate both white and black 
+        lists to create a consolidated privileges structure. 
+    """
+
+    access_start_time = ''
+    access_end_time   = ''
+    days_of_week      = ''
+    whitelist         = ''
+    blacklist         = ''
+
+    if not uprivs['s_hour'] == '':
+        access_start_time = time.strptime(uprivs['s_hour'], '%I:%M%p')
+
+    if not uprivs['e_hour'] == '':
+        access_end_time = time.strptime(uprivs['e_hour'], '%I:%M%p')
+
+    if not uprivs['daysofweek'] == '':
+        days_of_week = uprivs['daysofweek']
+
+    if not uprivs['whitelist'] == '':
+        whitelist = uprivs['whitelist']
+
+    if not uprivs['blacklist'] == '':
+        blacklist = uprivs['blacklist']
+
+    for i in range (len(gprivs)):
+        g_s_hour = time.strptime(gprivs[i]['s_hour'], '%I:%M%p')
+        g_e_hour = time.strptime(gprivs[i]['e_hour'], '%I:%M%p')
+        g_weekdays = gprivs[i]['daysofweek']
+        g_whitelist = gprivs[i]['whitelist']
+        g_blacklist = gprivs[i]['blacklist']
+
+        if g_s_hour < access_start_time:
+            access_start_time = g_s_hour
+
+        if g_e_hour > access_end_time:
+            access_end_time = g_e_hour
+
+        if not days_of_week == "":
+            for c in gprivs[i]['daysofweek']:
+                if c not in days_of_week:
+                    days_of_week += c
+        else:
+            days_of_week = g_weekdays
+
+        if whitelist is not "":
+            if g_whitelist is not "":
+                for item in g_whitelist:
+                    if item not in whitelist:
+                        whitelist.append(item)
+        else:
+            if g_whitelist is not "":
+                whitelist = g_whitelist
+
+        if blacklist is not "":
+            if g_blacklist is not "":
+                for item in g_blacklist:
+                    if item not in blacklist:
+                        blacklist.append(item)
+        else:
+            if g_blacklist is not "":
+                blacklist = g_blacklist
+
+    ca_details = {\
+        "ac_start"  : access_start_time, \
+        "ac_end"    : access_end_time, \
+        "whitelist" : whitelist, \
+        "blacklist" : blacklist, \
+        "weekdays"  : days_of_week\
+    }
+
+    return ca_details
+
+def checkNetAccess(c_privs, dest_url):
+    """
+    Checks are conducted in the following order:
+        Weekday check:
+        -> If the day of current day of week is not found, return false.
+
+        Time of day check:
+        -> If the current time does not fall between granted access time, return false.
+
+        Whitelist check:
+        -> If the url in question is defined in the whitelist, return true
+           Note: blacklist in this scenario is ignored.
+
+        Blacklist check:
+        -> Note: even if a whitelist is found, a blacklist check will still apply, as
+           long as the URL has not been matched in the global whitelist. The reasoning 
+           is, Zivios panel requires the attrs (black & white lists) to be mutually 
+           exclusive. The only possible way both can exist together is via group 
+           inheritance.
+    """
+    curr_time  = time.strptime(time.strftime('%I:%M%p'), '%I:%M%p')
+    curr_wkday = time.strftime('%w')
+
+    if curr_wkday not in c_privs['weekdays']:
+        logmsg("Weekday not permitted")
+        return 0
+    
+    if c_privs['ac_start'] > curr_time and c_privs['ac_end'] < curr_time:
+        logmsg("Access time violation")
+        return 0
+    
+    if c_privs['whitelist'] is not "":
+        for url in c_privs['whitelist']:
+            count = 0
+            runregex = 0
+            nurl = ""
+            for fc in url:
+                if count == 0 and fc == "*":
+                    runregex = 1
+                    count += 1
+                    continue
+                else:
+                    nurl += fc
+                    count += 1
+    
+            if runregex == 1:
+                logmsg("regex run requested..")
+                match = re.match(re.compile("(.*)"+nurl+"", re.S), dest_url)
+                if match:
+                    logmsg("Destination host whitelisted. Allowing access")
+                    return 1
+                else:
+                    continue
+            else:
+                logmsg("regex run not requested")
+                if url == dest_url:
+                    logmsg("Destination host whitelisted. Allowing access")
+                    return 1
+                else:
+                    continue
+
+        logmsg("Destination host not found in defined whitelist. Denying access")
+        return 0
+    
+    """ Blacklist handling -- done only if a whitelist does not exist """
+    if c_privs['blacklist'] is not "":
+        for url in c_privs['blacklist']:
+            count = 0
+            runregex = 0
+            nurl = ""
+            for fc in url:
+                if count == 0 and fc == "*":
+                    runregex = 1
+                    count += 1
+                    continue
+                else:
+                    nurl += fc
+                    count += 1
+    
+            if runregex == 1:
+                logmsg("regex run requested..")
+                match = re.match(re.compile("(.*)"+nurl+"", re.S), dest_url)
+                if match:
+                    logmsg("Destination host blacklisted. Denying accessing")
+                    return 0
+                else:
+                    continue
+            else:
+                logmsg("regex run not requested")
+                if url == dest_url:
+                    logmsg("Destination host blacklisted. Denying access")
+                    return 0
+                else:
+                    continue
+
+        """ URL not in specified blacklist """
+        return 1
+
+    """ All tests passed. Allow access """
+    return 1
+
+def getPrivileges(entry):
+    privs = {}
+    privs['entrydn'] = entry[0]
+    privs['entrycn'] = entry[1]['cn'][0]
+
+    try:
+        privs['whitelist'] = entry[1]['emssquidwhitelist']
+    except:
+        privs['whitelist'] = ''
+    
+    try:
+        privs['blacklist'] = entry[1]['emssquidblacklist']
+    except:
+        privs['blacklist'] = ''
+
+    try:
+        timerange = entry[1]['emssquidtimeofday']
+    except:
+        timerange = ''
+
+    if timerange != '':
+        timerange = timerange[0].split('|')
+        
+        privs['daysofweek'] = timerange[0]
+        privs['s_hour']     = timerange[1]
+        privs['e_hour']     = timerange[2]
+
+    else:
+        privs['daysofweek'] = ''
+        privs['s_hour']     = ''
+        privs['e_hour']     = ''
+
+    return privs
+
+def getSquidGroups(l, userdn, basedn, scope):
+
+    filter = "(&(objectClass=emssquidgroup)(emssquidactive=Y)(member="+userdn+"))"
+    attrs  = ['cn', 'member', 'gidnumber', 'emssquidactive','emssquidtimeofday']
+    attrs  = attrs + ['emssquidwhitelist','emssquidblacklist']
+    result_id = l.search(basedn, scope, filter, attrs)
+    groups = []
+
+    c = 0
+    while 1:
+        result_type, result_data = l.result(result_id, 0)
+    
+        if (result_data == []):
+            if c > 0:
+                break
+            else:
+                return 0
+        else:
+            if result_type == ldap.RES_SEARCH_ENTRY:
+                groups.append(result_data[0]);
+        
+        c = c + 1
+
+    return groups
+
+def checkUserAccess(user):
+    try:
+        sactive = user[1]['emssquidactive'][0]
+
+        if sactive == 'Y':
+            return 1
+        else:
+            return 0
+    except:
+        return 0
+
+while True:
+    line = sys.stdin.readline()
+    line = line.strip()
+
+    if line == "":
+        logmsg("User and destination URL missing from request")
+        sys.stdout.write("ERR\n")
+    else:
+        logmsg(line)
+        data = line.split(' ')
+        try:
+            if data[0] is not "" and data[1] is not "":
+                if (checkAccess(line)):
+                    logmsg("Access granted")
+                    sys.stdout.write("OK\n")
+                else:
+                    logmsg("Access denied")
+                    sys.stdout.write("ERR\n")
+            else:
+                logmsg("Missing data in request")
+                sys.stdout.write("ERR\n")
+        except:
+            logmsg("Error in received data.")
+            sys.stdout.write("ERR\n")

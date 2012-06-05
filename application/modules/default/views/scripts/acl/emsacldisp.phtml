@@ -1,0 +1,84 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		Zivios
+ * @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ **/
+
+Zend_Dojo_View_Helper_Dojo::setUseDeclarative();
+$emsaclarray = $this->emsaclarray;
+?>
+<div style="width: 70%; padding-left: 25px; float: left;">
+<p class="headline">Zivios ACLs on this Object</p>
+<?php 
+if (sizeof($emsaclarray) == 0) {
+    ?>
+    <div class="info">No Zivios ACLs found on this Object</div>
+    <?php
+} else {
+    ?>
+    <table class="general" width="100%">
+    <th>SCOPE</th><th>ACTION</th><Th style="width: 150px;">ACL</Th><th>TYPE</th><th style="width: 200px;">SUBJECT</th>
+    <?php
+    foreach ($emsaclarray as $emsacl) {
+        ?>
+        <tr>
+        <td><?php echo $emsacl->scope;?></td>
+        <TD><?php echo $emsacl->action;?></TD>
+        <td><?php echo $emsacl->acl_name;?></td>
+        <td><?php echo $emsacl->subject_type;?></td>
+        <td><?php
+            $objdisp = "";
+            if ($emsacl->subject_dn != "") {
+                try {
+                    $obj = Zivios_Ldap_Cache::loadDn($emsacl->subject_dn,'NOMODEL');
+                    $objdisp = $obj->getProperty('cn');
+                } catch (Exception $e) {
+                    $objdisp = '<font color="red">' . $emsacl->subject_dn . '</font>';
+                }
+    
+            }
+            echo $objdisp;
+            ?>
+        </td>
+        <td><span id="delete<?php echo $emsacl->oid;?>">
+        <a href= "#" onClick="zivios.callAction('/acl/deleteacl',{
+                                      origline: '<?php echo $emsacl->origline;?>',
+                                      dn: '<?php echo $this->entry->getdn();?>'
+                                        },'delete<?php echo $emsacl->oid;?>')">Delete</a>
+                </span>
+        </td>
+        </tr>
+    <?php
+    }
+    
+    ?>
+    </table>
+    
+    <?php
+}
+?>
+</div>
+<div class="note" style="width: 20%; float: left; margin-top: 25px;">
+<p>Zivios provides for its own ACL Management system for increased flexibility as compared to Openldap Aci's</p>
+<p>Zivios ACLs are listed on the left. These are entered as pre-defined Strings. Please make sure these Acls match known
+ACLs from <a href="http://wiki.zivios.org/wiki/Zivios_ACL_Names"> Zivios Wiki </a></p>
+</div>
+<div style="clear: both;"></div>

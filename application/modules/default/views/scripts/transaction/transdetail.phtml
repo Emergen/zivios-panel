@@ -1,0 +1,182 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		Zivios
+ * @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ **/
+ ?>
+<div class="note">
+    <div class="floatleft" style="width: 250px;">Display details for transaction ID:</div>
+    <div class="floatleft" style="width: 300px;"><?php echo $this->trans->id;?></div>
+    <div class="clearboth"></div>
+    <br />
+
+    <div class="floatleft" style="width: 250px;">Description: </div>
+    <div class="floatleft" style="width: 300px;"><?php echo $this->trans->description;?></div>
+    <div class="clearboth"></div>
+    <br />
+
+    <div class="floatleft" style="width: 250px;">Status:</div>
+    <div class="floatleft" style="width: 300px;"><?php echo $this->trans->status;?></div>
+    <div class="clearboth"></div>
+    <br />
+
+    <div class="floatleft" style="width: 250px;">User CN:</div>
+    <div class="floatleft" style="width: 300px;"><?php echo $this->user->getProperty('cn');?></div>
+    <div class="clearboth"></div>
+    <br />
+
+    <?php 
+    $rbdisabled = "false";
+    if ($this->trans->status == Zivios_Transaction_Handler::STATUS_COMPLETED) 
+        $rbdisabled = "true";
+    ?>
+
+    <button dojoType="dijit.form.Button" disabled="<?php echo $rbdisabled;?>">Rollback this Transaction
+        <script type="dojo/method" event="onClick">
+        zivios.callAction('/transaction/rollbackme',{
+            id: <?php echo $this->trans->id;?>}, this.id);              
+        </script>
+    </button>
+</div>
+
+<div style="height: 450px; overflow: auto">
+
+    <div style="width: 98.3%; border-bottom: 1px solid #477795; border-top: 1px solid #477795; 
+        background: #7c849c; padding: 5px; color: #fff;">Transaction Groups: </div>
+   
+    <div class="listHeader listingStart" style="width: 40px;">ID</div>
+    <div class="listHeader listingMid" style="width: 350px;">Description</div>
+    <div class="listHeader listingMid" style="width: 100px;">Created Time</div>
+    <div class="listHeader listingMid" style="width: 100px;">Stop Time</div>
+    <div class="listHeader listingEnd" style="width: 100px;">Status</div>
+
+    <?php
+    foreach ($this->tgroups as $tgroup) {
+        $createtime = $tgroup->created_ts->toString('EEE MMM d H:mm');
+        $stoptime = $tgroup->stop_ts->toString('EEE MMM d H:mm');
+        $items = $tgroup->getAllItems();
+        ?>
+        <div class="listingGeneral listingStart" style="width: 40px;"><?php echo $tgroup->id; ?></div>
+        <div class="listingGeneral listingMid" style="width: 350px;"><?php echo $tgroup->description; ?></div>
+        <div class="listingGeneral listingMid" style="width: 100px;"><?php echo $createtime; ?></div>
+        <div class="listingGeneral listingMid" style="width: 100px;"><?php echo $stoptime; ?></div>
+        <div class="listingGeneral listingEnd" style="width: 100px;"><?php echo $tgroup->status; ?></div>
+        <div class="clearboth"></div>
+
+        <div style="margin-left: 20px;">
+        <div style="width: 760px; border-bottom: 1px solid #477795; border-top: 1px solid #477795; 
+            background: #7c849c; margin-left: 5px; padding: 5px; color: #fff;">Items in group id:
+            <?php echo $tgroup->id; ?> </div>
+
+        <div class="listHeader listingStart" style="width: 40px;">Id</div>
+            <div class="listHeader listingMid" style="width: 400px;">Description</div>
+            <div class="listHeader listingMid" style="width: 100px;">Created Time</div>
+            <div class="listHeader listingMid" style="width: 100px;">Stop Time</div>
+            <div class="listHeader listingMid" style="width: 100px;">Status</div>
+            <div class="listHeader listingEnd" style="width: 50px;">Info</div>
+
+        <?php
+        foreach ($items as $item) {
+            $createtime = $item->created_ts->toString('EEE MMM d H:mm');
+            $stoptime = $item->stop_ts->toString('EEE MMM d H:mm');
+            ?>
+            <div class="listingGeneral listingStart" style="width: 40px;">
+                <?php echo $item->id;?>
+            </div>
+            
+            <div class="listingGeneral listingMid" style="width: 400px;">
+                <?php echo $item->description;?>
+            </div>
+            
+            <div class="listingGeneral listingMid" style="width: 100px;">
+                <?php echo $createtime;?>
+            </div>
+            
+            <div class="listingGeneral listingMid" style="width: 100px;">
+                <?php echo $stoptime;?>
+            </div>
+            
+            <div class="listingGeneral listingMid" style="width: 100px;">
+                <?php echo $item->status;?>
+            </div>
+            
+            <div class="listingGeneral listingEnd" style="width: 50px;">
+                <?php 
+                if ($item->last_exception != "") {
+                    ?>
+                    <button dojoType="dijit.form.Button">More
+                        <script type="dojo/method" event="onClick">
+                            var dcontent = '<?php echo urlencode($item->last_exception);?>';
+                            zivios.createDialogFromUrl('/transaction/showexception/'+
+                                'itemid/<?php echo urlencode($item->id);?>','Transaction Item Error Information');
+                        </script>
+                    </button>
+                    <?php
+                } else echo 'N/A';
+                ?>
+            </div>
+            <?php
+        }
+        ?>
+        </div>
+        <?php
+}
+?>
+
+<style type="text/css">
+.listHeader {
+    float: left;
+    width: 110px;
+    padding: 5px;
+    margin-top: 10px;
+    border-bottom: 4px solid #bfc7ce;
+    border-top: 1px solid #bfc7ce;
+    background-color: #dfe0e4;
+    font-weight: bold;
+    text-align: center;
+}
+
+.listingGeneral {
+    float: left;
+    width: 110px;
+    padding: 5px;
+    height: 20px;
+    border-bottom: 1px solid #bfc7ce;
+    min-height: 50px !important;
+}
+
+.listingStart {
+    clear: left;
+    border-left: 1px solid #bfc7ce;
+    margin-left: 5px;
+}
+
+.listingMid {
+    border-left: 1px solid #bfc7ce;
+}
+
+.listingEnd {
+    border-right: 1px solid #bfc7ce;
+    border-left: 1px solid #bfc7ce;
+    clear: right;
+    margin-right: 5px;
+}
+</style>

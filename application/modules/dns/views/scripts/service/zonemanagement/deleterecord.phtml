@@ -1,0 +1,81 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     mod_dns
+ * @copyright   Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+
+$strpCn = strtolower(preg_replace("/[^a-z0-9]/i", "", $this->zone->getProperty('cn')));
+$cpId   = $strpCn . '-dnszeopts';
+$delbId = $strpCn . '-delbutton';
+
+switch ($this->zone->getProperty('emsdnszonetype')) {
+    case EMSDnsZone::TYPE_REVERSE:
+            $type   = 'PTR';
+            $rvalue = $this->record->getHostname();
+        break;
+
+    case EMSDnsZone::TYPE_FORWARD: 
+        switch ($this->record->getProperty('dlztype')) {
+            case EMSDnsRecord::A_REC: 
+                $rvalue = $this->record->getProperty('dlzipaddr');
+                $type   = $this->record->getProperty('dlztype');
+                break;
+
+            case EMSDnsRecord::MX_REC: case EMSDnsRecord::CNAME_REC:
+            case EMSDnsRecord::TXT_REC: case EMSDnsRecord::SRV_REC:
+                $rvalue = $this->record->getProperty('dlzdata');
+                $type   = $this->record->getProperty('dlztype');
+                break;
+
+            default: 
+                $rvalue = '<em>unknown</em>';
+        }
+        break;
+}
+?>
+<div class="alert" style="margin-bottom: 10px;">
+You are about to delete record of type: <b><?php echo $type; ?></b>
+ with value: <b><?php echo $rvalue; ?></b> from the zone: <b><?php echo $this->zone->getProperty('cn'); ?></b>.
+</div>
+
+<div style="margin-left: 50px;" id="<?php echo $delbId;?>">        
+<button dojoType="dijit.form.Button">
+    <span>Delete Record</span>
+    <script type="dojo/connect" event="onClick">
+        zivios.callAction('/dns/service/deleterecordentry',{
+            dn: '<?php echo urlencode($this->service->getdn()); ?>',
+            zonedn: '<?php echo urlencode($this->zone->getdn()); ?>',
+            recorddn: '<?php echo urlencode($this->record->getdn()); ?>'
+            }, this.id 
+        );
+    </script>
+</button>
+
+<button dojoType="dijit.form.Button">
+    <span>Cancel Request</span>
+    <script type="dojo/connect" event="onClick">
+    zivios.cpaneRefresh(
+        '<?php echo $cpId; ?>', // cpane target
+        '/dns/service/getrecordentryform/'
+    );
+</script>
+</button>
+</div>

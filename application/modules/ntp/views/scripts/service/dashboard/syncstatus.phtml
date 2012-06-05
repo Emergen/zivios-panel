@@ -1,0 +1,50 @@
+<?php
+
+if ($this->syncstatus == -1) {
+?>
+<div class="alert"> NTP server malfunction or not running. Unable to provide Sync Status
+</div>
+<?php 
+}
+    
+else if (sizeof($this->syncstatus) == 0) {
+     ?>
+     <div class="note"> The server return a invalid sync status </div>
+     <?php 
+ } else {
+     ?>
+     <div class="info"><div style="float: left;">The following table displays current NTP Sync Status</div>
+     <div style="float: right;"><button dojoType="dijit.form.Button" type="button">Refresh
+        <script type="dojo/method" event="onClick">
+            zivios.cpaneRefresh('ntpsyncstatus');
+        </script>
+        </button>
+     </div>
+     <div class="cboth"></div>
+     </div>
+     <table class="general">
+     <th>Sync Source</th>
+     <th>Sync Status</th>
+     <th>Ref Id</th>
+     <th>Stratum</th>
+     <th>Delay</th>
+     <th>Jitter</th>
+     
+     <?php
+     foreach ($this->syncstatus as $syncstats) {
+         ?>
+         <tr>
+            <td><?php echo $syncstats->name;?></td>
+            <td><?php echo $syncstats->syncstatus;?></td>
+            <td><?php echo $syncstats->refid;?></td>
+            <td><?php echo $syncstats->stratum;?></td>
+            <td><?php echo $syncstats->delay;?></td>
+            <td><?php echo $syncstats->jitter;?></td>
+        </tr>
+        <?php 
+     }
+     ?>
+     </table>
+     <?php
+ }
+ 

@@ -1,0 +1,66 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     Zivios
+ * @copyright   Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+$id = Zivios_Util::randomString(6);
+$this->contentPane()->captureStart($id, array('region' => 'center'));
+?>
+<p class="headline">Application Error:</p>
+<p>
+    <div class="alert" style="margin: 0px;">
+    <?php 
+    echo 'Error Code: ' . $this->code . '<br/><br/>';
+    ?>
+    An application error has occurred. Additional information may be available below:
+    </div>
+    <br />
+    <div style="border: 1px dotted #e5e5e5; background-color: #fafafa;">
+    <?php
+    if (isset($this->errInfo) && is_array($this->errInfo) && !empty($this->errInfo)):
+    ?>
+    <div style="float: left; width: 150px;"><b>Error Message:</b></div>
+    <div style="float: left;"><?php echo $this->errInfo['message']; ?></div>
+    <div style="clear: both;"></div>
+    <div style="float: left; width: 150px;"><b>Offending File:</b></div>
+    <div style="float: left;"><?php echo $this->errInfo['file']; ?></div>
+    <div style="clear: both;"></div>
+    <div style="float: left; width: 150px;"><b>Line Number:</b></div>
+    <div style="float: left;"><?php echo $this->errInfo['line']; ?></div>
+    <div style="clear: both;"></div>
+    <div style="float: left; width: 150px;"><b>Strack Trace:</b></div>
+    <div style="float: left; max-width: 500px; overflow: auto;"><pre><?php echo $this->errInfo['stack']; ?></pre></div>
+    <div style="clear: both;"></div>
+    <?php
+    endif;
+    ?>
+    </div>
+</p>
+
+<p class="headline">Additional Information:</p>
+<p>
+    <div class="info" style="margin: 0px;">
+    Additional information <b>may</b> be available in your web server logs. Please ensure 
+    you gather all appropriate information before filing a bug. Thank you!
+    </div>
+</p>
+<?php
+echo $this->contentPane()->captureEnd($id);

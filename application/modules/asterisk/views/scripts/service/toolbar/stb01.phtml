@@ -1,0 +1,43 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		Zivios
+ * @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ **/
+?>
+<p class="toolbar">
+<div id="asttoolbar01" dojoType="dijit.Toolbar" style="width:100%; height: 23px; float: left;">
+    <div dojoType="dijit.form.DropDownButton">
+        <span><b>Service Menu</b></span>
+        <ul dojoType="dijit.Menu" id="asteriskservicemenu">
+                <li dojoType="dijit.MenuItem" label="Asterisk Configuration">
+                </li>
+            <li dojoType="dijit.MenuItem" label="Call Monitor"> Call Monitor
+             <script type="dojo/method" event="onClick">
+                zivios.loadApp('asterisk/service/callmonitor/dn/<?php echo urlencode($this->dn);?>',
+                               'asteriskservicetabs','astmonitor',
+                               'Call Monitor');
+            </script>
+            </li>
+        </ul>                    
+                    
+    </div>
+</div>
+</p>

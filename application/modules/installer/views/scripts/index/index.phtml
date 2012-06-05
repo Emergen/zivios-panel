@@ -1,0 +1,137 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		ZiviosInstaller
+ * @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ **/
+
+/**
+ * The left pane is independent and automatically performs periodic server
+ * side calls. If not required, simple comment out or remove.
+ */
+echo $this->render('index/_leftpane.phtml');
+
+/**
+ * Right pane data.
+ */
+$this->contentPane()->captureStart('rightpane', array('region' => 'right'), array('style' => 'width: 700px; padding: 0px;'));
+$this->contentPane()->captureStart('bcmaincontent', array('region' => 'top'));
+echo $this->render('index/_toolbar.phtml');
+?>
+<!-- all data is generated in pcontent -->
+<div id="pcontent">
+
+<div id="probeSystem">
+<p class="headline">Welcome to the Zivios installer.</p>
+<p class="content">
+Zivios is ready to begin system tests to ensure all required packages are in place. Upon successfully
+testing the system, Zivios will prompt for information regarding your infrastructure.</p>
+
+<div class="info" style="margin-bottom: 0px;">Please ensure that you have consulted the 
+<a target="_blank" href="http://wiki.zivios.org">documentation</a> relevant to your Linux distribution
+and taken care of required prerequisites.</div>
+<?php
+echo $this->form;
+echo '</div>';
+?>
+
+<div id="probeReport" style="display:none; width: 600px;">
+
+    <div style="float: left;">
+        <div class="rheading">Operating System Details:</div>
+        <div class="rlc">Operating System</div>
+        <div class="rrc" id="os"></div>
+
+        <div class="rlc">Distribution</div>
+        <div class="rrc" id="distro"></div>
+
+        <div class="rlc">Release</div>
+        <div class="rrc" id="release"></div>
+
+        <div class="rlc">Codename</div>
+        <div class="rrc" id="codename"></div>
+
+        <div class="rlc">Architecture</div>
+        <div class="rrc" id="arch"></div>
+    </div>
+    
+    <div style="float: left; clear: right;">
+        <div class="rheading">System Details</div>
+        <div class="rlc">Total System Memory</div>
+        <div class="rrc" id="totalmemory"></div>
+
+        <div class="rlc">Free System Memory</div>
+        <div class="rrc" id="freememory"></div>
+   
+        <div class="rlc">Total Swap Memory</div>
+        <div class="rrc" id="totalswap"></div>
+
+        <div class="rlc">Free Swap Memory</div>
+        <div class="rrc" id="freeswap"></div>
+    </div>
+
+    <div style="float: left; clear: left; padding-top: 10px;">
+        <div class="rheading">Zivios Installation Details</div>
+        <div class="rlc">Master Zivios Server</div>
+        <div class="rrc" id="zhost"></div>
+    
+        <div class="rlc">Master Server IP</div>
+        <div class="rrc" id="zip"></div>
+
+        <div class="rlc">Kerberos Realm</div>
+        <div class="rrc" id="krb5realm"></div>
+
+        <div class="rlc">KDC Hostname</div>
+        <div class="rrc" id="kdchost"></div>
+
+        <div class="rlc">Directory Base DN</div>
+        <div class="rrc" id="basedn"></div>
+
+    </div>
+
+    <div style="float: left; clear: right; margin-top: 24px; margin-left: 20px;">
+        <div class="info" style="width: 200px;">
+            Please <b>ensure that all system details appear correctly</b>. You cannot change any of detected
+            defaults at a later stage. 
+            <br/><br/>
+        </div>
+    </div>
+   
+    <div style="clear: both; padding-top: 10px;">
+
+    <div id="osWarn" class="alert" style="display: none;">
+    Your system distribution or release is not officially supported by Zivios. Please understand that
+    Zivios from this point on will bypass a number of checks and tests. If you run into issues or require
+    assistance, please e-mail: <a href="mailto: zivios-discuss@lists.zivios.org">zivios-discuss@lists.zivios.org</a>
+    </div>
+
+    <button dojoType="dijit.form.Button">Proceed with Database Initialization
+        <script type="dojo/connect" event="onClick">
+            installer.loadPage('/index/initializedb', 'pcontent');
+        </script>
+    </button>
+    </div>
+</div>
+
+<!-- pcontent div ends below -->
+</div>
+<?php
+echo $this->contentPane()->captureEnd('bcmaincontent');
+echo $this->contentPane()->captureEnd('rightpane');

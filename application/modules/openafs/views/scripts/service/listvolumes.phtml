@@ -1,0 +1,117 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		mod_openafs
+ * @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ * @version		$Id: listvolumes.phtml 919 2008-08-25 11:45:23Z fkhan $
+ * @lastchangeddate $LastChangedDate: 2008-08-25 17:45:23 +0600 (Mon, 25 Aug 2008) $
+ **/
+
+?>
+<style type="text/css">
+.voltable {
+	width: auto;
+	height: auto;
+	overflow: auto;
+	border: 0px;
+	margin: 0px;
+	max-width: 650px;
+}
+
+table.afsvols {
+	font: 10px/22px Verdana, Arial, Helvetica, sans-serif;
+	width: 650px;
+	background-color: #fafafa;
+	border: 1px #ccc solid;
+	border-collapse: collapse;
+	border-spacing: 2px;
+}
+
+table.afsvols td.header {
+	border-bottom: 2px solid #ccc;
+	border-left: 1px solid #ccc;
+	background-color: #e5e5e5;
+	text-align: right;
+	font: 10px/22px Verdana, Arial, Helvetica, sans-serif;
+	color: #666;
+	padding: 4px;
+}
+
+
+table.afsvols td {
+	border-bottom: 1px solid #ccc;
+	font: 10px/22px Verdana, Arial, Helvetica, sans-serif;
+	color: #000;
+	background-color: #f5f5f5;
+	text-align: left;
+	padding: 2px;
+}
+
+table.afsvols td.switch {
+	background-color: #e7e7e7;
+	border-left: 1px solid #ccc;
+}
+table.afsvols td.default {
+	border-left: 1px solid #ccc;
+}
+
+</style>
+<br />
+<div class="voltable">
+<table class="afsvols">
+<tr><td colspan="6" class="header"> | <a href="#" onClick="javascript:resyncVolListing();">Resync Volume Listing</a></td></tr>
+<tr>
+	<td>Volume ID</td>
+	<td>Volume Name</td>
+	<td>Status</td>
+	<td>In Use</td>
+	<td>Max Quota</td>
+	<td>Partition</td>
+</tr>
+<?php
+$c = 1;
+foreach ($this->vols as $vol) {
+	if ($c % 2) {
+		$tdbg = "switch";
+	} else {
+		$tdbg= "default";
+	}
+
+	echo '<tr>';
+	echo '<td bgcolor="#F5FFFA"><a href="#" onClick="javascript:getVolDetails(\'/openafs/server/getvoldetails\',\'pgupdate\', \''. $vol->getdn() . '\');">' . $vol->getProperty('emsafsvolid') . '</td>';
+	echo '<td class="'.$tdbg.'">' . $vol->getProperty("cn") . '</td>';
+	echo '<td class="'.$tdbg.'">';
+
+	// Display Green if status is okay, otherwise red.
+	if ($vol->getProperty('emsafsvolstatus') == "OK")
+		echo '<font color="green">';
+	else
+		echo '<font color="red">';
+
+	echo $vol->getProperty('emsafsvolstatus') . '</font></td>';
+	echo '<td class="'.$tdbg.'">' . $vol->getProperty('emsafsvolinuse') . '</td>';
+	echo '<td class="'.$tdbg.'">' . Ecl_Util::formatSize(($vol->getProperty('emsafsvolmaxquota') * 1024), null, '%01.0f (%s)', true) . '</td>';
+	echo '<td class="'.$tdbg.'">' . $vol->getProperty('emsafsvolpartition') . '</td>';
+	echo '</tr>';
+	$c++;
+}
+echo "</table>";
+?>
+</div>

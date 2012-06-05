@@ -1,0 +1,60 @@
+<?php
+/**
+ * Copyright (c) 2008-2010 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     mod_openldap
+ * @copyright   Copyright (c) 2008-2010 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+?>
+<p class="toolbar">
+
+<div dojoType="dijit.Toolbar" style="width:100%;height:23px;float:left;">
+
+     <div id="ldapconfig.logs" dojoType="dijit.form.Button" iconClass="genericIcon clipboardIcon" class="smtxt"
+        showLabel="true" 
+        onClick="zivios.cpaneAction('ldapconfdata','openldap/service/cfglogs/dn/<?php
+        echo urlencode($this->service->getdn()); ?>','','ldapconfig.logs');">
+        <span class="smtxt">Log Level</span></div>
+
+     <div id="ldapconfig.indexes" dojoType="dijit.form.Button" iconClass="genericIcon configIcon" class="smtxt"
+        showLabel="true" 
+        onClick="zivios.cpaneAction('ldapconfdata','openldap/service/cfgindexes/dn/<?php 
+        echo urlencode($this->service->getdn()); ?>','','ldapconfig.indexes');">
+        <span class="smtxt">Indexes</span></div>
+
+     <div id="ldapconfig.dbtuning" dojoType="dijit.form.Button" iconClass="genericIcon configIcon" class="smtxt"
+        showLabel="true" 
+        onClick="zivios.cpaneAction('ldapconfdata','openldap/service/cfgdbtuning/dn/<?php 
+        echo urlencode($this->service->getdn()); ?>','','ldapconfig.dbtuning');">
+        <span class="smtxt">DB Tuning</span></div>
+
+     <div id="ldapconfig.replicas" dojoType="dijit.form.Button" iconClass="genericIcon configIcon" class="smtxt"
+        showLabel="true" 
+        onClick="zivios.cpaneAction('ldapconfdata','openldap/service/cfgreplicas/dn/<?php 
+        echo urlencode($this->service->getdn()); ?>','','ldapconfig.replicas');">
+        <span class="smtxt">LDAP Replicas</span></div>
+
+     <div id="ldapconfig.info" dojoType="dijit.form.Button" iconClass="genericIcon helpIcon" class="smtxt"
+        showLabel="true" 
+        onClick="zivios.cpaneAction('ldapconfdata','openldap/service/cfginfo/dn/<?php
+        echo urlencode($this->service->getdn()); ?>','','ldapconfig.info');">
+        <span class="smtxt">Information</span></div>
+</div>
+</p>
+

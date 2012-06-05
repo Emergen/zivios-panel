@@ -1,0 +1,207 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		mod_openafs
+ * @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ * @version		$Id: manager.phtml 919 2008-08-25 11:45:23Z fkhan $
+ * @lastchangeddate $LastChangedDate: 2008-08-25 17:45:23 +0600 (Mon, 25 Aug 2008) $
+ **/
+
+$fsMenu = '
+	<li><a href="#">File Service &raquo;</a>
+	<ul>
+		<li><a href="#" onClick="javascript:monitor();">Run Salvager</a></li>
+		<li><a href="#" onClick="javascript:monitor();">Service Monitor</a></li>
+	</ul>
+	</li>
+';
+$clMenu = '
+	<li><a href="#">Client Service &raquo;</a>
+	<ul>
+		<li><a href="#" onClick="javascript:monitor();">Load Browser</a></li>
+		<li><a href="#" onClick="javascript:monitor();">Monitor</a></li>
+	</ul>
+	</li>
+';
+$dbMenu = '
+	<li><a href="#">Database Service &raquo;</a>
+	<ul>
+		<li><a href="#" onClick="javascript:monitor();">Check Quorum</a></li>
+		<li><a href="#" onClick="javascript:monitor();">Service Monitor</a></li>
+		<li><a href="#" onClick="javascript:monitor();">Restart Service</a></li>
+	</ul>
+	</li>
+';
+
+$serverRole = $this->obj->getProperty("emsafsrole");
+
+if (is_array($serverRole) && !empty($serverRole)) {
+	/**
+	 * Generate FS
+	 */
+	if (!in_array('FS', $serverRole))
+		$fsMenu = '';
+	if (!in_array('CL', $serverRole))
+		$clMenu = '';
+	if (!in_array('DB', $serverRole))
+		$dbMenu = '';
+} else {
+	switch ($serverRole) {
+		case 'DB' :
+			$fsMenu = '';
+			$clMenu = '';
+		break;
+
+		case 'FS' :
+			$dbMenu = '';
+			$clMenu = '';
+		break;
+
+		case 'CL' :
+			$dbMenu = '';
+			$fsMenu = '';
+		break;
+	}
+}
+?>
+
+
+<ul id="pluginnavmenu">
+	<li><a href="#" onclick="javascript:callAfsAction('/openafs/server/servermanager/', 'pluginmanager');">AFS Dashboard</a></li>
+	<li><a href="#">Volume Management +</a>
+	<ul>
+		<li><a href="#" onClick="javascript:callAfsAction('/openafs/server/addvolume/', 'pgupdate');">Add a Volume</a></li>
+		<li><a href="#" onClick="javascript:callAfsAction('/openafs/server/listvolumes/', 'pgupdate');">List Volumes</a></li>
+		<li><a href="#" onClick="javascript:callAfsAction('/openafs/server/ss/', 'pgupdate');">Search for a Volume</a></li>
+	</ul>
+	</li>
+	<li><a href="#">Partition Info +</a>
+	<ul>
+		<li><a href="#" onClick="javascript:listpart();">List Partitions</a></li>
+		<li><a href="#" onClick="javascript:addpart();">Add a Partition</a></li>
+	</ul>
+	</li>
+	<li><a href="#">Service Management +</a>
+	<ul>
+		<?php echo $dbMenu . $fsMenu . $clMenu; ?>
+	</ul>
+	</li>
+</ul>
+
+<p>
+<div id="optrst"></div>
+<div id="pgupdate">
+<?php
+echo $this->render("server/managerdashboard.phtml");
+?>
+</div>
+</p>
+<?php
+/**
+ * Include all the JS you need below. Ensure the function definitions
+ * remain in the manner shown below. Your Plugin Manager is responsible
+ * entirely for your JS and CSS as you see fit -- however, do try
+ * and make the most use of existing JS and CSS functionality provided.
+ */
+?>
+<script type="text/javascript">
+callAfsAction = function (url, div)
+{
+	request = new Object;
+	request.operate_dn = "<?php echo $this->obj->getdn(); ?>";
+	request = Object.toJSON(request);
+
+	var ma = new Ajax.Updater (
+	{success: div},
+		url,
+		{
+			method: 'get',
+			parameters: 'mr='+escape(request),
+			evalScripts: true,
+			onLoading: function(request) {
+				showNotify()
+			},
+			onComplete: function(request) {
+				hideNotify()
+			},
+		}
+	);
+}
+
+callAfsFormAction = function(formid, url, div)
+{
+	var f = $(formid).serialize(true);
+	f = Object.toJSON(f);
+
+	var ma = new Ajax.Updater (
+	{success: div},
+		url,
+		{
+			method: 'get',
+			parameters: 'mr='+escape(f),
+			evalScripts: true,
+			onLoading: function(request) {
+				showNotify()
+			},
+			onComplete: function(request) {
+				hideNotify()
+			},
+		}
+	);
+}
+
+getVolDetails = function(url, div, voldn)
+{
+	request = new Object;
+	request.operate_dn = "<?php echo $this->obj->getdn(); ?>";
+	request.voldn = voldn;
+	request = Object.toJSON(request);
+
+	var ma = new Ajax.Updater (
+	{success: div},
+		url,
+		{
+			method: 'get',
+			parameters: 'mr='+request,
+			evalScripts: true,
+			onLoading: function(request) {
+				showNotify()
+			},
+			onComplete: function(request) {
+				hideNotify()
+			},
+		}
+	);
+}
+
+resyncVolListing = function()
+{
+	var msg = "You are requesting a resynchronization of all volumes housed";
+	msg += " on this server.\n\n";
+	msg += "These is an expensive operation as it will drop all volumes from LDAP\n";
+	msg += " for this server, recreate records as well as all mountpoints\n";
+	msg += " housed on AFS.\n\nAre you certain you wish to continue?";
+
+	if (!confirm(msg))
+       return false;
+
+    callAfsAction('/openafs/server/resyncVolumeListing', 'pgupdate');
+}
+</script>

@@ -1,0 +1,12 @@
+dn: olcDatabase={1}ldap,olcOverlay={0}chain,olcDatabase={-1}frontend,cn=config
+objectClass: olcLDAPConfig
+objectClass: olcChainDatabase
+olcDatabase: {1}ldap
+olcDbURI: ldap://%%%MASTER_SERVER%%%
+olcDbIDAssertBind: 
+  bindmethod="simple"
+  binddn="%%%CHAIN_DN%%%"
+  credentials=%%%CHAIN_PASS%%%
+  mode=self
+olcDbIDAssertAuthzFrom: "dn.regex:.*"
+olcDbStartTLS: start

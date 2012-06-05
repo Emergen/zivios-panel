@@ -1,0 +1,52 @@
+<?php
+/**
+ * Copyright (c) 2008-2010 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     Zivios
+ * @copyright   Copyright (c) 2008-2010 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+
+$formid   = Zivios_Util::randomString(8);
+$regexLib = Zivios_Util::getRegexLibrary();
+?>
+
+<div class="heading">Security configuration</div>
+<div class="content">
+    <form id='<?php echo $formid; ?>' enctype="application/x-www-form-urlencoded" method="post" 
+        action="#" dojoType="dijit.form.Form">
+
+    <div class="info infocl" style="width: 320px; margin-left: 10px; margin-top: 15px;">
+        Define inactivity timeout for sessions (in seconds). 
+    </div>
+    <div class="zflabel" style="width: 150px;">Inactivity Timeout:  </div>
+    <input dojoType="dijit.form.NumberSpinner" value="<?php echo $this->config->security->inactivity_timeout; ?>" smallDelta="1"
+        largeDelta="10" defaultTimeout="500" timeoutChangeRate="100" maxLength="6" constraints="{min:1,max:864000,places:0}"
+        name="zcfggeneral[rq_digits_sesstimeout_Inactivity+Timeout]" class="zfgenField" style="width: 230px;"/>
+    <div class="cboth"></div>
+
+    <div class="zflabel" style="width: 150px;">&nbsp;</div>
+    <input onclick="zivios.postxhr('/default/zconfig/update', '', '<?php echo $formid; ?>',
+        'form', 'json', [], [], [], [], this.id); return false;" 
+        name="zcfgupdate" value="Update Configuration"
+        type="submit" label="Update Configuration" dojoType="dijit.form.Button"/>
+    <div class="cboth"></div>
+    <input type="hidden" name="zcfggeneral[rq_alnospaces_section_Update+Section]" value="security"/>
+    </form>
+</div>
+

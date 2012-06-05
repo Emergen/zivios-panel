@@ -1,0 +1,138 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		Zivios
+ * @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ **/
+
+Zend_Dojo_View_Helper_Dojo::setUseDeclarative();
+$this->dojo()->enable();
+
+$this->borderContainer()->captureStart('filterlayout', array('design' => 'sidebar', 'style' => 
+    'width: 100%; padding: 0px; margin: 0px; border: 0px;','title' => 'Filter Settings'));
+
+$this->contentPane()->captureStart('filterleftarea', array('region' => 'left', 'splitter' => 'true', 
+    'style' => 'width: 450px; padding: 0px; margin: 0px; border-left: 0px; border-top: 0px; border-bottom: 0px;'));
+
+$this->borderContainer()->captureStart('filterleftareabc', array('design' => 'headline', 
+    'style' => 'width: 99%; padding: 0px; margin: 0px; border: 0px;'));
+
+$this->contentPane()->captureStart('filtergeneralsettings', array('region' => 'top', 'style' => 'padding: 0px; 
+    margin: 0px; border-right: 0px; border-top: 0px; height: 50%;',
+    'href' => '/mail/service/generalsettings/dn/'.urlencode($this->entry->getdn())));
+
+
+echo $this->contentPane()->captureEnd('filtergeneralsettings');
+
+$this->contentPane()->captureStart('filterrblarea', array('region' => 'center', 'style' => 'padding: 0px; 
+                        margin: 0px; border-right: 0px; border: 0px; border-top: 0px; height: 50%;'));
+
+$this->borderContainer()->captureStart('filterrblsection', array('design' => 'headline', 
+                   'style' => 'width: 99%; border: 0px; padding: 0px; margin: 0px; border: 0px;'));
+
+/*
+* RBL AREA 
+*/
+ 
+$this->contentPane()->captureStart('filterrbldisplay', array('region' => 'top', 'style' => 'padding: 0px; 
+                           margin: 0px; border: 0px; border-right: 0px; border-top: 0px; height: 70%;',
+                           'href' => '/mail/service/rbldisplay/dn/'.urlencode($this->entry->getdn())));
+                                                       
+
+echo $this->contentPane()->captureEnd('filterrbldisplay');
+
+$this->contentPane()->captureStart('filterrblform', array('region' => 'center', 'style' => 'padding: 0px; 
+                            margin: 0px; border: 0px; border-right: 0px; border-top: 0px; height: 30%;',
+                            'href' => '/mail/service/rblform/dn/'.urlencode($this->entry->getdn())));
+
+echo $this->contentPane()->captureEnd('filterrblform');
+
+
+
+echo $this->borderContainer()->captureEnd('filterrblsection');
+
+
+echo $this->contentPane()->captureEnd('filterrblarea');
+echo $this->borderContainer()->captureEnd('filterleftareabc');
+
+echo $this->contentPane()->captureEnd('filterleftarea');
+
+ 
+$this->contentPane()->captureStart('filterblacklistcp', array('region' => 'top', 'style' => 'padding: 0px; 
+                margin: 0px; border-right: 0px; border-top: 0px; border-bottom: 1px; height: 50%;'));
+
+$this->borderContainer()->captureStart('filterblacklistsection', array('design' => 'headline', 
+    'style' => 'width: 99%; padding: 0px; margin: 0px; border: 0px;'));
+
+/*
+* Black list BC
+*/
+ 
+$this->contentPane()->captureStart('filterblacklistdisplay', array('region' => 'top', 'style' => 'padding: 0px; 
+    margin: 0px; border: 0px; border-top: 0px; height: 70%;',
+                     'href' => '/mail/service/bldisplay/dn/'.urlencode($this->entry->getdn())));
+
+
+echo $this->contentPane()->captureEnd('filterblacklistdisplay');
+
+$this->contentPane()->captureStart('filterblacklistform', array('region' => 'center', 'style' => 'padding: 0px; 
+                          margin: 0px; border-left: 0px; border-right: 0px; border-top: 0px; height: 30%;',
+                          'href' => '/mail/service/blform/dn/'.urlencode($this->entry->getdn())));
+
+
+echo $this->contentPane()->captureEnd('filterblacklistform');
+
+
+
+echo $this->borderContainer()->captureEnd('filterblacklistsection');
+
+echo $this->contentPane()->captureEnd('filterblacklistcp');
+
+$this->contentPane()->captureStart('filterwhitelistcp', array('region' => 'bottom', 'style' => 'padding: 0px; 
+    margin: 0px; border: 0px; border-top: 0px; height: 50%;'));
+
+$this->borderContainer()->captureStart('filterwhitelistsection', array('design' => 'headline', 
+    'style' => 'width: 99%; padding: 0px; margin: 0px; border: 0px;'));
+
+/*
+* White list BC
+*/
+ 
+$this->contentPane()->captureStart('filterwhitelistdisplay', array('region' => 'top', 'style' => 'padding: 0px; 
+                     margin: 0px; border: 0px; border-top: 0px; height: 70%;',
+                     'href' => '/mail/service/wldisplay/dn/'.urlencode($this->entry->getdn())));
+
+
+echo $this->contentPane()->captureEnd('filterwhitelistdisplay');
+
+$this->contentPane()->captureStart('filterwhitelistform', array('region' => 'center', 'style' => 'padding: 0px; 
+                          margin: 0px; border-left: 0px; border-right: 0px; border-top: 0px; height: 30%;',
+                          'href' => '/mail/service/wlform/dn/'.urlencode($this->entry->getdn())));
+
+
+echo $this->contentPane()->captureEnd('filterwhitelistform');
+
+
+
+echo $this->borderContainer()->captureEnd('filterwhitelistsection');
+
+// End border container layout
+echo $this->contentPane()->captureEnd('filterwhitelistcp');
+echo $this->borderContainer()->captureEnd('filterlayout');

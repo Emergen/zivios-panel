@@ -1,0 +1,55 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     mod_dns
+ * @copyright   Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+
+$strpCn = strtolower(preg_replace("/[^a-z0-9]/i", "", $this->zone->getProperty('cn')));
+$cpId   = $strpCn . '-dnszeopts';
+$delbId = $strpCn . '-delbutton';
+?>
+<div class="alert" style="margin-bottom: 10px;">
+You are about to delete the zone: <b><?php echo $this->zone->getProperty('cn'); ?></b>. Are you absolutely
+certain you wish to do this?
+</div>
+
+<div style="margin-left: 50px;" id="<?php echo $delbId;?>">        
+<button dojoType="dijit.form.Button">
+    <span>Delete Zone</span>
+    <script type="dojo/connect" event="onClick">
+        zivios.callAction('/dns/service/deletezone',{
+            dn: '<?php echo urlencode($this->service->getdn()); ?>',
+            zonedn: '<?php echo urlencode($this->zone->getdn()); ?>'
+            }, this.id 
+        );
+    </script>
+</button>
+
+<button dojoType="dijit.form.Button">
+    <span>Cancel Request</span>
+    <script type="dojo/connect" event="onClick">
+    zivios.cpaneRefresh(
+        '<?php echo $cpId; ?>', // cpane target
+        '/dns/service/getrecordentryform/'
+    );
+</script>
+</button>
+</div>

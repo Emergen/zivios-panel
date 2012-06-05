@@ -1,0 +1,37 @@
+dn: cn=zivios-mail,cn=schema,cn=config
+objectClass: olcSchemaConfig
+cn: zivios-mail
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.2.1 NAME 'emsmailtype' DESC 
+ 'EMS Mail Setup Type' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.2.2 NAME 'emsmailcomputerdn'
+  DESC 'EMS Mail Computer Host' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.2.3 NAME 'emsmailactive' DES
+ C 'EMS Mail Active' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.2.4 NAME 'emspostfixsecurity
+ class' DESC 'EMS Postfix Security Class' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.2.5 NAME 'emsmailmboxquota' 
+ DESC 'EMS Mailbox Quota' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.2.6 NAME 'emscyrusmboxroot' 
+ DESC 'EMS Cyrus Mailbox Root' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.2.7 NAME 'emsmaildomains' DE
+ SC 'EMS Postfix Destination Domains' SUP Name )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.2.8 NAME 'emsmailtransports'
+  DESC 'EMS Postfix Destination Domains' SUP Name )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.2.9 NAME 'emsmailrbls' DESC 
+ 'EMS Postfix Destination Domains' SUP Name )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.2.10 NAME 'emsmailrelayhost'
+  DESC 'EMS Postfix Destination Domains' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.2.11 NAME 'emsmailmessagesi
+ zelimit' DESC 'EMS Postfix Destination Domains' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.2.12 NAME 'emsmailrelayhostsm
+ x' DESC 'EMS Postfix Relay Host Supress MX Flag' SUP emsdescription )
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.3.2.2.1 NAME 'emsMailGroup' DESC 
+ 'EMS Mail Group Plugin' SUP emsSecurityObject AUXILIARY MAY ( emsmailactive
+  $ mail ) )
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.3.2.2.2 NAME 'emsMailUser' DESC '
+ EMS Mail User Plugin' SUP emsSecurityObject AUXILIARY MUST emsmailactive MA
+ Y ( emsmailmboxquota $ emspostfixsecurityclass $ emscyrusmboxroot ) )
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.3.2.2.3 NAME 'emsmailservice' DES
+ C 'EMS Mail Service' SUP emsservice AUXILIARY MUST emsmailtype MAY ( emsmai
+ ldomains $ emspostfixsecurityclass $ emsmailtransports $ emsmailrbls $ emsm
+ ailrelayhost $ emsmailmessagesizelimit $ emsmailrelayhostsmx ))

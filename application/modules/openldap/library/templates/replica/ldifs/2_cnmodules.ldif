@@ -1,0 +1,14 @@
+dn: cn=module,cn=config
+objectClass: olcModuleList
+cn: module
+olcModulepath: %%%LIBEXEC_DIR%%%/openldap
+olcModuleload: back_hdb
+olcModuleload: syncprov
+olcModuleload: back_monitor
+olcModuleload: auditlog
+olcModuleload: smbk5pwd
+olcModuleload: unique
+olcModuleload: accesslog
+olcModuleload: memberof
+olcModuleLoad: ppolicy
+olcModuleLoad: back_ldap

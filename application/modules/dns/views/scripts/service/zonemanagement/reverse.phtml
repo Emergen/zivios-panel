@@ -1,0 +1,48 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     mod_dns
+ * @copyright   Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+
+Zend_Dojo_View_Helper_Dojo::setUseDeclarative();
+$this->dojo()->enable();
+
+$bcId = $this->zone->getProperty('cn') . '_bc';
+$lpId = $this->zone->getProperty('cn') . '_lp'; // left pane attach point
+$rpId = $this->zone->getProperty('cn') . '_rp'; // right pane attach point
+
+// start border layout container for zone entry.
+$this->borderContainer()->captureStart($bcId, array('design' => 'sidebar', 'style' => 
+    'width: 100%; padding: 0px; margin: 0px; border: 0px;'));
+
+$this->contentPane()->captureStart($lpId, array('region' => 'left', 'style' => 'width: 360px; 
+    padding: 0px; margin: 0px;', 'href' => 'dns/service/revzoneoptions/dn/'.urlencode($this->service->getdn()).
+    '/zonedn/'.urlencode($this->zone->getdn())));
+echo $this->contentPane()->captureEnd($lpId);
+
+$this->contentPane()->captureStart($rpId, array('region' => 'center', 'style' =>'padding: 0px; 
+    margin: 0px;', 'href' => 'dns/service/revzonedetails/dn/'.urlencode($this->service->getdn()).
+    '/zonedn/'.urlencode($this->zone->getdn())));
+echo $this->contentPane()->captureEnd($rpId);
+
+// end border container.
+echo $this->borderContainer()->captureEnd($bcId);
+

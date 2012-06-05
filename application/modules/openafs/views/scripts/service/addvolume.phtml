@@ -1,0 +1,75 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		mod_openafs
+ * @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ * @version		$Id: addvolume.phtml 919 2008-08-25 11:45:23Z fkhan $
+ * @lastchangeddate $LastChangedDate: 2008-08-25 17:45:23 +0600 (Mon, 25 Aug 2008) $
+ **/
+
+$partitions = $this->plugin->getPartitions();
+if (!is_array($partitions))
+	$partitions = array($partitions);
+?>
+<script type="text/javascript">
+	Field.activate($('volname'));
+</script>
+<p>
+<div id="rprocess"></div>
+<div class="afsnotice" style="width: 450px;">The section <b>AFS Volume Details</b>
+requires all fields to be filled in. All other sections are <b>optional</b>.
+</div>
+<form method="post" action="#" onsubmit="return false;" id="fexec" style="width: 450px;">
+<fieldset>
+<legend>AFS Volume Details</legend>
+<label for="volname">Volume Name</label>
+	: <input id="volname" type="text" size="32" maxlength="32" value="" name="volname" /><br />
+<label for="maxquota">Max Quota</label>
+	: <input id="maxquota" type="text" size="32" maxlength="8" value="" name="maxquota" /> MB<br />
+<label for="partition">Partition</label>
+	: <select name="partition"><?php
+	foreach ($partitions as $partition) {
+		echo '<option value="'.$partition.'">'.$partition.'</option>';
+	}
+	?>
+	</select>
+</fieldset>
+<br />
+<fieldset>
+<legend>Mount Point Details</legend>
+<div class="notice">Path leading up to your mount point <b>must</b> exist</div>
+<label for="MountPoint">/afs/.<?php echo $this->obj->getProperty("emsafscell");?>/ </label>
+	<input type="text" name="newmountpoint" value="" maxlength="64" size="32" /><br />
+<label for="MountPointAccess">Mount Point Type:</label>
+	<input type="radio" value="rw" name="vtype" CHECKED /> RW
+	<input type="radio" value="ro" name="vtype" /> RO <br />
+<label for="releaseBaseVol">Release base volume:</label>
+	<input type="checkbox" value="1" name="releasebasevol" CHECKED /> <br />
+
+	<br />
+	  <input type="submit" name="addvolume" value="Add Volume"
+		onclick="javascript:callAfsFormAction('fexec', '/openafs/server/addvolume', 'optrst');" />
+	  	<input type="hidden" name="operate_dn" value="<?php echo $this->obj->getdn(); ?>" />
+	  	<input type="hidden" name="process" value="1" />
+	  	<input type="hidden" name="addRequestFor" value="volume" />
+	  	<input type="hidden" name="utype" value="add" />
+</fieldset>
+</form>
+</p>

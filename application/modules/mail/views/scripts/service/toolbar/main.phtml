@@ -1,0 +1,65 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		Zivios
+ * @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ **/
+Zend_Dojo_View_Helper_Dojo::setUseDeclarative();
+$this->dojo()->enable();
+
+?>
+<p class="toolbar">
+<div id="mtb01" dojoType="dijit.Toolbar" style="width:30%; height: 23px; float: left;">
+    <div dojoType="dijit.form.DropDownButton">
+        <span><b>Monitoring</b></span>
+        <ul dojoType="dijit.Menu">
+            <li dojoType="dijit.MenuItem">
+            <span>Monitor Queues</span>
+            <script type="dojo/method" event="onClick">
+                    zivios.loadApp('/mail/service/monitor/dn/<?php echo urlencode($this->entry->getdn());?>',
+                                   'mailservicetabs','mailqueuemonitor','Queue Monitor');
+            </script>
+            </li>
+        </ul>
+     </div>
+     <button dojoType="dijit.form.DropDownButton" id="mailddbset">
+        <span><B>Settings</b></span>
+        <ul dojoType="dijit.Menu" id="mailset">
+            <li dojoType="dijit.MenuItem">
+                <span>Filtering</span>
+                <script type="dojo/method" event="onClick">
+                    zivios.loadApp('/mail/service/filter/dn/<?php echo urlencode($this->entry->getdn());?>',
+                                   'mailservicetabs','mailservicesettings','Filter Settings');
+                </script>
+            </li>
+            <li dojoType="dijit.MenuItem">
+                <span>Routing</span>
+                <script type="dojo/method" event="onClick">
+                zivios.loadApp('/mail/service/routing/dn/<?php echo urlencode($this->entry->getdn());?>',
+                                   'mailservicetabs','mailservicerouting','Routing');
+                </script>
+            </li>
+        </ul>            
+    </button>
+</div>
+<div id="mailtoolbar02" dojoType="dijit.Toolbar" style="width:70%; height: 23px; float: left; text-align: right;">
+    <?php echo $this->entry->getProperty("cn"); ?> &nbsp;&nbsp;
+</div>
+</p>

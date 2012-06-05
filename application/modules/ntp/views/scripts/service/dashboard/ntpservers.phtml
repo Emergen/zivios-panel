@@ -1,0 +1,66 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		Zivios
+ * @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ **/
+
+ if (sizeof($this->servers) == 0) {
+     ?>
+     <div class="info"> No Servers are currently defined as Sync Sources </div>
+     <?php 
+ } else {
+     ?>
+     <div class="note">The following table displays NTP Sync Sources</div>
+     <table class="general">
+     <th style="text-align: left;width: 90%;">Sync Source</th><th>Action</th>
+     <?php
+     $i=0;
+     foreach ($this->servers as $server) {
+         $i++;
+         ?>
+         <tr>
+            <td style="text-align: left;"><?php echo $server;?></td>
+            <td><span id="bl<?php echo $i;?>">
+            <?php 
+            if (sizeof($this->servers) > 1) {
+                ?>
+                <a href="#" 
+                onClick="zivios.callAction('/ntp/service/dochangesrv',{
+                dn: '<?php echo urlencode($this->service->getdn());?>',
+                changeaction: 'delete',
+                srv: '<?php echo $server;?>'},'bl<?php echo $i;?>')"> delete</a></span>
+                <?php
+            } else {
+                
+            ?>
+            delete 
+            <?php 
+            }
+            ?>
+            </td>
+        </tr>
+        <?php 
+     }
+     ?>
+     </table>
+     <?php
+ }
+ 

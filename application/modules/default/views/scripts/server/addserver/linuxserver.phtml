@@ -1,0 +1,67 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     Zivios
+ * @copyright   Copyright (c) 2008-2010 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+
+$formid   = Zivios_Util::randomString(8);
+$regexLib = Zivios_Util::getRegexLibrary();
+?>
+
+<div class="heading">Adding Linux Server</div>
+<div class="content">
+
+    <form id='<?php echo $formid; ?>' enctype="application/x-www-form-urlencoded" method="post" 
+        action="#" dojoType="dijit.form.Form">
+
+    <div class="zflabel" style="width: 150px;">IP Address: </div>
+    <input name="addserverprobedata[rq_ip_iphostnumber_IP+Address]" type="text" dojoType="dijit.form.ValidationTextBox" 
+        size="16" maxlength="64" regExp="<?php echo $regexLib->exp->ip; ?>" required="true" 
+        invalidMessage="Invalid characters in field value." class="zfgenField" 
+        value="" />
+    <div class="cboth"></div>
+
+    <div class="zflabel" style="width: 150px;">Login: </div>
+    <input name="addserverprobedata[rq_uid_login_Login]" type="text" dojoType="dijit.form.ValidationTextBox" 
+        size="16" maxlength="64" regExp="<?php echo $regexLib->exp->uid; ?>" required="true" disabled="true"
+        invalidMessage="Invalid characters in field value." class="zfgenField" value="root"
+        value="" />
+    <div class="cboth"></div>
+
+    <div class="zflabel" style="width: 150px;">Password: </div>
+    <input name="addserverprobedata[rq_password_password_Root+Password]" type="password" dojoType="dijit.form.ValidationTextBox" size="16" maxlength="64" 
+        regExp="<?php echo $regexLib->exp->password; ?>" required="true" 
+        invalidMessage="Invalid password specified." class="genField" 
+        value="" />
+    <div class="cboth"></div>
+
+    <div class="zflabel" style="width: 150px;">&nbsp;</div>
+    <input onclick="zivios.postxhr('/default/server/probelinuxsystem', '', '<?php echo $formid; ?>',
+        'form', 'json', [], [], [], [], this.id); return false;" 
+        name="zvaddserverprobelinuxsystem" value="Probe Linux System" 
+        type="submit" label="Probe Linux System" dojoType="dijit.form.Button"/>
+    <div class="cboth"></div>
+
+    <input type="hidden" name="addserverprobedata[rq_dn_dn_Distinguished+Name_enc]" value="<?php echo urlencode($this->parentdn); ?>"/>
+    </form>
+
+</div>
+

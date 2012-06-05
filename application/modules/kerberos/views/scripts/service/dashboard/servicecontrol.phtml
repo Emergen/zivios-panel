@@ -1,0 +1,154 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     mod_dns
+ * @copyright   Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+?>
+
+<p class="headline">Kerberos Service Control</p>
+
+<?php 
+if (!$this->service->pingZiviosAgent()) {
+    $agentOffline = true;
+?>
+    <div class="dashboarddl"><b>Zivios Agent</b> Status:</div>
+    <div class="dashboarddr"><span style="color: red; font-weight: bold;">Offline</span></div>
+    <div class="clearline"></div>
+<?php 
+} else {
+    $status     = $this->service->getServiceStatus();
+    $serverTime = $this->service->getServerTime();
+?>
+    <div class="dashboarddl">Zivios Agent Status:</div>
+    <div class="dashboarddr"><span style="color: green; font-weight: bold;">Online</span></div>
+    <div class="clearline"></div>
+
+    <div class="dashboarddl"><b>KDC</b> Service Status:</div>
+    <div class="dashboarddr">
+        <?php
+        if ($status[0] == true) {
+            $srvstatus     = '<span style="color: green; font-weight: bold;">Running</span>';
+            $serviceOption = 'Stop Service';
+            $bid = 'stopkdc';
+        } else {
+            $srvstatus     = '<span style="color: red; font-weight: bold;">Stopped</span>';
+            $serviceOption = 'Start Service';
+            $bid = 'startkdc';
+        }
+        echo $srvstatus;
+        ?>
+        <button id="<?php echo $bid; ?>" dojoType="dijit.form.Button"><?php echo $serviceOption; ?>
+        <script type="dojo/connect" event="onClick">
+            zivios.callAction('/kerberos/service/servicectrl',{
+            dn: '<?php echo urlencode($this->service->getdn());?>',
+            action: '<?php echo $bid; ?>'},'<?php echo $bid; ?>');
+        </script>
+        </button>
+    </div>
+    <div class="clearline"></div>
+
+    <div class="dashboarddl"><b>Kadmin</b> Service Status:</div>
+    <div class="dashboarddr">
+        <?php
+        if ($status[1] == true) {
+            $srvstatus     = '<span style="color: green; font-weight: bold;">Running</span>';
+            $serviceOption = 'Stop Service';
+            $bid = 'stopkadmind';
+        } else {
+            $srvstatus     = '<span style="color: red; font-weight: bold;">Stopped</span>';
+            $serviceOption = 'Start Service';
+            $bid = 'startkadmind';
+        }
+        echo $srvstatus;
+        ?>
+        <button id="<?php echo $bid; ?>" dojoType="dijit.form.Button"><?php echo $serviceOption; ?>
+        <script type="dojo/connect" event="onClick">
+            zivios.callAction('/kerberos/service/servicectrl',{
+            dn: '<?php echo urlencode($this->service->getdn());?>',
+            action: '<?php echo $bid; ?>'},'<?php echo $bid; ?>');
+        </script>
+        </button>
+    </div>
+    <div class="clearline"></div>
+
+    <div class="dashboarddl"><b>Kpassword</b> Service Status:</div>
+    <div class="dashboarddr">
+        <?php
+        if ($status[2] == true) {
+            $srvstatus     = '<span style="color: green; font-weight: bold;">Running</span>';
+            $serviceOption = 'Stop Service';
+            $bid = 'stopkpasswdd';
+        } else {
+            $srvstatus     = '<span style="color: red; font-weight: bold;">Stopped</span>';
+            $serviceOption = 'Start Service';
+            $bid = 'startkpasswdd';
+        }
+        echo $srvstatus;
+        ?>
+        <button id="<?php echo $bid; ?>" dojoType="dijit.form.Button"><?php echo $serviceOption; ?>
+        <script type="dojo/connect" event="onClick">
+            zivios.callAction('/kerberos/service/servicectrl',{
+            dn: '<?php echo urlencode($this->service->getdn());?>',
+            action: '<?php echo $bid; ?>'},'<?php echo $bid; ?>');
+        </script>
+        </button>
+    </div>
+    <div class="clearline"></div>
+<?php
+}
+?>
+<br />
+<p class="headline">Kerberos Service Information</p>
+<div class="dashboarddl">Primary Server: </div>
+<div class="dashboarddr"><?php echo $this->mastercomp->getProperty('cn'); ?></div>
+<div class="clearline"></div>
+<div class="dashboarddl">Time on Server: </div>
+<div class="dashboarddr"><?php 
+    if (isset($agentOffline)) {
+        echo 'agent is offline';
+    } else {
+        echo $this->service->getServerTime();
+    }
+?></div>
+<div class="clearline"></div>
+
+<style type="text/css">
+.dashboarddl {
+    float: left; 
+    width: 165px;
+    padding: 5px;
+    clear: left;
+    vertical-align: middle;
+    height: 20px;
+    line-height: 25px;
+}
+
+.dashboarddr {
+    float: left;
+    clear: right;
+    padding: 5px;
+}
+
+.clearline {
+    clear: both;
+    border-bottom: 1px solid #e7e7e7;
+}
+</script>

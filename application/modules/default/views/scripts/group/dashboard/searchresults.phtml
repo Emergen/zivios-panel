@@ -1,0 +1,105 @@
+<?php
+/**
+ * Copyright (c) 2008-2010 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     Zivios
+ * @copyright   Copyright (c) 2008-2010 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+
+if (sizeof($this->returnusers) == 0) {
+    if ($this->iniLoad != true) {
+        echo '<br><div class="info"> No Users matched your search criteria</div>';
+    } else {
+        echo '';
+    }
+} else {
+    ?>
+<p class="headline">Search Results</p>
+
+<?php 
+if ($this->type == 'members') {
+    ?>
+    <div class="note">Listed below are <b>members</b> of this group. Select ones you wish to unsubscribe. Please
+    note that you cannot unsubscribe users for whom this group is primary</div>
+    <?php
+}
+else {
+    ?>
+    <div class="note">Listed below are <b>non members</b> of this group. Select ones you wish to susbcribe to the group</div>  
+    <?php
+}
+?>
+<br />  
+<form action="#" method="post" id="groupsubscription" onsubmit="return false;">
+<input type="hidden" name="dn" value="<?php echo urlencode($this->entry->getdn());?>"/>
+
+<div style="padding: 10px;">
+    <?php
+    $c = 1;
+    
+    foreach ($this->returnusers as $user) {
+        $primary = 0;
+        $disabled = "";
+        if ($this->entry->isPrimaryGroupForUser($user->getdn())) {
+            $primary = 1;
+            $disabled = "disabled='true'";
+        }
+            
+    ?>
+    <div style="padding: 2px; width: 15px; float: left; vertical-align: middle;">
+        <input type="checkbox" dojoType="dijit.form.CheckBox" <?php echo $disabled;?> name="users[]" value="<?php
+        echo urlencode($user->getdn());
+        ?>"/>
+    </div>
+    <div style="padding: 2px; width: 150px; height: 25px; float: left;">
+        <?php echo $user->getProperty("cn"); ?>
+    </div>
+    <?php
+    if ($c == 2) {
+        $c = 0;
+        echo '<div style="clear: both;"></div>';
+    }
+    $c++;
+    }
+    ?>
+</div>
+
+<div class="cboth"></div>
+<hr size="1" color="#cccccc"/>
+
+<div style="padding: 5px;">
+    <?php
+    if ($this->type == 'members') { 
+        ?>
+        <input type="submit" id="groupsubscription-submit" dojoType="dijit.form.Button" label="Unsubscribe users from group" 
+        onclick="zivios.doXhrPost('groupsubscription','/default/group/unsubscribeusers');"/>
+    <?php 
+    } else { 
+        ?>
+        <input type="submit" id="groupsubscription-submit" dojoType="dijit.form.Button" label="Subscribe users to group" 
+        onclick="zivios.doXhrPost('groupsubscription','/default/group/subscribeusers');"/>
+        <?php
+    }
+    ?>
+</div>
+</form>
+<?php
+}
+?>
+

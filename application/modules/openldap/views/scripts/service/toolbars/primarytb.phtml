@@ -1,0 +1,61 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     mod_dns
+ * @copyright   Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+?>
+<p class="toolbar">
+<div id="ldaptb02" dojoType="dijit.Toolbar" style="width:30%; height: 23px; float: left;">
+    <div dojoType="dijit.form.DropDownButton">
+        <span><b>Service Menu</b></span>
+        <ul dojoType="dijit.Menu">
+        <li dojoType="dijit.MenuItem" label="Service Configuration" iconClass="genericIcon configIcon" event="onclick" class="navdropdownitem">
+            <script type="dojo/method" event="onClick">
+                zivios.loadApp('openldap/service/config/dn/<?php echo $this->service->getdn();?>',
+                               'ldapsrvtabs01','ldapsrvconfig',
+                               'Service Configuration');
+            </script>
+        </li>
+
+        <li dojoType="dijit.MenuItem" label="Directory Monitor" iconClass="genericIcon reportIcon" event="onclick" class="navdropdownitem">
+            <script type="dojo/method" event="onClick">
+                zivios.loadApp('openldap/service/monitor/dn/<?php echo $this->service->getdn();?>',
+                               'ldapsrvtabs01','ldapsrvmonitor',
+                               'Director Monitor');
+            </script>
+        </li>
+
+        <li dojoType="dijit.MenuItem" label="Schema Management" iconClass="genericIcon copyIcon" event="onclick" class="navdropdownitem">
+            <script type="dojo/method" event="onClick">
+                zivios.loadApp('openldap/service/schemamanager/dn/<?php echo $this->service->getdn();?>',
+                               'ldapsrvtabs01','ldapsrvschemas',
+                               'Schema Management');
+            </script>
+        </li>
+
+        </ul>
+    </div>
+</div>
+
+<div id="ldaptb03" dojoType="dijit.Toolbar" style="width:70%; height: 23px; float: left; text-align: right;">
+    <b><?php echo $this->service->getProperty('cn'); ?></b> &nbsp;&nbsp;
+</div>
+</p>

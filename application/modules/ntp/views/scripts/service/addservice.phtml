@@ -1,0 +1,74 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		mod_ntp
+ * @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ * @version		$Id: addservice.phtml 915 2008-08-25 11:32:48Z fkhan $
+ * @lastchangeddate $LastChangedDate: 2008-08-25 17:32:48 +0600 (Mon, 25 Aug 2008) $
+ **/
+?>
+<div class="info">The NTP Service <b>must already be running</b> on the server you
+specify. The installation process will ensure that the service is running correctly
+before adding it to the container: <b><?php echo $this->obj->getproperty("cn"); ?></b>.
+</div>
+<br />
+<form id="antp" name="addntpservice" method="post" action="#" onsubmit="return false;"
+	style="padding-left: 0px;">
+<fieldset>
+	<legend>Select Computer System</legend>
+	<label for="mastercomp">Select Server: </label>
+	<select name="mastercompdn">
+	<?php
+	foreach ($this->computers as $compComputer) {
+		echo '<option value="'.$compComputer->getdn().'">'.$compComputer->getProperty("cn").'</option>';
+	}
+	?>
+	</select>
+</fieldset>
+<br />
+<fieldset>
+	<legend>External NTP Servers</legend>
+	<div class="notice">Enter one NTP Server per line.</div>
+	<label for="extntpservers">External NTP Servers: </label>
+	<textarea name="defntpservers" rows="5" cols="25">pool.ntp.org</textarea>
+</fieldset>
+<br />
+<fieldset>
+	<legend>Advanced Options</legend>
+	<label for="enablestats">Enable Statistics: </label>
+		<input type="checkbox" value="1" name="enbstats" CHECKED />
+		<div style="padding-left: 150px; background: #eee; font-size: 10px;">
+			<input type="checkbox" value="1" name="clstats" CHECKED /> Clock Stats
+			<input type="checkbox" value="1" name="lostats" CHECKED /> Loop Stats
+			<input type="checkbox" value="1" name="prstats" CHECKED /> Peer Stats
+		</div>
+	<br />
+
+	<label for="broadcast">Broadcast To Subnets: </label>
+		<textarea name="broadcastto" rows="3" cols="25"></textarea>
+
+<br /><br />
+<input type="submit" value="Install Service"
+	onclick="javascript:callFormUpdate('antp', '/ntp/service/addService/');" />
+<input type="hidden" name="operate_dn" value="<?php echo $this->obj->getdn();?>" />
+<input type="hidden" name="doinstall" value="1" />
+</fieldset>
+</form>
+

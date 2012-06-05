@@ -1,0 +1,81 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     mod_kerberos
+ * @copyright   Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+
+ 
+$formid   = Zivios_Util::randomString(8);
+$regexLib = Zivios_Util::getRegexLibrary();
+$user = $this->user;
+$kerbplugin = $this->krbplugin;
+$lockedstr = "";
+if ($kerbplugin->isLocked()) {
+	$lockedstr = "CHECKED";
+}
+$date = substr($kerbplugin->getProperty('krb5passwordend'),0,8);
+Zivios_Log::debug($date);
+//$date = new Zend_Date($kerbplugin->getProperty('krb5passwordend'),Zend_Date::ISO_8601);
+$year = substr($date,0,4);
+$month = substr($date,4,2);
+$day = substr($date,6,2);
+$ddate = $year.'-'.$month.'-'.$day;
+Zivios_Log::debug($ddate);
+
+?>
+
+<div class="subheading">Kerberos Password Settings</div>
+<div class="content">
+    <form id='<?php echo $formid; ?>' enctype="application/x-www-form-urlencoded" method="post" 
+        action="#" dojoType="dijit.form.Form">
+    
+     
+    <div class="labell">Kerberos Ticket MaxLife (hours): </div>
+
+    <input dojoType="dijit.form.NumberSpinner" value="<?php echo $kerbplugin->getProperty('krb5maxlife')/86400;?>" smallDelta="1" style="width: 100px;" required="false"
+        constraints="{min:0,max:96,places:0}" name="krb[op_digits_krb5maxlife_Kerberos+Ticket+MaxLife]" class="genField" />
+    <div class="cboth"></div>
+
+    <div class="labell">Password Expiry Date: </div>
+    <input dojoType="dijit.form.DateTextBox" style="width: 100px;" value="<?php echo $ddate;?>" name="krb[op_phonenumber_krb5passwordend_Kerberos+Password+Expiry]" 
+    	class="genField"/>
+    <div class="cboth"></div>
+    
+    <div class="labell">Force Expire Password: </div>
+    <input dojoType="dijit.form.CheckBox" name="krb[op_noval_pwforceexpire_PWE]" class="genField"/>
+    <div class="cboth"></div>
+    
+    <div class="labell">Lock Account? </div>
+    <input dojoType="dijit.form.CheckBox" disabled value="1" <?php echo $lockedstr;?> name="krb[op_noval_pwlockout_PWE]" class="genField"/>
+    <div class="cboth"></div>
+    <label></label>
+    <br />
+    <div class="labell"></div>
+    <input onclick="zivios.postxhr('/kerberos/user/dodashboard', '', '<?php echo $formid; ?>',
+        'form', 'json', [], [], [], [], this.id); return false;" 
+        name="inica" value="Apply" 
+        class="genField" type="submit" label="Apply" dojoType="dijit.form.Button"/>
+    <div class="cboth"></div>
+
+    <input type="hidden" name="krb[rq_noval_dn_dn]" value="<?php echo $user->getdn();?>"/>
+    </form>
+</div>
+ 

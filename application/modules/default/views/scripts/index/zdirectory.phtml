@@ -1,0 +1,42 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		Zivios
+ * @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ **/
+$this->borderContainer()->captureStart('dirlayout', array(
+    'design' => 'sidebar', 
+    'style' => 'width: 100%; margin: 0px; padding: 0px; border: 0px;'));
+
+    $this->contentPane()->captureStart('dirtree', array(
+        'minSize' => '270',
+        'region' => 'left', 
+        'splitter' => 'true',
+        'style' => 'width: 270px;'));
+        echo $this->render('index/zdirectory/tree.phtml');
+        echo $this->contentPane()->captureEnd('dirtree');
+
+    $this->contentPane()->captureStart('dirdata', array(
+        'region' => 'center',
+        'style' => 'margin: 0px; padding: 0px; border: 0px;'));
+        echo $this->render('index/zdirectory/nodeview.phtml');
+        echo $this->contentPane()->captureEnd('dirdata');
+
+echo $this->borderContainer()->captureEnd('dirlayout');

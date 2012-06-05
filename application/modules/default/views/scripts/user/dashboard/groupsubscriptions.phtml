@@ -1,0 +1,77 @@
+<?php
+/**
+ * Copyright (c) 2008-2010 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		Zivios
+ * @copyright	Copyright (c) 2008-2010 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ **/
+?>
+<div class="heading">User Group Subscriptions</div>
+<div class="content">
+
+<div class="info">Unsubscribing a user from a group will deprovision all plugins provided
+by the group in question.</div>
+
+<form action="#" method="post" id="unsubscribefromgroups" onsubmit="return false;">
+<div style="padding: 10px;">
+    <div style="border-bottom: 1px solid #ccc; padding-right: 5px; padding-bottom: 2px; margin-bottom: 4px;
+        text-align: right;">Primary Group: <b><?php echo $this->primaryGroup->getProperty('cn'); ?></b></div>
+    <?php
+    if (count($this->sgroups) > 1) {
+    $c = 1;
+    foreach ($this->sgroups as $group) {
+        if ($group->getdn() == $this->primaryGroup->getdn()) {
+            continue;
+        }
+    ?>
+    <div style="padding: 2px; width: 15px; float: left; vertical-align: middle;">
+        <input type="checkbox" dojoType="dijit.form.CheckBox" value="1" name="grouplisting[<?php
+        echo urlencode($group->getdn());
+        ?>]"/>
+    </div>
+    <div style="padding: 2px; width: 150px; height: 25px; float: left;">
+        <?php echo $group->getProperty("cn"); ?>
+    </div>
+    <?php
+        if ($c == 2) {
+            $c = 0;
+            echo '<div style="clear: both;"></div>';
+        }
+        $c++;
+    }
+    ?>
+</div>
+
+<div class="cboth"></div>
+<hr size="1" style="margin-left: 10px; width: 95%;" color="#cccccc"/>
+<div style="clear: both; margin-left: 10px;">
+    <input type="hidden" name="userdn" value="<?php echo urlencode($this->entry->getdn()); ?>"/>
+    <input type="submit" id="unsubscribefromgroups-submit" dojoType="dijit.form.Button" label="Unsubscribe User Groups" 
+    onclick="javascript:zivios.doXhrPost('unsubscribefromgroups', '/default/user/unsubscribefromgroups');"/>
+</div>
+<?php
+    } else {
+        // close the 10px padding div.
+        // @todo: redo layout for this cpane.
+        echo '</div>';
+    }
+    ?>
+</form>
+</div>
+

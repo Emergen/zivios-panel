@@ -1,0 +1,59 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		Zivios
+ * @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ **/
+$formid   = Zivios_Util::randomString(8);
+$regexLib = Zivios_Util::getRegexLibrary();
+?>
+
+<div class="heading">Subscribe User to Group</div>
+<div class="content">
+    Using the (auto-complete) form below, search available groups for User subscription.
+
+    <hr size="1" color="#eeeeee"/>
+
+    <form id='<?php echo $formid; ?>' enctype="application/x-www-form-urlencoded" method="post" 
+        action="#" dojoType="dijit.form.Form">
+
+    <div class="zflabel" style="width: 50px;">Search:</div> 
+    <div dojotype="zivios.AutocompleteReadStore" jsid="dogroupsearch" 
+        url="/default/user/getavailablegroups/dn/<?php echo urlencode($this->userEntry->getdn()); ?>/" 
+        requestmethod="get"></div>
+
+    <input dojoType="dijit.form.FilteringSelect" class="zfgenField" required="true"
+        store="dogroupsearch" name="addtogroup[rq_dn_agsearch_Group+Name_enc]" hasDownArrow="false" 
+        regExp="<?php echo $regexLib->exp->posixgroup; ?>"/>
+    <div class="cboth">
+
+    <div class="zflabel" style="width: 50px;">&nbsp;</div>
+    <input onclick="zivios.postxhr('/default/user/addtogroup', '', '<?php echo $formid; ?>',
+        'form', 'json', [], [], [], [], this.id); return false;" 
+        name="zvaddutogroup" value="Subscribe to Group"
+        type="submit" label="Subscribe to Group" dojoType="dijit.form.Button"/>
+    <div class="cboth"></div>
+
+    <input type="hidden" name="addtogroup[rq_dn_dn_Distinguished+Name_enc]" value="<?php echo urlencode($this->userEntry->getdn()); ?>"/>
+    </form>
+
+</div>
+
+

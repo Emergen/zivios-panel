@@ -1,0 +1,150 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		Zivios
+ * @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ **/
+
+
+
+
+
+
+
+
+
+$this->borderContainer()->captureStart('mailuserlayout', array('design' => 'sidebar', 'style' => 
+    'width: 100%; padding: 0px; margin: 0px; border: 0px;','title' => 'Mailuser Settings'));
+
+$this->contentPane()->captureStart('mailuserleftarea', array('region' => 'left', 'splitter' => 'true', 
+    'style' => 'width: 450px; padding: 0px; margin: 0px; border-left: 0px; border-top: 0px; border-bottom: 0px;'));
+
+$this->borderContainer()->captureStart('mailuserleftareabc', array('design' => 'headline', 
+    'style' => 'width: 99%; padding: 0px; margin: 0px; border: 0px;'));
+
+$this->contentPane()->captureStart('mailusergeneralinfo', array('region' => 'top', 'style' => 'padding: 0px; 
+    margin: 0px; border-right: 0px; border-top: 0px; height: 30%;',
+    'href' => '/mail/user/generalinfo/dn/'.urlencode($this->user->getdn())));
+
+
+echo $this->contentPane()->captureEnd('mailusergeneralinfo');
+
+$this->contentPane()->captureStart('mailusergeneralsettings', array('region' => 'center', 'style' => 'padding: 0px; 
+    margin: 0px; border-right: 0px; border-top: 0px; height: 70%;',
+    'href' => '/mail/user/generalsettings/dn/'.urlencode($this->user->getdn())));
+
+
+echo $this->contentPane()->captureEnd('mailusergeneralsettings');
+
+$this->contentPane()->captureStart('mailuseraliasarea', array('region' => 'bottom', 'style' => 'padding: 0px; 
+                        margin: 0px; border-right: 0px; border: 0px; border-top: 0px; height: 40%;'));
+
+$this->borderContainer()->captureStart('mailuseraliassection', array('design' => 'headline', 
+                   'style' => 'width: 99%; border: 0px; padding: 0px; margin: 0px; border: 0px;'));
+
+/*
+* ALIAS AREA
+*/
+ 
+$this->contentPane()->captureStart('mailuseraliasdisplay', array('region' => 'top', 'style' => 'padding: 0px; 
+                           margin: 0px; border: 0px; border-right: 0px; border-top: 0px; height: 60%;',
+                           'href' => '/mail/user/aliasdisplay/dn/'.urlencode($this->user->getdn())));
+                                                       
+
+echo $this->contentPane()->captureEnd('mailuseraliasdisplay');
+
+$this->contentPane()->captureStart('mailuseraliasform', array('region' => 'center', 'style' => 'padding: 0px; 
+                            margin: 0px; border: 0px; border-right: 0px; border-top: 0px; height: 40%;',
+                            'href' => '/mail/user/aliasform/dn/'.urlencode($this->user->getdn())));
+
+echo $this->contentPane()->captureEnd('mailuseraliasform');
+
+
+
+echo $this->borderContainer()->captureEnd('mailuseraliassection');
+
+
+echo $this->contentPane()->captureEnd('mailuseraliasarea');
+echo $this->borderContainer()->captureEnd('mailuserleftareabc');
+
+echo $this->contentPane()->captureEnd('mailuserleftarea');
+
+ 
+$this->contentPane()->captureStart('mailuserblacklistcp', array('region' => 'top', 'style' => 'padding: 0px; 
+                margin: 0px; border-right: 0px; border-top: 0px; border-bottom: 1px; height: 50%;'));
+
+$this->borderContainer()->captureStart('mailuserblacklistsection', array('design' => 'headline', 
+    'style' => 'width: 99%; padding: 0px; margin: 0px; border: 0px;'));
+
+/*
+* Black list BC
+*/
+ 
+$this->contentPane()->captureStart('mailuserblacklistdisplay', array('region' => 'top', 'style' => 'padding: 0px; 
+    margin: 0px; border: 0px; border-top: 0px; height: 70%;',
+                     'href' => '/mail/user/bldisplay/dn/'.urlencode($this->user->getdn())));
+
+
+echo $this->contentPane()->captureEnd('mailuserblacklistdisplay');
+
+$this->contentPane()->captureStart('mailuserblacklistform', array('region' => 'center', 'style' => 'padding: 0px; 
+                          margin: 0px; border-left: 0px; border-right: 0px; border-top: 0px; height: 30%;',
+                          'href' => '/mail/user/blform/dn/'.urlencode($this->user->getdn())));
+
+
+echo $this->contentPane()->captureEnd('mailuserblacklistform');
+
+
+
+echo $this->borderContainer()->captureEnd('mailuserblacklistsection');
+
+echo $this->contentPane()->captureEnd('mailuserblacklistcp');
+
+$this->contentPane()->captureStart('mailuserwhitelistcp', array('region' => 'bottom', 'style' => 'padding: 0px; 
+    margin: 0px; border: 0px; border-top: 0px; height: 50%;'));
+
+$this->borderContainer()->captureStart('mailuserwhitelistsection', array('design' => 'headline', 
+    'style' => 'width: 99%; padding: 0px; margin: 0px; border: 0px;'));
+
+/*
+* White list BC
+*/
+ 
+$this->contentPane()->captureStart('mailuserwhitelistdisplay', array('region' => 'top', 'style' => 'padding: 0px; 
+                     margin: 0px; border: 0px; border-top: 0px; height: 70%;',
+                     'href' => '/mail/user/wldisplay/dn/'.urlencode($this->user->getdn())));
+
+
+echo $this->contentPane()->captureEnd('mailuserwhitelistdisplay');
+
+$this->contentPane()->captureStart('mailuserwhitelistform', array('region' => 'center', 'style' => 'padding: 0px; 
+                          margin: 0px; border-left: 0px; border-right: 0px; border-top: 0px; height: 30%;',
+                          'href' => '/mail/user/wlform/dn/'.urlencode($this->user->getdn())));
+
+
+echo $this->contentPane()->captureEnd('mailuserwhitelistform');
+
+
+
+echo $this->borderContainer()->captureEnd('mailuserwhitelistsection');
+
+// End border container layout
+echo $this->contentPane()->captureEnd('mailuserwhitelistcp');
+echo $this->borderContainer()->captureEnd('mailuserlayout');

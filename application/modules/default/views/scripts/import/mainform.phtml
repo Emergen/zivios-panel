@@ -1,0 +1,100 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     Zivios
+ * @copyright   Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+ 
+$regexlib = Zivios_Regex::loadLibrary();
+?>
+<div class="note notecl" style="width: 350px;">
+    Importing UNDER Dn: <b><?php echo $this->dn;?></b>
+</div>
+
+<p class="headline">Ldap Import Operation</p>
+<div class="imptxt">IP Address</div>
+<div class="impfield"><input type="text" value="" dojoType="dijit.form.ValidationTextBox"
+    trim="true" id="ip" regex="<?php echo $regexlib->ip;?>"></div>
+<div class="clearboth"></div>
+
+<div class="imptxt">Auth DN</div>
+<div class="impfield"><input type="text" value="" dojoType="dijit.form.TextBox" 
+    trim="true" id="authdn"></div>
+<div class="clearboth"></div>
+
+<div class="imptxt">Auth Pass</div>
+<div class="impfield"><input type="text" value="" dojoType="dijit.form.TextBox" 
+    trim="true" id="authpass"></div>
+<div class="clearboth"></div>
+
+<div class="imptxt">Filter</div>
+<div class="impfield"><input type="text" dojoType="dijit.form.TextBox" 
+    trim="true" id="filter" value="(objectclass=*)"></div>
+<div class="clearboth"></div>
+
+<div class="imptxt">Base Dn</div>
+<div class="impfield"><input type="text" value="" dojoType="dijit.form.TextBox" 
+    trim="true" id="basedn"></div>
+<div class="clearboth"></div>
+
+<div class="imptxt">Scope</div>
+<div class="impfield"><select type="text" value="" dojoType="dijit.form.FilteringSelect" 
+    trim="true" id="scope">
+    <option value="SUB">Subtree</option>
+    <option value="ONE" selected>One</option>
+    </select>
+    </div>
+<div class="clearboth"></div>
+
+<div style="margin-left: 105px;">
+<button dojoType="dijit.form.Button" id="search">Search
+    <script type="dojo/method" event="onClick">
+         var ip = dijit.byId('ip').value;
+         var filter = dijit.byId('filter').value;
+         var basedn = dijit.byId('basedn').value;
+         var authdn = dijit.byId('authdn').value;
+         var authpass = dijit.byId('authpass').value;
+         zivios.cpaneAction('searchdata','/import/search',{
+                 dn: '<?php echo urlencode($this->dn);?>',
+                ip: ip,
+               filter: filter,
+               basedn: basedn,
+               authdn: authdn,
+               authpass: authpass,
+               scope: dijit.byId('scope').value
+               }, this.id);
+    </script>
+</button>
+</div>
+
+<style type="text/css">
+.impfield {
+    float: left;
+    height: 20px;
+}
+
+.imptxt {
+    margin-left: 5px;
+    width: 100px;
+    float: left;
+    height: 20px;
+}
+
+</style>

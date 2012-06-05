@@ -1,0 +1,9 @@
+dlz "ldap zone" {
+        database "ldap 2
+        v3 simple {uid=%%%BIND_USER%%%,ou=zUsers,ou=Core Control,ou=Zivios,%%%BASE_DN%%%} {%%%BIND_PASS%%%} {%%%MASTER_IP%%%}
+        {ldap:///dlzZoneName=$zone$,cn=Zivios DNS,ou=Master Services,ou=Core Control,ou=Zivios,%%%BASE_DN%%%???objectclass=dlzZone}
+        {ldap:///dlzHostName=$record$,dlzZoneName=$zone$,cn=Zivios DNS,ou=Master Services,ou=Core Control,ou=Zivios,%%%BASE_DN%%%?dlzTTL,dlzType,dlzPreference,dlzData,dlzIPAddr?sub?(&(objectclass=dlzAbstractRecord)(!(dlzType=soa)))}
+        {ldap:///dlzHostName=@,dlzZoneName=$zone$,cn=Zivios DNS,ou=Master Services,ou=Core Control,ou=Zivios,%%%BASE_DN%%%?dlzTTL,dlzType,dlzData,dlzPrimaryNS,dlzAdminEmail,dlzSerial,dlzRefresh,dlzRetry,dlzExpire,dlzMinimum?sub?(&(objectclass=dlzAbstractRecord)(dlzType=soa))}
+        {ldap:///dlzZoneName=$zone$,cn=Zivios DNS,ou=Master Services,ou=Core Control,ou=Zivios,%%%BASE_DN%%%?dlzTTL,dlzType,dlzHostName,dlzPreference,dlzData,dlzIPAddr,dlzPrimaryNS,dlzAdminEmail,dlzSerial,dlzRefresh,dlzRetry,dlzExpire,dlzMinimum?sub?(&(objectclass=dlzAbstractRecord)(!(dlzType=soa)))}
+        {ldap:///dlzZoneName=$zone$,cn=Zivios DNS,ou=Master Services,ou=Core Control,ou=Zivios,%%%BASE_DN%%%??sub?(&(objectclass=dlzXFR)(dlzIPAddr=$client$))}";
+};

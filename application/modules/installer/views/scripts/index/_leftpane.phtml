@@ -1,0 +1,43 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     mod_installer
+ * @copyright   Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+
+$this->contentPane()->captureStart('leftpane', array('region' => 'left'), array('style' => 'width: 220px;'));
+
+$aboutContent   = $this->aboutZivios();
+$installContent = $this->installProgress();
+$consoleContent = $this->consoleData();
+
+/**
+ * Accordion actions here need to be triggered when the panel name is clicked; there is little point
+ * in generating this data without reason.
+ */
+
+$this->accordionContainer()->captureStart('aContainer', array('style'=>'overflow: hidden; height: 100%; width: 200px;'),
+    array('duration' => '300'));
+echo $this->accordionPane('aboutpane', $aboutContent, array('title'=>'About Zivios', 'selected' => 'true'));
+echo $this->accordionPane('logpane', $installContent, array('title'=>'Install Log'));
+echo $this->accordionPane('consolepane', $consoleContent, array('title'=>'Console Log'));
+echo $this->accordionContainer()->captureEnd('aContainer');
+
+echo $this->contentPane()->captureEnd('leftpane');

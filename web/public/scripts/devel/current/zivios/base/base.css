@@ -1,0 +1,439 @@
+/**
+ * Copyright (c) 2008-2010 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     Zivios
+ * @copyright   Copyright (c) 2008-2010 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+
+@import "active.css";
+@import "tree.css";
+@import "icons.css";
+@import "forms.css";
+@import "login.css";
+@import "zpanel.css";
+@import "links.css";
+
+html, body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    line-height: 18px;
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+}
+
+#preloader {
+    background: #fff url(../../../../../imgs/zloading01.gif) top left no-repeat;
+    padding-left: 20px;
+}
+
+#flashmsg {
+    width: 350px;
+    height: auto;
+    margin-top: 10px;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 10px;
+    opacity: 0;
+    text-align: center;
+    position: relative;
+    z-index: 10;
+}
+
+#zvPrimaryContainer {
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+}
+
+#layout {
+    width:  100%;
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+}
+
+p.headline {
+    padding: 5px;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+p.content  {
+    padding: 5px;
+}
+
+p.toolbar  {
+    padding: 0px; margin: 0px;
+}
+
+#header {
+    border: 0px; padding: 0px; margin: 0px;
+}
+
+#zvPane {
+    border: 0px; padding: 5px; margin: 0px;
+}
+
+#js_clock {
+    color: #838B8B;
+}
+
+#bctop {
+    height: 5%;
+    background-color: #eee;
+}
+
+#bcmiddle {
+    height: auto;
+}
+
+#bcbottom {
+    height: 70%;
+}
+
+#xhrloading {
+    position: absolute;
+    background:#D8E5F8;
+    width: 100px;
+    height: 20px;
+    left: 415px;
+    top: 1px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.alert {
+    color: #c00;
+    padding: 10px;
+    padding-left: 40px;
+    border-top: 3px solid #fe7b7a;
+    border-bottom: 3px solid #fe7b7a;
+    background: #FFD6D6 url(../../../../../imgs/status-alert.png) 10px 50% no-repeat;
+    font-weight: normal;
+    margin-top: 0px;
+    margin-bottom: 5px;
+}
+
+.alertcl {
+    border: 3px solid #fe7b7a;
+}
+
+/*
+.info {
+    color: #0055BB;
+    border-top: 3px solid #629de3;
+    border-bottom: 3px solid #629de3;
+    background: #D8E5F8 url(../../../../../imgs/status-info.png) 10px 50% no-repeat;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 10px;
+    padding-left: 40px;
+}
+*/
+
+.info {
+	border-top: 3px solid #ccc;
+	border-bottom: 3px solid #ccc;
+	background: #e5e5e5 url(../../../../../imgs/status-info.png) 10px 50% no-repeat;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	padding: 10px;
+	padding-left: 40px;
+}
+
+
+.infocl {
+    border: 3px solid #ccc;
+}
+
+.note {
+    color: #8B6508;
+    border-top: 3px solid #fde179;
+    border-bottom: 3px solid #fde179;
+    background: #FEF6D8 url(../../../../../imgs/status-note.png) 10px 50% no-repeat;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 10px;
+    padding-left: 40px;
+}
+
+.notecl {
+    border: 3px solid #fde179;
+}
+
+.confirm {
+    color: #57861A;
+    border-top: 3px solid #c2df88;
+    border-bottom: 3px solid #c2df88;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 10px;
+    padding-left: 35px;
+    background: #EEF7DD url(../../../../../imgs/status-confirm.png) 10px 50% no-repeat;
+}
+
+.configcl {
+    border: 3px solid #c2df88;
+}
+
+#notifyarea {
+    font-size: 11px;
+    font-weight: bold;
+    color: #88a62e;
+    padding: 2px;
+    width: 250px;
+    height: auto;
+    float: left;
+}
+
+#notifydata {
+    max-width: 370px !important;
+    padding: 10px;
+    font-size: 11px;
+    font-weight: normal;
+    color: #000;
+}
+
+#alertarea {
+    font-size: 11px;
+    font-weight: bold;
+    color: #DAA520;
+    padding: 2px;
+    width: 250px;
+    height: auto;
+    float: left;
+}
+
+#alertdata {
+    max-width: 370px !important;
+    padding: 10px;
+    font-size: 11px;
+    font-weight: normal;
+    color: #000;
+}
+
+#exceptionarea {
+    font-size: 11px;
+    font-weight: bold;
+    color: #ff0000;
+    padding: 2px;
+    width: 300px;
+    height: auto;
+    float: left;
+}
+
+#exceptiondata {
+    max-width: 450px;
+    padding: 10px;
+    font-size: 11px;
+    font-weight: normal;
+    color: #000;
+}
+
+.toolbarcdiv {
+    float: right;
+    font-size: 11px;
+    padding: 2px;
+}
+
+.tundra .dijitTooltipContainer {
+    font-size: 10px;
+}
+
+#navmenu {
+    background: #e5e5e5;
+    border: 1px solid #ccc;
+    margin-top: 2px;
+    padding: 5px;
+}
+
+.navdropdownitem {
+    background: #e5e5e5;
+    border: 1px solid #e5e5e5;
+    background-color: #e5e5e5;
+    padding: 2px;
+    padding-top: 3px;
+    font-size: 11px;
+}
+
+#usermenu {
+    background: #e5e5e5;
+    border: 1px solid #ccc;
+    border-top: 1px dotted #ccc;
+    margin-top: 2px;
+    padding: 5px;
+}
+
+.dropdownmenu {
+    background: #e5e5e5 !important;
+    border: 1px solid #ccc !important;
+    border-top: 1px dotted #ccc !important;
+    padding: 5px !important;
+    font-size: 11px !important;
+}
+
+.clearboth,
+.cboth {
+    clear: both;
+}
+
+.floatleft,
+.fleft {
+    float: left;
+}
+
+.floatright,
+.fright {
+    float: right;
+}
+
+.confirmLogout {
+    width: 300px;
+    height: 100px;
+    border: 1px solid #ddd;
+    padding: 5px;
+    margin: 10px;
+}
+
+table.general {
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+table.general th {
+    text-align: center;
+    white-space: nowrap;
+    border-bottom: 1px solid #DADADA;
+    margin: 0;
+    background-color: #F6F6F6;
+    padding: 4px;
+    font-size: 11px;
+    font-family: Verdana,Arial,Sans-Serif;  
+}
+
+table.general td {
+    padding: 4px;
+    border-bottom: 1px solid #EEE;
+    text-align: left;
+    margin: 0;
+    font-size: 11px;
+    font-family: Verdana,Arial,Sans-Serif;
+}
+
+.gtbsheader {
+    float: left;
+    width: 110px;
+    padding: 5px;
+    margin-top: 10px;
+    border-bottom: 4px solid #bfc7ce;
+    border-top: 1px solid #bfc7ce;
+    background-color: #dfe0e4;
+    font-weight: bold;
+    line-height: 23px;
+}
+
+.gtbscol {
+    float: left;
+    width: 110px;
+    padding: 5px;
+    height: 25px;
+    border-bottom: 1px solid #bfc7ce;
+    line-height: 23px;
+}
+
+.colstart {
+    clear: left;
+    border-left: 1px solid #bfc7ce;
+    margin-left: 5px;
+    line-height: 23px;
+}
+
+.colmid {
+    border-left: 1px solid #bfc7ce;
+    line-height: 23px;
+}
+
+.colend {
+    border-right: 1px solid #bfc7ce;
+    border-left: 1px solid #bfc7ce;
+    clear: right;
+    margin-right: 5px;
+    line-height: 23px;
+}
+
+.tbstyle {
+    display:table;
+    border-collapse: separate;
+}
+.tbrow {
+    display: table-row;
+}
+.tbrow div {
+    display: table-cell;
+}
+
+.smtxt {
+    font-family: arial;
+    font-size: 0.9em;
+}
+
+.green {
+    color: green;
+}
+
+.red {
+    color: red;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+div.heading {
+    font-weight: bold;
+    margin-right: 5px;
+    font-size: 12px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #ccc;
+    padding: 5px;
+    margin-left: 3px;
+}
+
+div.content  {
+    margin-left: 10px;
+    margin-right: 10px;
+    padding: 5px;
+    line-height: 16px;
+}
+
+div.subheading {
+    font-weight: bold;
+    margin-right: 5px;
+    font-size: 12px;
+    margin-bottom: 5px;
+    border-bottom: 1px dotted #e5e5e5;
+    color: #666;
+    padding: 5px;
+}
+
+

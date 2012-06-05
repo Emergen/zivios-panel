@@ -1,0 +1,50 @@
+# Virtual Host template for the Zivios panel.
+NameVirtualHost %%%IP_ADDRESS%%%:443
+<VirtualHost %%%IP_ADDRESS%%%:443>
+        ServerAdmin %%%SERVER_ADMIN%%%
+        ServerName %%%SERVER_NAME%%%
+
+        SSLEngine On
+        SSLCertificateFile %%%SSL_PUBCERT%%%
+        SSLCertificateKeyFile %%%SSL_PRVKEY%%%
+
+        <FilesMatch "\.(cgi|shtml|phtml|php)$">
+                SSLOptions +StdEnvVars
+        </FilesMatch>
+
+        BrowserMatch ".*MSIE.*" \
+                nokeepalive ssl-unclean-shutdown \
+                downgrade-1.0 force-response-1.0
+
+        DocumentRoot %%%DOC_ROOT%%% 
+
+        <Directory />
+                Options FollowSymLinks
+                AllowOverride None
+        </Directory>
+
+        <Directory %%%DOC_ROOT%%%> 
+                RewriteEngine on
+                RewriteRule .* index.php
+                php_flag magic_quotes_gpc off
+                php_flag register_globals off
+                Options Indexes FollowSymLinks MultiViews
+                AllowOverride None
+                Order allow,deny
+                allow from all
+        </Directory>
+
+        <Directory %%%DOC_ROOT%%%/public>
+                RewriteEngine off
+                Options Indexes FollowSymLinks MultiViews
+                AllowOverride None
+                Order allow,deny
+                allow from all
+        </Directory>
+
+        ErrorLog %%%ERROR_LOG%%%
+        LogLevel warn
+
+        CustomLog %%%ACCESS_LOG%%% combined
+        ServerSignature On
+</VirtualHost>

@@ -1,0 +1,113 @@
+<?php
+/**
+ * Copyright (c) 2008-2010 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     Zivios
+ * @copyright   Copyright (c) 2008-2010 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+?>
+<p class="toolbar">
+
+<div id="zmenutb" dojoType="dijit.Toolbar" style="width: 35%; float: left; height: 23px;">
+    <div dojoType="dijit.form.DropDownButton">
+        <span><b>Applications</b></span>
+        <div dojoType="dijit.Menu" id="navmenu" class="dropdownmenu">
+            <div dojoType="dijit.MenuItem" label="Zivios Directory"
+                onclick="zivios.loadApp('/index/zdirectory','ztabs','zdirectory','Enterprise Directory');" 
+                iconClass="genericIcon directoryIcon"></div>
+
+        <div dojoType="dijit.MenuItem" label="Zivios Configuration" 
+            onclick="zivios.loadApp('/zconfig/index','ztabs','zconfig','Zivios Configuration');" 
+            iconClass="genericIcon configIcon"></div>
+        
+        <div dojoType="dijit.MenuItem" label="Zivios Transactions" 
+            onclick="zivios.loadApp('/transaction/index','ztabs','ztransactions','Zivios Transactions');" 
+            iconClass="genericIcon copyIcon"></div>
+        
+        <div dojoType="dijit.MenuItem" label="Bulk Password Update" 
+            onclick="zivios.loadApp('/password/index','ztabs','zpassupdate','Bulk Password Update');" 
+            iconClass="genericIcon copyIcon"></div>
+            
+        <div dojoType="dijit.MenuItem" label="Zivios Logs" 
+            onclick="zivios.loadApp('/index/zlogs','ztabs','zlogs','Zivios Logs');" 
+            iconClass="genericIcon clipboardIcon"></div>
+
+        <div dojoType="dijit.MenuItem" label="Help Center" 
+            onclick="zivios.loadApp('/index/zhelp','ztabs','zhelp','Help Center');" 
+            iconClass="genericIcon helpIcon"></div>
+        
+        <div dojoType="dijit.MenuItem" label="Logout" iconClass="genericIcon shutdownIcon"
+            onclick="dijit.byId('logoutDialog').show()" iconClass="logoutIcon"></div>
+    </div>
+</div>
+
+</div>
+
+<div id="ztoolbar" dojoType="dijit.Toolbar" style="width: 65%; float: left; text-align: right; height: 23px;">
+    <div dojoType="dijit.form.DropDownButton" id="ztoolbar.notifications" iconClass="dijitToolbarIcon dijitToolbarIconNotifications">
+        <span></span>
+        <div dojoType="dijit.TooltipDialog" id="system-notifications" title="Notifications">
+            <div id="notifyarea">System Notifications</div>
+            <div class="toolbarcdiv"><a href="#" onClick="javascript:zivios.clearDiv('notifydata');"
+            ><img src="public/scripts/dijit/themes/tundra/images/tabCloseHover.png" align="absmiddle"/></a>
+            <a href="#" onClick="javascript:zivios.clearDiv('notifydata');">Clear Notifications</a></div>
+            <div id="notifydata"></div>
+        </div>
+    </div>
+
+     <div dojoType="dijit.form.DropDownButton" id="ztoolbar.alerts" iconClass="dijitToolbarIcon dijitToolbarIconAlerts">
+        <span></span>
+        <div dojoType="dijit.TooltipDialog" id="system-alerts" title="Alerts" style="display: none;">
+            <div id="alertarea">System Alerts</div>
+            <div class="toolbarcdiv"><a href="#" onClick="javascript:zivios.clearDiv('alertdata');"
+            ><img src="public/scripts/dijit/themes/tundra/images/tabCloseHover.png" align="absmiddle"/></a>
+            <a href="#" onClick="javascript:zivios.clearDiv('alertdata');">Clear Alerts</a></div>
+            <div id="alertdata"></div>
+        </div>
+    </div>
+   
+     <div dojoType="dijit.form.DropDownButton" id="ztoolbar.exceptions" iconClass="dijitToolbarIcon dijitToolbarIconExceptions">
+        <span></span>
+        <div dojoType="dijit.TooltipDialog" id="system-exceptions" title="Exceptions">
+            <div id="exceptionarea">System Exceptions</div>
+            <div class="toolbarcdiv"><a href="#" onClick="javascript:zivios.clearDiv('exceptiondata');"
+            ><img src="public/scripts/dijit/themes/tundra/images/tabCloseHover.png" align="absmiddle"/></a>
+            <a href="#" onClick="javascript:zivios.clearDiv('exceptiondata');">Clear Exceptions</a></div>
+            <div id="exceptiondata"></div>
+        </div>
+    </div>
+
+    <span id="js_clock"></span>&nbsp;&nbsp;
+</div>
+
+<div dojoType="dijit.Tooltip" connectId="ztoolbar.notifications" showDelay="0" position="below">System Notifications</div>
+<div dojoType="dijit.Tooltip" connectId="ztoolbar.exceptions" showDelay="0" position="below">System Exceptions</div>
+<div dojoType="dijit.Tooltip" connectId="ztoolbar.alerts" showDelay="0" position="below">System Alerts</div>
+
+<div dojoType="dijit.Dialog" id="logoutDialog" title="Logout of Zivios" execute="zivios.logout()">
+    <div class="confirm">
+    Are you sure you want to logout of Zivios?
+    </div>
+    <div style="margin: 10px;">
+        <button dojoType=dijit.form.Button type="submit">Logout</button>
+        <button dojoType=dijit.form.Button type="submit" onClick="dijit.byId('logoutDialog').hide(); return false;">Cancel Logout</button>
+    </div>
+</div>
+</p>
+

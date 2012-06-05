@@ -1,0 +1,145 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     mod_openldap
+ * @copyright   Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+
+ 
+$formid   = Zivios_Util::randomString(8);
+$regexLib = Zivios_Util::getRegexLibrary();
+
+
+$policy = $this->policy;
+
+?>
+
+<div class="subheading">Openldap Password Policy</div>
+<div class="content">
+    <form id='<?php echo $formid; ?>' enctype="application/x-www-form-urlencoded" method="post" 
+        action="#" dojoType="dijit.form.Form">
+    
+     <?php
+     if ($this->isnew)
+         $disabled ="";
+     else
+        $disabled = "disabled";
+     ?>
+     <div class="labell">Policy Name: </div>
+    <input dojoType="dijit.form.ValidationTextBox" style="width: 100px;" value="<?php echo $policy->getProperty('cn');?>" name="ldap[op_alnumwithspaces_cn_Name]" 
+    	<?php echo $disabled; ?> class="genField"/>
+    <div class="cboth"></div>
+     
+     
+        
+    <div class="labell">Password Max Age (days): </div>
+
+    <input dojoType="dijit.form.NumberSpinner" value="<?php echo $policy->getProperty('pwdmaxage')/86400;?>" smallDelta="1" style="width: 100px;" required="false"
+        constraints="{min:0,max:365,places:0}" name="ldap[op_digits_pwdmaxage_Password+Max+Age]" class="genField" />
+    <div class="cboth"></div>
+    
+    <div class="labell">Password Min Age (days): </div>
+    
+    <input dojoType="dijit.form.NumberSpinner" value="<?php echo $policy->getProperty('pwdminage')/86400;?>" smallDelta="1" style="width: 100px;" required="false"
+        constraints="{min:0,max:365,places:0}" name="ldap[op_digits_pwdminage_Password+Min+Age]" class="genField" />
+    <div class="cboth"></div>
+    
+    <div class="labell">Password Expire Warning (days): </div>
+    
+    <input dojoType="dijit.form.NumberSpinner" value="<?php echo $policy->getProperty('pwdexpirewarning')/86400;?>" smallDelta="1" style="width: 100px;" required="false"
+        constraints="{min:0,max:365,places:0}" name="ldap[op_digits_pwdexpirewarning_Password+Min+Age]" class="genField" />
+    <div class="cboth"></div>
+    
+    <?php
+    $pwdlockoutc = $pwdmustchangec = "";
+    if (strtolower($policy->getProperty('pwdlockout')) == 'true')
+        $pwdlockoutc = "CHECKED";
+    
+    if (strtolower($policy->getProperty('pwdmustchange')) == 'true')
+        $pwdmustchangec = "CHECKED";
+    
+    if (strtolower($policy->getProperty('pwdallowuserchange')) == 'true')
+        $pwdallowc = "CHECKED";
+    ?>
+    
+    
+    
+    <div class="labell">Allow Account Lock: </div>
+    <input dojoType="dijit.form.CheckBox" name="ldap[op_noval_pwdlockout_PWE]" <?php echo $pwdlockoutc;?> value='TRUE' class="genField"/>
+    <div class="cboth"></div>
+    
+    <div class="labell">Password must change on Reset: </div>
+    <input dojoType="dijit.form.CheckBox" name="ldap[op_noval_pwdmustchange_PWE]" <?php echo $pwdmustchangec;?> value='TRUE' class="genField"/>
+    <div class="cboth"></div>
+    
+    <div class="labell">Allow user change: </div>
+    <input dojoType="dijit.form.CheckBox" name="ldap[op_noval_pwdallowuserchange_PWE]" <?php echo $pwdallowc;?> value='TRUE' class="genField"/>
+    <div class="cboth"></div>
+    
+    <div class="labell">Password Min Length (days): </div>
+
+    <input dojoType="dijit.form.NumberSpinner" value="<?php echo $policy->getProperty('pwdminlength');?>" smallDelta="1" style="width: 100px;" required="false"
+        constraints="{min:0,max:20,places:0}" name="ldap[op_digits_pwdminlength_Password+Min+Length]" class="genField" />
+    <div class="cboth"></div>
+    
+    
+    <div class="labell">Password Max Failures</div>
+    <input dojoType="dijit.form.NumberSpinner" value="<?php echo $policy->getProperty('pwdmaxfailure');?>" smallDelta="1" style="width: 100px;" required="false"
+        constraints="{min:0,max:365,places:0}" name="ldap[op_digits_pwdmaxfailure_Password+Max+Failure]" class="genField" />
+    <div class="cboth"></div>
+    
+    <div class="labell">Password History N</div>
+    <input dojoType="dijit.form.NumberSpinner" value="<?php echo $policy->getProperty('pwdinhistory');?>" smallDelta="1" style="width: 100px;" required="false"
+        constraints="{min:0,max:365,places:0}" name="ldap[op_digits_pwdinhistory_Password+History]" class="genField" />
+    <div class="cboth"></div>
+    
+    <div class="labell">Grace Logins</div>
+    <input dojoType="dijit.form.NumberSpinner" value="<?php echo $policy->getProperty('pwdgraceauthnlimit');?>" smallDelta="1" style="width: 100px;" required="false"
+        constraints="{min:0,max:365,places:0}" name="ldap[op_digits_pwdgraceauthnlimit_Password+Grace+Logins]" class="genField" />
+    <div class="cboth"></div>
+    
+    <div class="labell">Auto-Unlock time (seconds)</div>
+    <input dojoType="dijit.form.NumberSpinner" value="<?php echo $policy->getProperty('pwdlockoutduration');?>" smallDelta="10" style="width: 100px;" required="false"
+        constraints="{min:0,max:86400,places:0}" name="ldap[op_digits_pwdlockoutduration_Password+Lock+Duration]" class="genField" />
+    <div class="cboth"></div>
+    
+    <label></label>
+    <br />
+    <div class="labell"></div>
+    <input onclick="zivios.postxhr('/openldap/ppolicy/update', '', '<?php echo $formid; ?>',
+        'form', 'json', [], [], [], [], this.id); return false;" 
+        name="inica" value="Apply" 
+        class="genField" type="submit" label="Apply" dojoType="dijit.form.Button"/>
+    <div class="cboth"></div>
+
+    <?php
+    if ($this->isnew)
+        $action = "add";
+    else
+        $action = "edit";
+    ?>
+    
+    <input type="hidden" name="ldap[rq_noval_action_action]" value="<?php echo $action;?>"/>
+    <input type="hidden" name="ldap[rq_noval_parentdn_parentdn]" value="<?php echo $this->parentdn;?>"/>
+    
+    <input type="hidden" name="ldap[rq_noval_dn_dn]" value="<?php echo $policy->getdn();?>"/>
+    </form>
+</div>
+ 

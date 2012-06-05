@@ -1,0 +1,51 @@
+#!/usr/bin/perl -w
+#
+# Copyright (c) 2008 Zivios, LLC.
+#
+# This file is part of Zivios.
+#
+# Zivios is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Zivios is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+#
+# @package		Zivios
+# @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+# @license		http://www.zivios.org/legal/license
+# @version		$Id: addattendant 1019 2008-09-08 07:26:34Z gmustafa $
+#
+use lib "/opt/zivios/asterisk/lib";
+use Asterisk::config;
+use Getopt::Long;
+
+#command line arguments
+GetOptions( 'exten=i' 	=> \$exten,
+			'pin:s' 	=> \$pin,
+			'admpin:s'	=> \$admpin);  
+##
+my $vmrc = new Asterisk::config(file=>'/etc/asterisk/meetme.conf',keep_resource_array=>0);
+$vmrc->assign_delkey(section=>'rooms',key=>"conf", value_regexp=>"$exten");
+
+$vmrc->assign_append(point=>'foot',section=>'rooms',data=>"conf => $exten,$pin,$admpin");
+$vmrc->save_file();
+
+
+##exten entry
+my $rcexten = new Asterisk::config(file=>'/etc/asterisk/extensions.conf',keep_resource_array=>0);
+
+##del the old entry first
+$rcexten->assign_delkey(section=>'confs',key=>'exten',value_regexp=>"$exten");
+$rcexten->assign_append(point=>'foot',section=>'confs',data=>"exten => $exten,1,Meetme($exten)");
+$rcexten->assign_append(point=>'foot',section=>'confs',data=>"exten => $exten,2,Hangup()");
+
+$rcexten->save_file();
+##end exten entry
+

@@ -1,0 +1,109 @@
+<div style="width: 98.3%; border-bottom: 1px solid #477795; border-top: 1px solid #477795; 
+    background: #7c849c; padding: 5px; color: #fff;"><b>Emails in Deferred Queue:</b></div>
+
+<div class="listHeader listingStart" style="width: 25px;">-</div>
+<div class="listHeader listingMid" style="width: 70px;">ID</div>
+<div class="listHeader listingMid" style="width: 100px;">Sender</div>
+<div class="listHeader listingMid" style="width: 100px;">Time</div>
+<div class="listHeader listingMid" style="width: 150px;">Recipient</div>
+<div class="listHeader listingMid" style="width: 250px;">Reason</div>
+<div class="listHeader listingEnd" style="width: 50px;">Size</div>
+
+<form id="deferredqueuemanage" dojoType='dijit.form.Form' action="#" method="post">
+<input type="hidden" name="changeaction" id="changeaction" />
+<input type="hidden" name="dn" value="<?php echo $this->dn;?>" />
+<?php
+if (sizeof($this->deferredqueue) == 0) {
+    ?>
+    <div class="listingGeneral listingStart" style="width: 400px; margin-left: 50px; border: 0px;">
+    <div class="info">
+        Deferred Queue is currently Empty
+    </div>
+    </div>
+    <div class="clearboth"></div>
+    <?php
+}
+foreach ($this->deferredqueue as $key => $defer) {
+    ?>
+    <div class="listingGeneral listingStart" style="width: 25px;">
+        <input type="checkbox" dojoType="dijit.form.CheckBox" name="ids[]" value="<?php echo $key;?>"/>
+    </div>
+    
+    <div class="listingGeneral listingMid" style="width: 70px;">
+    <?php echo $key;?>
+    </div>
+    <div class="listingGeneral listingMid" style="width: 100px;">
+    <?php echo $defer->sender;?>
+    </div>
+    <div class="listingGeneral listingMid" style="width: 100px;">
+    <?php echo $defer->time;?>
+    </div>
+    <div class="listingGeneral listingMid" style="width: 150px; overflow: auto;">
+    <?php echo $defer->recipient;?>
+    </div>
+    <div class="listingGeneral listingMid" style="width: 250px; overflow: auto;">
+    <?php echo $defer->deferreason;?>
+    </div>
+    <div class="listingGeneral listingEnd" style="width: 50px; text-align: center;">
+    <?php echo $defer->size;?> B
+    </div>
+    <?php
+}
+
+?>
+
+<br />
+<button dojoType="dijit.form.Button" id="deferredqueuemanage-submit">Delete Selected
+    <script type="dojo/method" event="onClick">
+        dojo.byId('changeaction').value = 'delete';
+        zivios.formXhrPost('deferredqueuemanage','/mail/service/domanagequeue');
+    </script>
+</button>
+
+<button dojoType="dijit.form.Button"> Flush Queue
+    <script type="dojo/method" event="onClick">
+        zivios.callAction('/mail/service/doflushqueue',{dn: '<?php echo urlencode($this->dn);?>'}, this.id);
+    </script>
+</button>
+
+</form>
+
+<style type="text/css">
+.listHeader {
+    float: left;
+    width: 110px;
+    padding: 5px;
+    margin-top: 10px;
+    border-bottom: 4px solid #bfc7ce;
+    border-top: 1px solid #bfc7ce;
+    background-color: #dfe0e4;
+    font-weight: bold;
+    text-align: center;
+}
+
+.listingGeneral {
+    float: left;
+    width: 110px;
+    padding: 5px;
+    height: 20px;
+    border-bottom: 1px solid #bfc7ce;
+    min-height: 50px !important;
+}
+
+.listingStart {
+    clear: left;
+    border-left: 1px solid #bfc7ce;
+    margin-left: 5px;
+}
+
+.listingMid {
+    border-left: 1px solid #bfc7ce;
+}
+
+.listingEnd {
+    border-right: 1px solid #bfc7ce;
+    border-left: 1px solid #bfc7ce;
+    clear: right;
+    margin-right: 5px;
+}
+</style>

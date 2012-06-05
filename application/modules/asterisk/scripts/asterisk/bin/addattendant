@@ -1,0 +1,94 @@
+#!/usr/bin/perl -w
+#
+# Copyright (c) 2008 Zivios, LLC.
+#
+# This file is part of Zivios.
+#
+# Zivios is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Zivios is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+#
+# @package		Zivios
+# @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+# @license		http://www.zivios.org/legal/license
+# @version		$Id: $
+#
+use lib "/opt/zivios/asterisk/lib";
+use Asterisk::config;
+use Getopt::Long;
+##args from cmd line
+GetOptions ("name=s" 		=> \$name,
+			"res_timeout=i"	=> \$res_timeout,
+			"dig_timeout=i" => \$dig_timeout,
+			"playfile=s"	=> \$playfile,
+			"loop=i"		=> \$loop,
+			"localext:s"	=> \$localext,
+			"option:s" 		=> \@options);  
+##
+
+my $rc = new Asterisk::config(file=>'/etc/asterisk/extensions.conf',keep_resource_array=>0);
+$name = 'ivr-'. $name ;
+$rc->assign_addsection(section=>$name);
+$rc->assign_append(point=>'foot',section=>$name,data=>"; ");
+$rc->assign_append(point=>'foot',section=>$name,data=>"; -= IVR $name =- ");
+$rc->assign_append(point=>'foot',section=>$name,data=>"; Response Timeout: $res_timeout ");
+$rc->assign_append(point=>'foot',section=>$name,data=>"; Digit Timeout: $dig_timeout ");
+$rc->assign_append(point=>'foot',section=>$name,data=>"; Background Playback File: $playfile");
+$rc->assign_append(point=>'foot',section=>$name,data=>"; Loop Count: $loop");
+$rc->assign_append(point=>'foot',section=>$name,data=>"; ");
+if ($localext eq "yes") {
+	$rc->assign_append(point=>'foot',section=>$name,data=>"include => internal");
+}
+$rc->assign_append(point=>'foot',section=>$name,data=>"exten => s,1,Answer()");
+$rc->assign_append(point=>'foot',section=>$name,data=>"exten => s,n,Set(LOOPCOUNT=$loop)");
+$rc->assign_append(point=>'foot',section=>$name,data=>"exten => s,n,Set(TIMEOUT(response)=$res_timeout)");
+$rc->assign_append(point=>'foot',section=>$name,data=>"exten => s,n,Set(TIMEOUT(digit)=$dig_timeout)");
+$rc->assign_append(point=>'foot',section=>$name,data=>"exten => s,n(begin),Wait(2)");
+$rc->assign_append(point=>'foot',section=>$name,data=>"exten => s,n,Background(custom\/$playfile)");
+$rc->assign_append(point=>'foot',section=>$name,data=>"exten => s,n,WaitExten($res_timeout)");
+$rc->assign_append(point=>'foot',section=>$name,data=>"exten => i,1,Playback(invalid)");
+$rc->assign_append(point=>'foot',section=>$name,data=>"exten => i,n,Goto(loop|1)");
+$rc->assign_append(point=>'foot',section=>$name,data=>"exten => t,1,Goto(loop|1)");
+$rc->assign_append(point=>'foot',section=>$name,data=>"exten => loop,1,Set,LOOPCOUNT=\$[\${LOOPCOUNT} + 1]");
+$rc->assign_append(point=>'foot',section=>$name,data=>"exten => loop,2,GotoIf(\$[\${LOOPCOUNT} > $loop]?h,1)");
+$rc->assign_append(point=>'foot',section=>$name,data=>"exten => loop,3,Goto(s|begin)");
+$rc->assign_append(point=>'foot',section=>$name,data=>"exten => h,1,Hangup()");
+
+
+$rc->assign_append(point=>'foot',section=>$name,data=>"; ");
+$rc->assign_append(point=>'foot',section=>$name,data=>"; key sequences for auto attendant");
+$rc->assign_append(point=>'foot',section=>$name,data=>"; ");
+
+foreach (@options) {
+	#print $_ . "\n";
+	$line = $_;
+	@params = split (' ',$line);
+	$key = $params[0];
+	$app = $params[1];
+	$data = $params[2];
+	#print "pressing $key will execute $app with $data values \n";
+	$rc->assign_append(point=>'foot',section=>$name,data=>"; pressing $key will execute $app with $data values ");
+
+	if ($app eq "queue") {
+		$rc->assign_append(point=>'foot',section=>$name,data=>"exten => $key,1,Queue($data)");
+		$rc->assign_append(point=>'foot',section=>$name,data=>"exten => $key,2,Hangup()");
+	}
+
+    if ($app eq "goto") {
+		$rc->assign_append(point=>'foot',section=>$name,data=>"exten => $key,1,Goto($data)");
+		$rc->assign_append(point=>'foot',section=>$name,data=>"exten => $key,2,Hangup()");
+	}
+
+}
+
+$rc->save_file();
+

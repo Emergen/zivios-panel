@@ -1,0 +1,148 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     Zivios
+ * @copyright   Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+ ?>
+ 
+ <?php
+ Zivios_Log::debug($this->entries);
+ $count = $this->entries['count'];
+ ?>
+ <form action="#" id="searchbulkimport" name="searchbulkimport" dojoType="dijit.form.Form">
+ <input type="hidden" name="dn" value="<?php echo urlencode($this->dn);?>" />
+ <input type="hidden" name="ip" value="<?php echo $this->ip;?>" />
+ <input type="hidden" name="authdn" value="<?php echo $this->authdn;?>" />
+ <input type="hidden" name="authpass" value="<?php echo $this->authpass;?>" />
+ <div class="info">Search yeilded <b><?php echo $count;?></b> entries </div>
+ <div style="text-align: right"><button dojoType="dijit.form.Button"> Select All
+    <script type="dojo/method" event="onClick">
+        checkbox = dojo.byId('searchbulkimport').elements['importdns[]'];
+        for (i = 0; i < checkbox.length; i++)
+        {
+            checkbox[i].checked = true ;
+        }
+    </script>
+ </button>
+ <button dojoType="dijit.form.Button"> Deselect All
+    <script type="dojo/method" event="onClick">
+        checkbox = dojo.byId('searchbulkimport').elements['importdns[]'];
+        for (i = 0; i < checkbox.length; i++)
+        {
+            checkbox[i].checked = false ;
+        }
+    </script>
+ </button>
+ </div>
+ <?php
+ for($i=0;$i<$count;$i++) {
+     
+     $entry = $this->entries[$i];
+     $dn =$entry['dn'];
+     $cn =$entry['cn'][0];
+     $objclass = $entry['objectclass'];
+     $objarr = array();
+     for ($j=1;$j<$objclass['count'];$j++)
+     {
+         $objarr[] = $objclass[$j];
+     }
+     
+     $objstr = implode (', ',$objarr);
+     ?>
+     <div class="blueBox">
+     <input type="checkbox" id="importdns[]" name="importdns[]" value="<?php echo urlencode($dn);?>"/>
+     <b>dn: </b><?php echo $dn;?><br /><b>cn: </b><?php echo $cn;?>
+     <br /><b>obj: </b><?php echo $objstr;?>
+     <button dojoType='dijit.form.Button'> >>
+        <script type="dojo/method" event="onClick">
+            basedn = dojo.byId('basedn');
+            button = dojo.byId('search');
+            basedn.value = '<?php echo $dn;?>';
+            dijit.byId('basedn').value = '<?php echo $dn;?>';
+            button.click();
+        </script>
+     </button>
+     </div>
+     <?php
+     
+     if (($i+1) % 4 == 0) {
+         ?>
+         <div style="clear: both;"></div>
+         <?php
+     }
+    
+ }
+ ?>
+ <div style="clear: both;"></div>
+<div style="float: left; width: 300px;">
+ <label for="">Convert To: </label>        
+<select dojoType="dijit.form.FilteringSelect" name="convertto" id="convertto" size="10">
+  <script type="dojo/method" event="onChange">
+    el = dojo.byId('groupac');
+    display = el.style.display;
+    if (this.value == 'user') {
+        dojo.fx.wipeIn({
+            node: "groupac",
+            duration: 300}).play();
+    } else if (display != 'none') {
+        dojo.fx.wipeOut({
+            node: "groupac",
+            duration: 300}).play();
+    }  
+        
+  </script>
+  <option value="user" selected="selected">Users</option>
+  <option value="group">Groups</option>
+  <option value="userc">User Container</option>
+  <option value="bcontainer">Branch containers</option>
+  <option value="locality">Locality</option>
+  <option value="custom">Customer Containers</option>
+  
+</select>
+</div>
+<div id="groupac" style="float: left; width: 300px;">
+    <div dojoType="zivios.AutocompleteReadStore" jsId="stateStore" 
+            url="/user/getavailablegroups/dn/<?php echo urlencode($this->dn);?>"></div>
+    <b>Default Group: </b> 
+    <input dojoType="dijit.form.FilteringSelect" value="" store="stateStore" name="defaultgroup" id="defaultgroup" required="false">
+</div>
+<div style="clear: both;"></div>
+ <div class="note">Import all selected entries? 
+    <button dojoType="dijit.form.Button" id="searchbulkimport-submit"> Start Import
+        <script type="dojo/method" event="onClick">
+        zivios.formXhrPost('searchbulkimport','/import/dobulkimport');
+        </script>
+    </button>
+</div>
+ 
+ 
+ </form>
+ <style type="text/css">
+.blueBox {
+    float: left;
+    width: 200px;
+    padding: 5px;
+    margin: 5px;
+    border-bottom: 1px solid #bfc7ce;
+    border-top: 1px solid #bfc7ce;
+    background-color: #dfe0e4;
+}
+</style>

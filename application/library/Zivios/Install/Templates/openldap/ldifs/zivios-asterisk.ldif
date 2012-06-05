@@ -1,0 +1,14 @@
+dn: cn=zivios-asterisk,cn=schema,cn=config
+objectClass: olcSchemaConfig
+cn: zivios-asterisk
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.1.1 NAME 'emsastdidnumber' DESC 'Asterisk DID Number' SUP name )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.1.2 NAME 'emsastphonelockcode' DESC 'Asterisk Phone Lock Code' SUP name )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.1.3 NAME 'emsastphonelock' DESC 'Asterisk Extension' SUP name )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.1.4 NAME 'emsastroutesallowed' DESC 'Asterisk Extension' SUP name )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.1.5 NAME 'emsastexten' DESC 'Asterisk Extension' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.1.6 NAME 'emsastdisable' DESC 'Asterisk Account Disabled' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.1.7 NAME 'useragent' DESC 'Asterisk User Agent' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.3.1.1.8 NAME 'emsastvoicemailenable' DESC 'Asterisk User Agent' SUP emsdescription )
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.3.2.1.1 NAME 'emsastuser' DESC 'Asterisk User Object' SUP emsSecurityObject 
+ AUXILIARY MAY ( emsastexten $ emsastroutesallowed $ emsastphonelock $emsastphonelockcode $ emsastdidnumber $ emsastdisable $ useragent $ emsastvoicemailenable ) )
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.3.2.1.2 NAME 'emsastservice' DESC 'Asterisk Service' SUP emsservice AUXILIARY )

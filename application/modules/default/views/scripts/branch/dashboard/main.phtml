@@ -1,0 +1,51 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		Zivios
+ * @copyright	Copyright (c) 2008-2010 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ **/
+?>
+
+<div style="width: 550px; padding-left: 20px; padding-top: 10px;">
+    <div class="floatleft" style="border-left: 1px solid #eee; border-top: 1px solid #eee; font-weight: bold; width: 110px;">Branch:</div>
+    <div class="floatleft" style="border-top: 1px solid #eee; font-weight: normal; width: 250px;"><?php echo $this->entry->getProperty('cn'); ?></div>
+<div style="clear:both;"></div>
+<div class="floatleft" style="border-left: 1px solid #eee; width: 110px;font-weight: bold; ">Branch Code:</div>
+    <div class="floatleft" style="width: 250px;"><?php echo $this->entry->getProperty('emscode'); ?></div>
+
+<div style="clear:both;"></div>
+
+    <div class="floatleft" style="border-left: 1px solid #eee; width: 110px;font-weight: bold; ">Phone:</div>
+    <div class="floatleft" style="width: 250px;"><?php echo $this->entry->getProperty('telephonenumber'); ?></div>
+
+<div style="clear:both;"></div>
+    <div class="floatleft" style="border-left: 1px solid #eee; width: 110px;font-weight: bold; ">Fax:</div>
+    <div class="floatleft" style="width: 250px;"><?php echo $this->entry->getProperty('facsimiletelephonenumber'); ?></div>
+    
+    <div style="clear:both;"></div>
+    <div class="floatleft" style="border-left: 1px solid #eee; width: 110px;font-weight: bold; ">Address:</div>
+    <div class="floatleft" style="width: 250px;"><?php echo $this->entry->getProperty('postaladdress'); ?></div>
+   
+</div>
+
+
+
+
+

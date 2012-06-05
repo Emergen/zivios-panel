@@ -1,0 +1,114 @@
+#!/usr/bin/python -u
+#
+# Copyright (c) 2008 Zivios, LLC.
+#
+# This file is part of Zivios.
+#
+# Zivios is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Zivios is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+#
+# @package		Zivios
+# @copyright		Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+# @license		http://www.zivios.org/legal/license
+# @version		$Id: zsatisfy 892 2008-08-22 11:54:31Z gmustafa $
+#
+
+import sys                                
+import socket                             
+import ldap                               
+import datetime
+import time
+import re
+from time import gmtime, strftime
+
+def zsatisfy(data):
+	line = data.split(' ')
+	user = line[0]
+	dest = line[1]
+	server = sys.argv[1] ##'master.zivios.com'
+	keyword = user          
+	base = sys.argv[2] ##'dc=zivios,dc=com'
+	lc = ldap.open(server)       
+	lc.simple_bind_s("","")      
+	scope = ldap.SCOPE_SUBTREE     
+	filter = "uid=" + "*" + keyword + "*"
+	retrieve_attributes = None          
+	count = 0
+	result_set = []
+	timeout = 0
+	result_id = lc.search(base, scope, filter, retrieve_attributes)
+	while 1:
+		result_type, result_data = lc.result(result_id, timeout)
+		if (result_data == []):
+			break
+		else:
+			if result_type == ldap.RES_SEARCH_ENTRY:
+				result_set.append(result_data)
+
+			for i in range(len(result_set)):
+				for entry in result_set[i]:
+					name = entry[1]['cn'][0]
+					uid = entry[1]['uid'][0]
+					sactive = entry[1]['emssquidactive'][0]
+					try:
+						whitelist = entry[1]['emssquidwhitelist']
+					except:
+						whitelist = ''
+					try:
+						blacklist = entry[1]['emssquidblacklist']
+					except:
+						blacklist = ''
+					try:
+						timerange = entry[1]['emssquidtimeofday'][0]
+					except:
+						timerange = ''
+					count = count + 1
+					if timerange!="":
+						timerange = timerange.split('|')
+						weekdays = timerange[0]
+						s_hour = timerange[1]
+						e_hour = timerange[2]
+						s_time = time.strptime(s_hour, '%I:%M%p')
+						e_time = time.strptime(e_hour, '%I:%M%p')
+						c_time = time.strptime(time.strftime('%I:%M%p'), '%I:%M%p')
+
+					if sactive == 'Y' and sactive!='':
+						if timerange!="":
+							if s_time < c_time and e_time < c_time:
+								return 0
+							if time.strftime('%w') not in weekdays:
+								return 0
+						for url in whitelist:
+							match = re.match(re.compile("(.*)"+url+"", re.S), dest)
+							if not match:
+								return 0
+							else:
+								return 1
+						for url in blacklist:
+							match = re.match(re.compile("(.*)"+url+"", re.S), dest)
+							if not match:
+								continue
+							else:
+								return 0
+						return 1
+					else:
+						return 0
+		
+while True:
+	line = sys.stdin.readline()
+	line = line.strip()
+	data = line
+	if zsatisfy(data):
+			sys.stdout.write("OK\n")
+	else:
+			sys.stdout.write("ERR\n")

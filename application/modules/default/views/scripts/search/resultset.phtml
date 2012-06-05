@@ -1,0 +1,47 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     Zivios
+ * @copyright   Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+if (is_array($this->returnResults) && !empty($this->returnResults)) {
+    $size = count($this->returnResults);
+    ?>
+    <div class="info"><?php echo $size; ?> Search Results Found. Displaying Results 1-<?php echo $size;?>.</div>
+    <div class="clear"></div>
+    <?php
+    $c = 1;
+    foreach ($this->returnResults as $srst) {
+        if ($c % 2) {
+            echo '<div class="clearboth"></div>';
+        }
+        ?>
+        <div class="floatleft" style="margin-left: 5px; height: 20px; width: 10px; background-color: #e5e5e5;">&nbsp;</div>
+        <div class="floatleft" style="height: 20px; width: 200px; padding-left: 3px;">
+        <a href="#" onClick="zivios.cpaneRefresh('dirdata', '/default/search/forwardtoresult/dn/<?php 
+            echo urlencode($srst->getdn());?>'); return false;"><?php echo $srst->getProperty('cn'); ?></a></div>
+        <?php
+        $c++;
+    }
+} else {
+    ?>
+    <div class="alert">No Results found.</div>
+    <?php
+}

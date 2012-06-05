@@ -1,0 +1,459 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     mod_dns
+ * @copyright   Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+
+$soaRecord  = $this->zone->getAllRecords('SOA');
+$mxRecords  = $this->zone->getAllRecords('MX');
+$aRecords   = $this->zone->getAllRecords('A');
+$cRecords   = $this->zone->getAllRecords('CNAME');
+$nsRecords  = $this->zone->getAllRecords('NS');
+$txtRecords = $this->zone->getAllRecords('TXT');
+$srvRecords = $this->zone->getAllRecords('SRV');
+?>
+<!-- SOA Record -->
+<div style="margin: 0px auto; width: 520px;">
+<div style="width: 510px; border-bottom: 1px solid #477795; border-top: 1px solid #477795; 
+    background: #7c849c; padding: 5px; color: #fff;"><b>Start of Authority (SOA) Record</b></div>
+
+<div class="dnszdhead">Primary DNS</div>
+<div class="dnszdhead" style="width: 250px;">Email</div>
+<div class="dnszdhead">Refresh Rate</div>
+<div class="clearboth"></div>
+
+<div class="dnszdinf"><?php echo $soaRecord[0]->getProperty('dlzprimaryns');?></div>
+<div class="dnszdinf" style="width: 250px;"><?php echo $soaRecord[0]->getProperty('dlzadminemail');?></div>
+<div class="dnszdinf"><?php echo $soaRecord[0]->getProperty('dlzrefresh');?></div>
+<div class="clearboth"></div>
+
+<div class="dnszdhead">Expire Time</div>
+<div class="dnszdhead">Default TTL</div>
+<div class="dnszdhead" style="width: 165px;">Retry Rate</div>
+<div class="dnszdhead" style="width: 75px;">Options</div>
+<div class="clearboth"></div>
+
+<div class="dnszdinf"><?php echo $soaRecord[0]->getProperty('dlzexpire');?></div>
+<div class="dnszdinf"><?php echo $soaRecord[0]->getProperty('dlzttl');?></div>
+<div class="dnszdinf" style="width: 165px;"><?php echo $soaRecord[0]->getProperty('dlzretry');?></div>
+<div class="dnszdinf" style="width: 75px;">
+    <?php
+    // Content pane ID is based on the stripped cn of the zone entry.
+    $strpCn = strtolower(preg_replace("/[^a-z0-9]/i", "", $this->zone->getProperty('cn')));
+    $cpId   = $strpCn . '-dnszeopts';
+    ?>
+    <div dojoType="dijit.form.Button" iconClass="genericIcon editIcon" showLabel="false">
+        <script type="dojo/connect" event="onClick">
+            zivios.cpaneRefresh(
+            '<?php echo $cpId; ?>', // cpane target
+            '/dns/service/getrecordentryform/zonedn/<?php 
+                echo urlencode($this->zone->getdn()); ?>/dn/<?php 
+                echo urlencode($this->service->getdn());?>/recorddn/<?php 
+                echo urlencode($soaRecord[0]->getdn()); ?>'
+            );
+        </script>
+    </div>
+</div>
+<div class="clearboth"></div>
+
+</div>
+<br />
+<!-- MX Record -->
+<div style="margin: 0px auto; width: 520px;">
+<div style="width: 510px; border-bottom: 1px solid #477795; border-top: 1px solid #477795; 
+    background: #7c849c; padding: 5px; color: #fff;"><b>Mail eXchange (MX) Records</b></div>
+
+<div class="dnszdhead" style="width: 165px;">Mail Host</div>
+<div class="dnszdhead">Preference</div>
+<div class="dnszdhead">TTL</div>
+<div class="dnszdhead" style="text-align: center; width: 75px;">Options</div>
+<div class="clearboth"></div>
+
+<?php
+if (is_array($mxRecords) && !empty($mxRecords)) {
+    foreach ($mxRecords as $mx) {
+    ?>
+    <div class="dnszdinf" style="width: 165px;"><?php echo $mx->getProperty('dlzdata');?></div>
+    <div class="dnszdinf"><?php echo $mx->getProperty('dlzpreference');?></div>
+    <div class="dnszdinf"><?php echo $mx->getProperty('dlzttl');?></div>
+    <div class="dnszdinf" style="text-align: center; width: 75px; vertical-align: middle;">
+        <?php
+        // Content pane ID is based on the stripped cn of the zone entry.
+        $strpCn = strtolower(preg_replace("/[^a-z0-9]/i", "", $this->zone->getProperty('cn')));
+        $cpId   = $strpCn . '-dnszeopts';
+        ?>
+        <div dojoType="dijit.form.Button" iconClass="genericIcon editIcon" showLabel="false">
+            <script type="dojo/connect" event="onClick">
+                zivios.cpaneRefresh(
+                '<?php echo $cpId; ?>', // cpane target
+                '/dns/service/getrecordentryform/zonedn/<?php 
+                    echo urlencode($this->zone->getdn()); ?>/dn/<?php 
+                    echo urlencode($this->service->getdn());?>/recorddn/<?php 
+                    echo urlencode($mx->getdn()); ?>'
+                );
+            </script>
+        </div>
+
+        <div dojoType="dijit.form.Button" iconClass="genericIcon deleteIcon" showLabel="false">
+            <script type="dojo/connect" event="onClick">
+                zivios.cpaneRefresh(
+                '<?php echo $cpId; ?>', // cpane target
+                '/dns/service/deleterecordentry/zonedn/<?php 
+                    echo urlencode($this->zone->getdn()); ?>/dn/<?php 
+                    echo urlencode($this->service->getdn());?>/recorddn/<?php 
+                    echo urlencode($mx->getdn()); ?>'
+                );
+            </script>
+        </div>
+    </div>
+    <div class="clearright"></div>
+    <?php
+    }
+} else {
+    // no MX records found. Display notice and option to add MX.
+    $strpCn = strtolower(preg_replace("/[^a-z0-9]/i", "", $this->zone->getProperty('cn')));
+    $cpId   = $strpCn . '-dnszeopts';
+    ?>
+    <div class="info">
+    No records found. <button dojoType="dijit.form.Button">Add a MX Record
+    <script type="dojo/connect" event="onClick">
+        zivios.cpaneRefresh(
+        '<?php echo $cpId; ?>',
+        '/dns/service/getrecordentryform/zonedn/<?php echo urlencode($this->zone->getdn()); ?>/dn/<?php echo urlencode($this->service->getdn());?>/et/MX'
+        );
+    </script>
+    </button>
+    </div>
+    <?php
+}
+?>
+</div>
+<br />
+<!-- A/AAAA Records -->
+<div style="margin: 0px auto; width: 520px;">
+<div style="width: 510px; border-bottom: 1px solid #477795; border-top: 1px solid #477795; 
+    background: #7c849c; padding: 5px; color: #fff;"><b>A/AAAA Records</b></div>
+
+<div class="dnszdhead">Host Name</div>
+<div class="dnszdhead" style="width: 165px;">IP Address</div>
+<div class="dnszdhead">TTL</div>
+<div class="dnszdhead" style="text-align: center; width: 75px;">Options</div>
+<div class="clearboth"></div>
+
+<?php
+if (is_array($aRecords) && !empty($aRecords)) {
+    foreach ($aRecords as $a) {
+    ?>
+    <div class="dnszdinf"><?php echo ($a->getProperty('cn') == '@') ? '' : $a->getProperty('cn'); ?></div>
+    <div class="dnszdinf" style="width: 165px;"><?php echo $a->getProperty('dlzipaddr');?></div>
+    <div class="dnszdinf"><?php echo $a->getProperty('dlzttl');?></div>
+
+    <div class="dnszdinf" style="text-align: center; width: 75px; vertical-align: middle;">
+        <?php
+        // Content pane ID is based on the stripped cn of the zone entry.
+        $strpCn = strtolower(preg_replace("/[^a-z0-9]/i", "", $this->zone->getProperty('cn')));
+        $cpId   = $strpCn . '-dnszeopts';
+        ?>
+        <div dojoType="dijit.form.Button" iconClass="genericIcon editIcon" showLabel="false">
+            <script type="dojo/connect" event="onClick">
+                zivios.cpaneRefresh(
+                '<?php echo $cpId; ?>', // cpane target
+                '/dns/service/getrecordentryform/zonedn/<?php 
+                    echo urlencode($this->zone->getdn()); ?>/dn/<?php 
+                    echo urlencode($this->service->getdn());?>/recorddn/<?php 
+                    echo urlencode($a->getdn()); ?>'
+                );
+            </script>
+        </div>
+
+        <div dojoType="dijit.form.Button" iconClass="genericIcon deleteIcon" showLabel="false">
+            <script type="dojo/connect" event="onClick">
+                zivios.cpaneRefresh(
+                '<?php echo $cpId; ?>', // cpane target
+                '/dns/service/deleterecordentry/zonedn/<?php 
+                    echo urlencode($this->zone->getdn()); ?>/dn/<?php 
+                    echo urlencode($this->service->getdn());?>/recorddn/<?php 
+                    echo urlencode($a->getdn()); ?>'
+                );
+            </script>
+        </div>
+    </div>
+    <div class="clearright"></div>
+    <?php
+    }
+} else {
+    // no A records found. Display notice and option to add A record
+    $strpCn = strtolower(preg_replace("/[^a-z0-9]/i", "", $this->zone->getProperty('cn')));
+    $cpId   = $strpCn . '-dnszeopts';
+    ?>
+    <div class="info">
+    No records found. <button dojoType="dijit.form.Button">Add an A/AAAA Record
+    <script type="dojo/connect" event="onClick">
+        zivios.cpaneRefresh(
+        '<?php echo $cpId; ?>',
+        '/dns/service/getrecordentryform/zonedn/<?php echo urlencode($this->zone->getdn()); ?>/dn/<?php echo urlencode($this->service->getdn());?>/et/A'
+        );
+    </script>
+    </button>
+    </div>
+    <?php
+}
+?>
+</div>
+<br />
+<!-- CNAME Records -->
+<div style="margin: 0px auto; width: 520px;">
+<div style="width: 510px; border-bottom: 1px solid #477795; border-top: 1px solid #477795; 
+    background: #7c849c; padding: 5px; color: #fff;"><b>CNAME Records</b></div>
+
+<div class="dnszdhead">Host Name</div>
+<div class="dnszdhead" style="width: 165px;">Alias</div>
+<div class="dnszdhead">TTL</div>
+<div class="dnszdhead" style="text-align: center; width: 75px;">Options</div>
+<div class="clearboth"></div>
+
+<?php
+if (is_array($cRecords) && !empty($cRecords)) {
+    foreach ($cRecords as $c) {
+    ?>
+    <div class="dnszdinf"><?php echo $c->getProperty('cn'); ?></div>
+    <div class="dnszdinf" style="width: 165px;"><?php echo $c->getProperty('dlzdata');?></div>
+    <div class="dnszdinf"><?php echo $c->getProperty('dlzttl');?></div>
+
+    <div class="dnszdinf" style="text-align: center; width: 75px; vertical-align: middle;">
+        <?php
+        // Content pane ID is based on the stripped cn of the zone entry.
+        $strpCn = strtolower(preg_replace("/[^a-z0-9]/i", "", $this->zone->getProperty('cn')));
+        $cpId   = $strpCn . '-dnszeopts';
+        ?>
+        <div dojoType="dijit.form.Button" iconClass="genericIcon editIcon" showLabel="false">
+            <script type="dojo/connect" event="onClick">
+                zivios.cpaneRefresh(
+                '<?php echo $cpId; ?>', // cpane target
+                '/dns/service/getrecordentryform/zonedn/<?php 
+                    echo urlencode($this->zone->getdn()); ?>/dn/<?php 
+                    echo urlencode($this->service->getdn());?>/recorddn/<?php 
+                    echo urlencode($c->getdn()); ?>'
+                );
+            </script>
+        </div>
+
+        <div dojoType="dijit.form.Button" iconClass="genericIcon deleteIcon" showLabel="false">
+            <script type="dojo/connect" event="onClick">
+                zivios.cpaneRefresh(
+                '<?php echo $cpId; ?>', // cpane target
+                '/dns/service/deleterecordentry/zonedn/<?php 
+                    echo urlencode($this->zone->getdn()); ?>/dn/<?php 
+                    echo urlencode($this->service->getdn());?>/recorddn/<?php 
+                    echo urlencode($c->getdn()); ?>'
+                );
+            </script>
+        </div>
+    </div>
+    <div class="clearright"></div>
+    <?php
+    }
+} else {
+    // no CNAME records found. Display notice and option to add CNAME record
+    $strpCn = strtolower(preg_replace("/[^a-z0-9]/i", "", $this->zone->getProperty('cn')));
+    $cpId   = $strpCn . '-dnszeopts';
+    ?>
+    <div class="info">
+    No records found. <button dojoType="dijit.form.Button">Add a CNAME Record
+    <script type="dojo/connect" event="onClick">
+        zivios.cpaneRefresh(
+        '<?php echo $cpId; ?>',
+        '/dns/service/getrecordentryform/zonedn/<?php echo urlencode($this->zone->getdn()); ?>/dn/<?php echo urlencode($this->service->getdn());?>/et/CNAME'
+        );
+    </script>
+    </button>
+    </div>
+    <?php
+}
+?>
+</div>
+<br />
+<!-- TXT Records -->
+<div style="margin: 0px auto; width: 520px;">
+<div style="width: 510px; border-bottom: 1px solid #477795; border-top: 1px solid #477795; 
+    background: #7c849c; padding: 5px; color: #fff;"><b>TXT Records</b></div>
+
+<div class="dnszdhead">Name</div>
+<div class="dnszdhead" style="width: 165px;">Value</div>
+<div class="dnszdhead">TTL</div>
+<div class="dnszdhead" style="text-align: center; width: 75px;">Options</div>
+<div class="clearboth"></div>
+
+<?php
+if (is_array($txtRecords) && !empty($txtRecords)) {
+    foreach ($txtRecords as $t) {
+    ?>
+    <div class="dnszdinf"><?php echo $t->getProperty('cn'); ?></div>
+    <div class="dnszdinf" style="width: 165px;"><?php echo $t->getProperty('dlzdata');?></div>
+    <div class="dnszdinf"><?php echo $t->getProperty('dlzttl');?></div>
+
+    <div class="dnszdinf" style="text-align: center; width: 75px; vertical-align: middle;">
+        <?php
+        // Content pane ID is based on the stripped cn of the zone entry.
+        $strpCn = strtolower(preg_replace("/[^a-z0-9]/i", "", $this->zone->getProperty('cn')));
+        $cpId   = $strpCn . '-dnszeopts';
+        ?>
+        <div dojoType="dijit.form.Button" iconClass="genericIcon editIcon" showLabel="false">
+            <script type="dojo/connect" event="onClick">
+                zivios.cpaneRefresh(
+                '<?php echo $cpId; ?>', // cpane target
+                '/dns/service/getrecordentryform/zonedn/<?php 
+                    echo urlencode($this->zone->getdn()); ?>/dn/<?php 
+                    echo urlencode($this->service->getdn());?>/recorddn/<?php 
+                    echo urlencode($t->getdn()); ?>'
+                );
+            </script>
+        </div>
+
+        <div dojoType="dijit.form.Button" iconClass="genericIcon deleteIcon" showLabel="false">
+            <script type="dojo/connect" event="onClick">
+                zivios.cpaneRefresh(
+                '<?php echo $cpId; ?>', // cpane target
+                '/dns/service/deleterecordentry/zonedn/<?php 
+                    echo urlencode($this->zone->getdn()); ?>/dn/<?php 
+                    echo urlencode($this->service->getdn());?>/recorddn/<?php 
+                    echo urlencode($t->getdn()); ?>'
+                );
+            </script>
+        </div>
+    </div>
+    <div class="clearright"></div>
+    <?php
+    }
+} else {
+    // no TXT records found. Display notice and option to add TXT record
+    $strpCn = strtolower(preg_replace("/[^a-z0-9]/i", "", $this->zone->getProperty('cn')));
+    $cpId   = $strpCn . '-dnszeopts';
+    ?>
+    <div class="info">
+    No records found. <button dojoType="dijit.form.Button">Add a TXT Record
+    <script type="dojo/connect" event="onClick">
+        zivios.cpaneRefresh(
+        '<?php echo $cpId; ?>',
+        '/dns/service/getrecordentryform/zonedn/<?php echo urlencode($this->zone->getdn()); ?>/dn/<?php echo urlencode($this->service->getdn());?>/et/TXT'
+        );
+    </script>
+    </button>
+    </div>
+    <?php
+}
+?>
+</div>
+<br />
+<!-- SRV Records -->
+<div style="margin: 0px auto; width: 520px;">
+<div style="width: 510px; border-bottom: 1px solid #477795; border-top: 1px solid #477795; 
+    background: #7c849c; padding: 5px; color: #fff;"><b>SRV Records</b></div>
+
+<div class="dnszdhead">Service</div>
+<div class="dnszdhead" style="width: 165px;">Data</div>
+<div class="dnszdhead">TTL</div>
+<div class="dnszdhead" style="text-align: center; width: 75px;">Options</div>
+<div class="clearboth"></div>
+
+<?php
+if (is_array($srvRecords) && !empty($srvRecords)) {
+    foreach ($srvRecords as $s) {
+    ?>
+    <div class="dnszdinf"><?php echo $s->getProperty('cn'); ?></div>
+    <div class="dnszdinf" style="width: 165px;"><?php echo $s->getProperty('dlzdata');?></div>
+    <div class="dnszdinf"><?php echo $s->getProperty('dlzttl');?></div>
+    <div class="dnszdinf" style="text-align: center; width: 75px; vertical-align: middle;">
+        <?php
+        // Content pane ID is based on the stripped cn of the zone entry.
+        $strpCn = strtolower(preg_replace("/[^a-z0-9]/i", "", $this->zone->getProperty('cn')));
+        $cpId   = $strpCn . '-dnszeopts';
+        ?>
+        <div dojoType="dijit.form.Button" iconClass="genericIcon editIcon" showLabel="false">
+            <script type="dojo/connect" event="onClick">
+                zivios.cpaneRefresh(
+                '<?php echo $cpId; ?>', // cpane target
+                '/dns/service/getrecordentryform/zonedn/<?php 
+                    echo urlencode($this->zone->getdn()); ?>/dn/<?php 
+                    echo urlencode($this->service->getdn());?>/recorddn/<?php 
+                    echo urlencode($s->getdn()); ?>'
+                );
+            </script>
+        </div>
+
+        <div dojoType="dijit.form.Button" iconClass="genericIcon deleteIcon" showLabel="false">
+            <script type="dojo/connect" event="onClick">
+                zivios.cpaneRefresh(
+                '<?php echo $cpId; ?>', // cpane target
+                '/dns/service/deleterecordentry/zonedn/<?php 
+                    echo urlencode($this->zone->getdn()); ?>/dn/<?php 
+                    echo urlencode($this->service->getdn());?>/recorddn/<?php 
+                    echo urlencode($s->getdn()); ?>'
+                );
+            </script>
+        </div>
+    </div>
+    <div class="clearright"></div>
+    <?php
+    }
+} else {
+    // no SRV records found. Display notice and option to add SRV record
+    $strpCn = strtolower(preg_replace("/[^a-z0-9]/i", "", $this->zone->getProperty('cn')));
+    $cpId   = $strpCn . '-dnszeopts';
+    ?>
+    <div class="info">
+    No records found. <button dojoType="dijit.form.Button">Add a SRV Record
+    <script type="dojo/connect" event="onClick">
+        zivios.cpaneRefresh(
+        '<?php echo $cpId; ?>',
+        '/dns/service/getrecordentryform/zonedn/<?php echo urlencode($this->zone->getdn()); ?>/dn/<?php echo urlencode($this->service->getdn());?>/et/SRV'
+        );
+    </script>
+    </button>
+    </div>
+    <?php
+}
+?>
+</div>
+<br />
+
+<style tyle="text/css">
+.dnszdhead {
+    float: left;
+    width: 120px;
+    border-bottom: 1px solid #ccc;
+    background: #e5e5e5;
+    margin-left: 0px;
+    padding: 5px;
+    font-weight: bold;
+
+}
+.dnszdinf {
+    width: 120px;
+    border-bottom: 1px solid #ccc;
+    background: #fff;
+    float: left;
+    clear: right;
+    padding: 5px;
+    height: 23px;
+}
+</style>
+

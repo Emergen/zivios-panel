@@ -1,0 +1,51 @@
+<?php
+/**
+ * Copyright (c) 2008-2010 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		ZiviosInstaller
+ * @copyright	Copyright (c) 2008-2010 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ **/
+
+$formid   = Zivios_Util::randomString(8);
+$regexLib = Zivios_Util::getRegexLibrary();
+?>
+<div class="heading">Zivios Agent and Web Panel Configuration | Final Step.</div>
+
+<div class="content">Zivios has completed configuration and initialization of all 
+required services. Zivios will now configure the Zivios Agent service as well as 
+the web panel service.<br /><br />
+</div>
+
+<div class="subheading">Configure Zivios Agent and Panel</div>
+<div class="content" style="padding: 10px;">
+
+    <form id='<?php echo $formid; ?>' enctype="application/x-www-form-urlencoded" method="post" 
+        action="#" dojoType="dijit.form.Form">
+
+    <input onclick="installer.postxhr('/installer/index/processinizv', '', '<?php echo $formid; ?>',
+        'form', 'json', [], ['loadingmsg'], ['loadingmsg'], [], this.id); return false;" 
+        name="inizv" value="Configure Zivios Agent and Panel" 
+        type="submit" label="Configure Zivios Agent and Panel" dojoType="dijit.form.Button"
+        style="margin-left: 0px;"/>
+    <div class="cboth"></div>
+
+    <input type="hidden" name="zvconfig[rq_digits_finalize_Finalize+Install]" value="1"/>
+    </form>
+
+</div>

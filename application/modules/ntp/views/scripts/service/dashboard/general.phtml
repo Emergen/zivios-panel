@@ -1,0 +1,124 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     mod_dns
+ * @copyright   Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+?>
+<p class="headline">NTP Service Control</p>
+
+<?php 
+if (!$this->service->pingZiviosAgent()):
+?>
+    <div class="dashboarddl">Zivios Agent Status:</div>
+    <div class="dashboarddr"><span style="color: red; font-weight: bold;">Offline</span></div>
+    <div class="clearline"></div>
+    <br />
+    <div class="alert">
+    Agent on host <b><?php echo $this->service->getMasterComputer()->getdn();?></b> could not be contacted. The agent
+    is required for live statistics and detailed information
+    </div>
+<?php 
+else:
+?>
+    <div class="dashboarddl">Zivios Agent Status:</div>
+    <div class="dashboarddr"><span style="color: green; font-weight: bold;">Online</span></div>
+    <div class="clearline"></div>
+
+    <div class="dashboarddl">NTP Service Status:</div>
+    <div class="dashboarddr">
+        <?php
+        if ($this->service->getServiceStatus()) {
+            $srvstatus     = '<span style="color: green; font-weight: bold;">Running</span>';
+            $serviceOption = 'Stop Service';
+        } else {
+            $srvstatus     = '<span style="color: red; font-weight: bold;">Stopped</span>';
+            $serviceOption = 'Start Service';
+        }
+        echo $srvstatus;
+        ?>
+    </div>
+    <div class="clearline"></div>
+
+    <div class="dashboarddl">NTP Service Control:</div>
+    <div class="dashboarddr">
+        <button id="stopntp" class="smallbutton" dojoType="dijit.form.Button">Stop
+        <script type="dojo/connect" event="onClick">
+            zivios.callAction('/ntp/service/servicectrl',{
+            dn: '<?php echo urlencode($this->service->getdn());?>',
+            action: 'stop'},'stopntp');
+        </script>
+        </button>
+        <button id="startntp" class="smallbutton" dojoType="dijit.form.Button">Start
+        <script type="dojo/connect" event="onClick">
+            zivios.callAction('/ntp/service/servicectrl',{
+            dn: '<?php echo urlencode($this->service->getdn());?>',
+            action: 'start'},'startntp');
+        </script>
+        </button>
+
+    </div>
+    <div class="clearline"></div>
+
+<br />
+<p class="headline">NTP Service Information</p>
+
+<div class="dashboarddl">Master Computer : </div>
+<div class="dashboarddr"><?php echo $this->service->getMasterComputer()->getProperty('cn');?></div> 
+                        
+<div class="clearline"></div>
+
+<div class="dashboarddl">Server Time : </div>
+<div class="dashboarddr"><?php echo $this->service->getServerTime(); ?></div> 
+                        
+<div class="clearline"></div>
+
+<div class="dashboarddl">System Timezone: </div>
+<div class="dashboarddr"><?php echo $this->service->getTimeZone(); ?></div>
+<div class="clearline"></div>
+
+<div class="dashboarddl">System GMT OffSet: </div>
+<div class="dashboarddr">GMT <?php echo $this->service->getGmtOffset(); ?></div>
+<div class="clearline"></div>
+
+<?php 
+endif;
+?>
+
+<style type="text/css">
+.dashboarddl {
+    float: left; 
+    width: 125px;
+    padding: 5px;
+    clear: left;
+    vertical-align: middle;
+}
+
+.dashboarddr {
+    float: left;
+    clear: right;
+    padding: 5px;
+}
+
+.clearline {
+    clear: both;
+    border-bottom: 1px solid #e7e7e7;
+}
+</script>

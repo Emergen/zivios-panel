@@ -1,0 +1,99 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		Zivios
+ * @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ **/
+
+Zend_Dojo_View_Helper_Dojo::setUseDeclarative();
+$this->dojo()->enable();
+
+$this->borderContainer()->captureStart('routinglayout', array('design' => 'sidebar', 'style' => 
+    'width: 100%; padding: 0px; margin: 0px; border: 0px;'));
+
+$this->contentPane()->captureStart('routinggeneral', array('region' => 'left', 'splitter' => 'true', 
+    'style' => 'width: 450px; padding: 0px; margin: 0px; border-left: 0px; border-top: 0px; border-bottom: 0px;',
+     'href' => '/mail/service/routinggeneral/dn/'.urlencode($this->entry->getdn())));
+
+
+echo $this->contentPane()->captureEnd('routinggeneral');
+
+ 
+$this->contentPane()->captureStart('relaydomainscp', array('region' => 'top', 'style' => 'padding: 0px; 
+                margin: 0px; border-right: 0px; border-top: 0px; border-bottom: 1px; height: 50%;'));
+
+$this->borderContainer()->captureStart('relaydomainssection', array('design' => 'headline', 
+    'style' => 'width: 99%; padding: 0px; margin: 0px; border: 0px;'));
+
+/*
+* Relay Domains BC
+*/
+ 
+$this->contentPane()->captureStart('relaydomainsdisplay', array('region' => 'top', 'style' => 'padding: 0px; 
+    margin: 0px; border: 0px; border-top: 0px; height: 70%;',
+                     'href' => '/mail/service/relaydomainsdisplay/dn/'.urlencode($this->entry->getdn())));
+
+
+echo $this->contentPane()->captureEnd('relaydomainsdisplay');
+
+$this->contentPane()->captureStart('relaydomainsform', array('region' => 'center', 'style' => 'padding: 0px; 
+                          margin: 0px; border-left: 0px; border-right: 0px; border-top: 0px; height: 30%;',
+                          'href' => '/mail/service/relaydomainsform/dn/'.urlencode($this->entry->getdn())));
+
+
+echo $this->contentPane()->captureEnd('relaydomainsform');
+
+
+
+echo $this->borderContainer()->captureEnd('relaydomainssection');
+
+echo $this->contentPane()->captureEnd('relaydomainscp');
+
+$this->contentPane()->captureStart('transportcp', array('region' => 'bottom', 'style' => 'padding: 0px; 
+    margin: 0px; border: 0px; border-top: 0px; height: 50%;'));
+
+$this->borderContainer()->captureStart('transportsection', array('design' => 'headline', 
+    'style' => 'width: 99%; padding: 0px; margin: 0px; border: 0px;'));
+
+/*
+* Transport BC
+*/
+ 
+$this->contentPane()->captureStart('transportdisplay', array('region' => 'top', 'style' => 'padding: 0px; 
+                     margin: 0px; border: 0px; border-top: 0px; height: 50%;',
+                     'href' => '/mail/service/transportdisplay/dn/'.urlencode($this->entry->getdn())));
+
+
+echo $this->contentPane()->captureEnd('transportdisplay');
+
+$this->contentPane()->captureStart('transportform', array('region' => 'center', 'style' => 'padding: 0px; 
+                          margin: 0px; border-left: 0px; border-right: 0px; border-top: 0px; height: 50%;',
+                          'href' => '/mail/service/transportform/dn/'.urlencode($this->entry->getdn())));
+
+
+echo $this->contentPane()->captureEnd('transportform');
+
+
+
+echo $this->borderContainer()->captureEnd('transportsection');
+
+// End border container layout
+echo $this->contentPane()->captureEnd('transportcp');
+echo $this->borderContainer()->captureEnd('routinglayout');

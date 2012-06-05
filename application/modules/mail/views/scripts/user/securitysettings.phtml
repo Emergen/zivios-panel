@@ -1,0 +1,76 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		mod_mail
+ * @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ * @version		$Id: securitysettings.phtml 1005 2008-09-03 11:36:35Z fkhan $
+ * @lastchangeddate $LastChangedDate: 2008-09-03 16:36:35 +0500 (Wed, 03 Sep 2008) $
+ **/
+
+?>
+
+	<div style="padding-left: 10px;">
+	<form id="mboxsecupdate" method="post" action="#" onsubmit="return false;" style="width:498px; padding-left:0px">
+	<fieldset>
+	<legend>Security Settings</legend>
+
+    <label for="">Security Class: </label>
+    <select name="secclass">
+	<?php
+	foreach ($this->dashboardData['secclasses'] as $secclass) {
+	?>
+	<option value="<?php echo $secclass;?>"><?php echo $secclass;?></option>
+    <?php
+    }
+    ?>
+    </select>
+    <br />
+    <label for="">Max Message Size (MB): </label>
+		<input id="maxmailsize" type="text" size="38" value="<?php
+		echo $this->dashboardData['maxmailsize'];?>" name="maxmailsize" maxlength="8" /><br />
+	<label for="">Sender Black Lists (one address per line): </label>
+		<textarea rows=6 cols=33 name="blacklist"><?php
+		echo $this->dashboardData['blacklist'];?></textarea><br />
+
+    <label for="">Sender White Lists (one address per line): </label>
+	    <textarea rows=6 cols=33 name="whitelist"><?php
+	    echo $this->dashboardData['whitelist'];?></textarea><br />
+
+    <label for="">Spam Tag 1 Level: </label>
+		<input id="spamtagone" type="text" size="38" value="<?php
+		echo $this->dashboardData['spamtagone'];?>" name="spamtagone" maxlength="4" /><br />
+    <label for="">Add **SPAM** Level: </label>
+		<input id="spamtagtwo" type="text" size="38" value="<?php
+		echo $this->dashboardData['spamtagtwo'];?>" name="spamtagtwo" maxlength="4" /><br />
+     <label for="">Spam Block Level: </label>
+		<input id="spamkill" type="text" size="38" value="<?php
+		echo $this->dashboardData['spamkill'];?>" name="spamkill" maxlength="4" /><br />
+
+	<input type="submit" value="Update Security Settings"
+		onclick="javascript:callAjaxRender('mboxsecupdate','/mail/user/updatemboxsecurity','innermailuser');">
+	<br />
+	</fieldset>
+
+	<input type=hidden name="operate_dn" value="<?php echo $this->obj->getdn(); ?>" />
+	</form>
+	</div>
+
+
+

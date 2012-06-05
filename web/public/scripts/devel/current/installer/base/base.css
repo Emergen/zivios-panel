@@ -1,0 +1,466 @@
+/**
+ * Copyright (c) 2008-2010 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		mod_installer
+ * @copyright	Copyright (c) 2008-2010 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ **/
+
+@import url("../../dijit/themes/tundra/tundra.css");
+
+html, body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    line-height: 18px;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    color: #000;
+}
+
+a {
+    outline: none;
+    color: #00688B;
+    background-color:transparent;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+    border-bottom: 1px dashed #00688B;
+}
+
+a img {
+    border: 0px;
+}
+
+p {
+    margin: 5 0 5 0px;
+    padding: 3px;
+}
+
+div.heading {
+    font-weight: bold;
+    margin-right: 5px;
+    font-size: 13px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #ccc;
+    padding: 5px;
+}
+
+div.content  {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+div.subheading {
+    font-weight: bold;
+    margin-right: 5px;
+    font-size: 12px;
+    margin-bottom: 5px;
+    border-bottom: 1px dotted #e5e5e5;
+    color: #666;
+    padding: 5px;
+}
+
+p.toolbar  {
+    padding: 0px;
+    margin: 0px;
+}
+
+#preloader {
+    background: #fff url(../../../../../imgs/zloading01.gif) top left no-repeat;
+    padding-left: 20px;
+}
+
+#headerContent {
+    height: 105px;
+}
+
+#headerLeft {
+    background: #fff url(../../../../../imgs/zlogo.gif) top left no-repeat;
+    padding: 5px 10px 0px 0px;
+    float: left;
+    width: 250px;
+    height: 92px;
+}
+
+#headerRight {
+    float: left;
+}
+
+.loadingmsg {
+    width: 60px;
+    background-color: #e2e2e2;
+}
+
+#systemError {
+    width: 550px;
+}
+
+#resumeInstall {
+    width: 550px;
+}
+
+#errorMessage {
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 16px;
+    border: 1px dashed #e2e2e2;
+    padding: 5px;
+    background: #fafafa;
+}
+
+#mainTop {
+    
+}
+
+#mainLeft {
+    width: 200px;
+}
+
+#mainContent {
+    min-width: 500px;
+}
+
+#mainRight {
+    width: 300px;
+}
+
+#js_clock {
+    color: #838B8B;
+}
+
+#footer {
+}
+
+#primaryLayout {
+    width:  100%;
+    height: 100%;
+}
+
+#bctop {
+    height: 5%;
+    background-color: #eee;
+}
+
+#bcmiddle {
+    height: auto;
+}
+
+#bcbottom {
+    height: 70%;
+}
+
+#installerProgressHead {
+    line-height: 14px;
+    padding: 5px;
+    border-bottom: 1px solid #e5e5e5;
+    padding-bottom: 8px;
+    text-align: right;
+}
+
+#installerProgressLog {
+    line-height: 14px;
+    padding: 5px;
+}
+
+#consoleHead {
+    line-height: 14px;
+    padding: 5px;
+    border-bottom: 1px solid #e5e5e5;
+    padding-bottom: 8px;
+    text-align: right;
+}
+
+#consoleLog {
+    line-height: 14px;
+    padding: 5px;
+    font-size: 11px;
+    font: Verdana, Arial;
+    color: #fff;
+    background-color: #000;
+    height: 300px;
+}
+
+#aboutZivios {
+    line-height: 14px;
+    padding: 5px;
+}
+
+#xhrloading {
+    position: absolute;
+    background:#D8E5F8;
+    width: 100px;
+    height: 20px;
+    left: 415px;
+    top: 1px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.alert {
+	color: #8B2323;
+	padding: 10px;
+	padding-left: 40px;
+	border-top: 3px solid #fe7b7a;
+	border-bottom: 3px solid #fe7b7a;
+	background: #FFD6D6 url(../../../../../imgs/status-alert.png) 10px 50% no-repeat;
+	margin-top: 0px;
+	margin-bottom: 5px;
+}
+
+.info {
+	border-top: 3px solid #ccc;
+	border-bottom: 3px solid #ccc;
+	background: #e5e5e5 url(../../../../../imgs/status-info.png) 10px 50% no-repeat;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	padding: 10px;
+	padding-left: 40px;
+}
+
+.note {
+    color: #8B6914;
+	border-top: 3px solid #fde179;
+	border-bottom: 3px solid #fde179;
+	background: #FEF6D8 url(../../../../../imgs/status-note.png) 10px 50% no-repeat;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	padding: 0px;
+	padding-left: 40px;    
+}
+
+.download {
+	color: #57861A;
+	border-top: 3px solid #c2df88;
+	border-bottom: 3px solid #c2df88;
+	background: #EEF7DD url(../../../../../imgs/status-download.png) 10px 50% no-repeat;
+}
+
+#notifyarea {
+    font-weight: bold;
+    color: #88a62e;
+    padding: 2px;
+    width: 250px;
+    height: auto;
+    float: left;
+}
+
+#notifydata {
+    padding: 10px;
+    font-weight: normal;
+    color: #000;
+}
+
+#alertarea {
+    font-weight: bold;
+    color: #DAA520;
+    padding: 2px;
+    width: 250px;
+    height: auto;
+    float: left;
+}
+
+#alertdata {
+    padding: 10px;
+    font-weight: normal;
+    color: #000;
+}
+
+#exceptionarea {
+    font-weight: bold;
+    color: #ff0000;
+    padding: 2px;
+    width: 300px;
+    height: auto;
+    float: left;
+}
+
+#exceptiondata {
+    padding: 10px;
+    font-weight: normal;
+    color: #000;
+}
+
+.errorMsgDiv {
+    padding: 10px;
+    font-size: 12px;
+	border: 1px solid #fe7b7a;
+	background-color: #FFD6D6;
+    color: #333;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#flashmsg {
+    width: 350px;
+    height: auto;
+    margin-top: 10px;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 10px;
+    opacity: 0;
+    text-align: center;
+    position: relative;
+    z-index: 10;
+}
+
+.toolbarcdiv {
+    float: right;
+    padding: 2px;
+}
+
+.dijitToolbarIcon
+{
+        background-image: url('../../../../../imgs/toolbar-installer.png');
+        background-repeat: no-repeat;
+        width: 18px;
+        height: 18px;
+        text-align: center;
+}
+
+.dijitToolbarIconNotifications { background-position: -145px; width: 90px; margin-right: 0px; }
+.dijitToolbarIconExceptions { background-position: -20px; width: 75px; }
+.dijitToolbarIconAlerts { background-position: -95px; width: 50px;}
+
+/* Override the tooltip font size. */
+.tundra .dijitTooltipContainer
+{
+    font-size: 10px;
+}
+
+#probeReport {
+    padding: 10px;
+}
+
+/* Reporting */
+.rheading {
+    font-weight: bold;
+    border-bottom: 2px solid #A2CD5A;
+    margin-top: 5px;
+}
+
+.rcontent {
+    padding-top: 10px;
+    color: #2E8B57;
+    font-weight: bold;
+}
+
+.rlc {
+    clear: left;
+    float: left;
+    background-color: #EEE9E9;
+    width: 130px;
+    padding: 5px;
+}
+
+.rrc {
+    float: left;
+    padding: 5px;
+    clear: right;
+    width: 150px;
+}
+
+dl {
+    position: relative;
+    width: 500px;
+}
+
+dt {
+    clear: both;
+    float:left;
+    width: 180px;
+    padding: 4px 0 2px 2px;
+    text-align: right;
+}
+
+dd {
+    float: left;
+    width: 300px;
+    margin: 0 0 8px 0;
+    padding-left: 6px;
+}
+
+.green {
+    color: green;
+}
+
+.red {
+    color: red;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.cboth {
+    clear: both;
+}
+
+/** form css **/
+
+label {
+    float: left;
+    line-height: 24px;
+    margin-top: 6px;
+    padding-right: 2px;
+    text-align: right;
+    width: 180px;
+}
+
+.disabledInput {
+    float: left;
+    line-height: 24px;
+    margin-top: 6px;
+    text-align: left;
+    padding-left: 2px;
+    width: 220px;
+    background-color: #e2e2e2;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.tundra .genField.dijitTextBox,                   
+.tundra .genField.dijitSpinner,                 
+.genField.dijitTextBox.dijitTimeTextBox,
+.tundra .dijitTextArea.genField
+{
+        margin:5px 0 0 0;
+        font-size: 11px;
+        width: 220px;
+        line-height: 16px;
+}
+
+.tundra .genField.dijitSpinner
+{
+}
+
+.genField.dijitTextBox,                                         
+.genField.dijitSpinner .dijitInputField,        
+.genField.dijitTextBox.dijitTimeTextBox,        
+.tundra .dijitTextArea.genField
+{
+        padding:5px;
+}
+
+.genField .dijitSpinnerButtonContainer
+{
+        line-height:24px;
+}
+

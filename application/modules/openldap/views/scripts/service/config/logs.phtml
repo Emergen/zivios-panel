@@ -1,0 +1,190 @@
+<?php
+/**
+ * Copyright (c) 2008-2010 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     mod_openldap
+ * @copyright   Copyright (c) 2008-2010 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+
+$formid = Zivios_Util::randomString(8);
+?>
+<p class="headline">Log Level Configuration</p>
+
+<form id='<?php echo $formid; ?>' enctype="application/x-www-form-urlencoded" method="post" 
+    action="#" dojoType="dijit.form.Form">
+
+<div class="clearboth" style="width: 660px; border-bottom: 1px solid #e5e5e5;"></div>
+<div style="width: 200px; padding: 10px; float: left;">
+    <div class="fleft">
+        <input name="loglevel[any]" dojoType="dijit.form.CheckBox" value="1" class="zfgenField" 
+       <?php if (in_array('any', $this->loglevel)) echo 'checked'; ?> />
+    </div>
+    <div class="fleft" style="padding-left: 2px;"><b>Log Level: -1</b><br/>Enable All Debugging</div>
+    <div class="clearboth"></div>
+</div>
+
+<div style="width: 200px; padding: 10px; float: left;">
+    <div class="fleft";>
+        <input name="loglevel[trace]" dojoType="dijit.form.CheckBox" value="1" class="zfgenField"
+        <?php if (in_array('trace', $this->loglevel)) echo 'checked'; ?> />
+    </div>
+    <div class="fleft" style="padding-left: 2px;"><b>Log Level: 1</b><br/>Trace Function Calls</div>
+    <div class="clearboth"></div>
+</div>
+
+<div style="width: 200px; padding: 10px; float: left;">
+    <div class="fleft";>
+        <input name="loglevel[packets]" dojoType="dijit.form.CheckBox" value="1" class="zfgenField"
+       <?php if (in_array('packets', $this->loglevel)) echo 'checked'; ?> />        
+    </div>
+    <div class="fleft" style="padding-left: 2px;"><b>Log Level: 2</b><br/>Debug Packet Handling</div>
+    <div class="clearboth"></div>
+</div>
+<div class="clearboth" style="width: 660px; border-bottom: 1px solid #e5e5e5;"></div>
+
+<div style="width: 200px; padding: 10px; float: left;">
+    <div class="fleft";>
+        <input name="loglevel[args]" dojoType="dijit.form.CheckBox" value="1" class="zfgenField"
+       <?php if (in_array('args', $this->loglevel)) echo 'checked'; ?> />        
+    </div>
+    <div class="fleft" style="padding-left: 2px;"><b>Log Level: 4</b><br/>Heavy Trace Debugging</div>
+    <div class="clearboth"></div>
+</div>
+
+<div style="width: 200px; padding: 10px; float: left;">
+    <div class="fleft";>
+        <input name="loglevel[conns]" dojoType="dijit.form.CheckBox" value="1" class="zfgenField"
+       <?php if (in_array('conns', $this->loglevel)) echo 'checked'; ?> />        
+    </div>
+    <div class="fleft" style="padding-left: 2px;"><b>Log Level: 8</b><br/>Connection Management</div>
+    <div class="clearboth"></div>
+</div>
+
+<div style="width: 200px; padding: 10px; float: left;">
+    <div class="fleft";>
+        <input name="loglevel[ber]" dojoType="dijit.form.CheckBox" value="1" class="zfgenField"
+       <?php if (in_array('ber', $this->loglevel)) echo 'checked'; ?> />        
+    </div>
+    <div class="fleft" style="padding-left: 2px;"><b>Log Level: 16</b><br/>Packet Transmission</div>
+    <div class="clearboth"></div>
+</div>
+<div class="clearboth" style="width: 660px; border-bottom: 1px solid #e5e5e5;"></div>
+
+<div style="width: 200px; padding: 10px; float: left;">
+    <div class="fleft";>
+        <input name="loglevel[filter]" dojoType="dijit.form.CheckBox" value="1" class="zfgenField"
+       <?php if (in_array('filter', $this->loglevel)) echo 'checked'; ?> />        
+    </div>
+    <div class="fleft" style="padding-left: 2px;"><b>Log Level: 32</b><br/>Search Filter Processing</div>
+    <div class="clearboth"></div>
+</div>
+
+<div style="width: 200px; padding: 10px; float: left;">
+    <div class="fleft";>
+        <input name="loglevel[config]" dojoType="dijit.form.CheckBox" value="1" class="zfgenField"
+       <?php if (in_array('config', $this->loglevel)) echo 'checked'; ?> />        
+    </div>
+    <div class="fleft" style="padding-left: 2px;"><b>Log Level: 64</b><br/> Configuration Processing</div>
+    <div class="clearboth"></div>
+</div>
+
+<div style="width: 200px; padding: 10px; float: left;">
+    <div class="fleft";>
+        <input name="loglevel[acl]" dojoType="dijit.form.CheckBox" value="1" class="zfgenField"
+       <?php if (in_array('acl', $this->loglevel)) echo 'checked'; ?> />        
+    </div>
+    <div class="fleft" style="padding-left: 2px;"><b>Log Level: 128</b><br/>ACL Processing</div>
+    <div class="clearboth"></div>
+</div>
+<div class="clearboth" style="width: 660px; border-bottom: 1px solid #e5e5e5;"></div>
+
+<div style="width: 200px; padding: 10px; float: left;">
+    <div class="fleft";>
+        <input name="loglevel[stats]" dojoType="dijit.form.CheckBox" value="1" class="zfgenField" 
+        <?php if (in_array('stats', $this->loglevel)) echo 'checked'; ?> />
+    </div>
+    <div class="fleft" style="padding-left: 2px;"><b>Log Level: 256</b><br/>Stats (conns/ops/results) </div>
+    <div class="clearboth"></div>
+</div>
+
+<div style="width: 200px; padding: 10px; float: left;">
+    <div class="fleft";>
+        <input name="loglevel[stats2]" dojoType="dijit.form.CheckBox" value="1" class="zfgenField"
+       <?php if (in_array('stats2', $this->loglevel)) echo 'checked'; ?> />
+    </div>
+    <div class="fleft" style="padding-left: 2px;"><b>Log Level: 512</b><br/>Stats2 (log entries)</div>
+    <div class="clearboth"></div>
+</div>
+
+<div style="width: 200px; padding: 10px; float: left;">
+    <div class="fleft";>
+        <input name="loglevel[shell]" dojoType="dijit.form.CheckBox" value="1" class="zfgenField"
+       <?php if (in_array('shell', $this->loglevel)) echo 'checked'; ?> />
+    </div>
+    <div class="fleft" style="padding-left: 2px;"><b>Log Level: 1024</b><br/>Shell Backend Communications</div>
+    <div class="clearboth"></div>
+</div>
+<div class="clearboth" style="width: 660px; border-bottom: 1px solid #e5e5e5;"></div>
+
+<div style="width: 200px; padding: 10px; float: left;">
+    <div class="fleft";>
+        <input name="loglevel[parse]" dojoType="dijit.form.CheckBox" value="1" class="zfgenField"
+        <?php if (in_array('parse', $this->loglevel)) echo 'checked'; ?> />
+    </div>
+    <div class="fleft" style="padding-left: 2px;"><b>Log Level: 2048</b><br/>Debug Entry Parsing</div>
+    <div class="clearboth"></div>
+</div>
+
+<div style="width: 200px; padding: 10px; float: left;">
+    <div class="fleft";>
+        <input name="loglevel[sync]" dojoType="dijit.form.CheckBox" value="1" class="zfgenField"
+       <?php if (in_array('sync', $this->loglevel)) echo 'checked'; ?> />
+    </div>
+    <div class="fleft" style="padding-left: 2px;"><b>Log Level: 16484</b><br/>Syncrepl Consumer Processing</div>
+    <div class="clearboth"></div>
+</div>
+
+<div style="width: 200px; padding: 10px; float: left;">
+    <div class="fleft";>
+        <input name="loglevel[none]" dojoType="dijit.form.CheckBox" value="1" class="zfgenField"
+       <?php if (in_array('none', $this->loglevel)) echo 'checked'; ?> />
+    </div>
+    <div class="fleft" style="padding-left: 2px;"><b>Log Level: 32768</b><br/>Message Logging Only</div>
+    <div class="clearboth"></div>
+</div>
+<div class="clearboth" style="width: 660px; border-bottom: 1px solid #e5e5e5;"></div>
+
+<div style="width: 200px; padding: 10px; float: left;">
+    <div class="fleft";>
+        <input name="loglevel[off]" dojoType="dijit.form.CheckBox" value="1" class="zfgenField"
+       <?php if (in_array('off', $this->loglevel)) echo 'checked'; ?> />
+    </div>
+    <div class="fleft" style="padding-left: 2px;"><b>Log Level: 0</b><br/>No Debugging</div>
+    <div class="clearboth"></div>
+</div>
+<div class="clearboth" style="width: 660px; border-bottom: 1px solid #e5e5e5;"></div>
+
+<input type="hidden" name="servicedn" value="<?php echo urlencode($this->service->getdn()); ?>"/>
+<input onclick="zivios.postxhr('/openldap/service/cfglogsupdate', '', '<?php echo $formid; ?>',
+    'form', 'json', [], [], [], [], this.id); return false;" name="cfglogupdate" value="Update Log Level" 
+     type="submit" label="Update Log Level" dojoType="dijit.form.Button"/>
+
+<div class="clearboth"></div>
+
+

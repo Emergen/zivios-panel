@@ -1,0 +1,78 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     mod_ca
+ * @copyright   Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+?>
+<div id="pgupdate">
+    <div style="padding-left: 10px;">
+        <div style="width: 180px;" class="floatleft"><b>Common Name(s)</b></div>
+        <div style="width: 230px;" class="floatleft"><b>Valid Till</b></div>
+        <div style="width: 100px;" class="floatleft"><b>Options</b></div>
+        <div class="clear"></div>
+    <?php
+    foreach ($this->pubCerts as $filename => $certificate) {
+        ?>
+        <div style="width: 180px;" class="floatleft"><?php
+        if (!is_array($certificate['subject']['CN']))
+            echo $certificate['subject']['CN'];
+        else {
+            /**
+             * If the CN returned is an array, we get the last CN set.
+             */
+            echo $certificate['subject']['CN'][sizeof($certificate['subject']['CN'])-1];
+        }
+        ?></div>
+        <div style="width: 230px;" class="floatleft"><?php echo $certificate['validTo']; ?></div>
+        <div style="width: 100px;" class="floatleft"><a href="#"
+            onClick="javascript:manageCrt('<?php echo $filename; ?>'); return false;">Manage</a></div>
+        <div class="clear"></div>
+        <?php
+    }
+    ?>
+    </div>
+</div>
+
+<script language="javascript">
+manageCrt = function(filename)
+{
+    var call = '/ca/service/managecert/';
+    var div = 'pgupdate';
+    var data = {operate_dn: "<?php echo $this->obj->getdn(); ?>", file: filename};
+    rpc = Object.toJSON(data);
+
+    var ma = new Ajax.Updater (
+        {success: div},
+        call,
+        {
+            method: 'get',
+            parameters: 'mr='+escape(rpc),
+            evalScripts: true,
+            onLoading: function(request) {
+                showNotify()
+            },
+            onComplete: function(request) {
+                hideNotify()
+            },
+        }
+    );
+}
+</script>

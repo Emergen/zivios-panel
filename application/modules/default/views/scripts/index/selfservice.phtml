@@ -1,0 +1,195 @@
+<?php
+/**
+ * Copyright (c) 2008-2010 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		Zivios
+ * @copyright	Copyright (c) 2008-2010 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ **/
+
+$actformid = Zivios_Util::randomString(8); // account form id
+$lgnformid = Zivios_Util::randomString(8); // login form id
+$regexLib  = Zivios_Util::getRegexLibrary();
+
+$this->userEntry = $this->user;
+?>
+<div dojoType="dijit.layout.TabContainer" style="width: 100%; height: 100%;" id="ztabs">
+    <div dojoType="dijit.layout.ContentPane" title="Dashboard" selected="true">
+        <h3><font color="green">Welcome</font> <?php echo $this->user->getProperty('cn');?>.</h3>
+        <div class="content">
+            <div style="float: left; width: 450px; border-right: 1px solid #e6e6e6;">
+            <div class="subheading">Account Details</div>
+
+                <form id='<?php echo $actformid; ?>' enctype="application/x-www-form-urlencoded" method="post" 
+                    action="#" dojoType="dijit.form.Form">    
+
+                <div class="zflabel" style="width: 150px;">First Name: </div>
+                <input name="userdata[rq_givenname_givenname_First+Name]" type="text" dojoType="dijit.form.ValidationTextBox" 
+                    size="16" maxlength="64" regExp="<?php echo $regexLib->exp->givenname; ?>" required="true" 
+                    invalidMessage="Invalid characters in field value." class="zfgenField"
+                    value="<?php echo $this->userEntry->getProperty('givenname'); ?>" />
+                <div class="cboth"></div>
+
+                <div class="zflabel" style="width: 150px;">Last Name: </div>
+                <input name="userdata[rq_sn_sn_Last+Name]" type="text" dojoType="dijit.form.ValidationTextBox" 
+                    size="16" maxlength="64" regExp="<?php echo $regexLib->exp->sn; ?>" required="true" 
+                    invalidMessage="Invalid characters in field value." class="zfgenField"
+                    value="<?php echo $this->userEntry->getProperty('sn'); ?>" />
+                <div class="cboth"></div>
+
+                <div class="zflabel" style="width: 150px;">Title: </div>
+                <input name="userdata[op_alnumwithspaces_title_Title]" type="text" dojoType="dijit.form.ValidationTextBox" 
+                    size="16" maxlength="64" regExp="<?php echo $regexLib->exp->alnumwithspaces; ?>" required="false" 
+                    invalidMessage="Invalid characters in field value." class="zfgenField"
+                    value="<?php echo $this->userEntry->getProperty('title'); ?>" />
+                <div class="cboth"></div>
+
+                <div class="zflabel" style="width: 150px;">Department: </div>
+                <input name="userdata[op_alnumwithspaces_ou_Department]" type="text" dojoType="dijit.form.ValidationTextBox" 
+                    size="16" maxlength="64" regExp="<?php echo $regexLib->exp->alnumwithspaces; ?>" required="false" 
+                    invalidMessage="Invalid characters in field value." class="zfgenField"
+                    value="<?php echo $this->userEntry->getProperty('ou'); ?>" />
+                <div class="cboth"></div>
+
+                <div class="zflabel" style="width: 150px;">Mobile Phone: </div>
+                <input name="userdata[op_phonenumber_mobile_Mobile+Phone]" type="text" dojoType="dijit.form.ValidationTextBox" 
+                    size="16" maxlength="64" regExp="<?php echo $regexLib->exp->phonenumber; ?>" required="false" 
+                    invalidMessage="Invalid characters in field value." class="zfgenField" 
+                    value="<?php echo $this->userEntry->getProperty('mobile'); ?>" />
+                <div class="cboth"></div>
+
+                <div class="zflabel" style="width: 150px;">Home Phone: </div>
+                <input name="userdata[op_phonenumber_homephone_Home+Phone]" type="text" dojoType="dijit.form.ValidationTextBox" 
+                    size="16" maxlength="64" regExp="<?php echo $regexLib->exp->phonenumber; ?>" required="false" 
+                    invalidMessage="Invalid characters in field value." class="zfgenField" 
+                    value="<?php echo $this->userEntry->getProperty('homephone'); ?>" />
+                <div class="cboth"></div>
+
+                <div class="zflabel" style="width: 150px;">Office Phone: </div>
+                <input name="userdata[op_phonenumber_telephonenumber_Office+Phone]" type="text" dojoType="dijit.form.ValidationTextBox" 
+                    size="16" maxlength="64" regExp="<?php echo $regexLib->exp->phonenumber; ?>" required="false" 
+                    invalidMessage="Invalid characters in field value." class="zfgenField" 
+                    value="<?php echo $this->userEntry->getProperty('telephonenumber'); ?>" />
+                <div class="cboth"></div>
+
+                <div class="zflabel" style="width: 150px;">Home Address: </div>
+                <input name="userdata[op_postaladdress_homepostaladdress_Home+Address]" type="text" dojoType="dijit.form.SimpleTextarea" style="width: 220px; height: 80px;" 
+                    class="zfgenField" required="false" value="<?php echo $this->userEntry->getProperty('homepostaladdress'); ?>"/>
+                <div class="cboth"></div>
+
+                <div class="zflabel" style="width: 150px;">&nbsp;</div>
+                <input onclick="zivios.postxhr('/default/user/updateuseraccount', '', '<?php echo $actformid; ?>',
+                    'form', 'json', [], [], [], [], this.id); return false;"
+                    name="zvadduser" value="Update Account Details"
+                    type="submit" label="Update Account Details" dojoType="dijit.form.Button" />
+                <div class="cboth"></div>
+
+                <input type="hidden" name="userdata[rq_dn_userdn_User+DN_enc]" value="<?php echo urlencode($this->userEntry->getdn()); ?>" />
+                </form>
+
+            </div>
+            <div style="float: left; margin-left: 5px;">
+            <div class="subheading">Update Your Password</div>
+
+                <form id='<?php echo $lgnformid; ?>' enctype="application/x-www-form-urlencoded" method="post" 
+                    action="#" dojoType="dijit.form.Form"> 
+
+                <div class="zflabel" style="width: 150px;">User Login: </div>
+                <input name="userlogindata[rq_uid_uid_User+Login]" type="text" dojoType="dijit.form.ValidationTextBox" 
+                    size="16" maxlength="64" regExp="<?php echo $regexLib->exp->uid; ?>" required="false" 
+                    invalidMessage="Invalid characters in field value." class="zfgenField" disabled="true"
+                    value="<?php echo $this->userEntry->getProperty('uid'); ?>" />
+                <div class="cboth"></div>
+
+                <div class="zflabel" style="width: 150px;">Password: </div>
+                <input name="userlogindata[rq_password_password_User+Password]" type="password" dojoType="dijit.form.ValidationTextBox" size="16" maxlength="64" 
+                    regExp="<?php echo $regexLib->exp->password; ?>" required="true" 
+                    invalidMessage="Invalid password specified" class="genField" 
+                    value="" />
+                <div class="cboth"></div>
+
+                <div class="zflabel" style="width: 150px;">Confirm Password: </div>
+                <input name="userlogindata[cmp_password_cpassword_Confirm+User+Password]" type="password" dojoType="dijit.form.ValidationTextBox" size="16" maxlength="64" 
+                    regExp="<?php echo $regexLib->exp->password; ?>" required="true" 
+                    invalidMessage="Invalid password specified" class="genField"
+                    value="" />
+                <div class="cboth"></div>
+
+                <div class="zflabel" style="width: 150px;">&nbsp;</div>
+                <input onclick="zivios.postxhr('/default/user/updateuserlogin', '', '<?php echo $lgnformid; ?>',
+                    'form', 'json', [], [], [], [], this.id); return false;"
+                    name="zvadduser" value="Update Login Details"
+                    type="submit" label="Update Login Details" dojoType="dijit.form.Button" />
+                <div class="cboth"></div>
+
+                <input type="hidden" name="userlogindata[rq_dn_userdn_User+DN_enc]" value="<?php echo urlencode($this->userEntry->getdn()); ?>" />
+                </form>
+
+            </div>
+            
+            <div class="info" style="float: left; margin-left: 25px; width: 300px;"?>
+                <?php
+                $plugin = $this->user->getPlugin('OpenldapUser');
+                
+
+                $locked = $plugin->getProperty('pwdaccountlockedtime');
+                if ($locked != "") {
+                    $locked = true;
+                    $unlock = "";
+                    $lock = "disabled";
+                    $status = "<font color='red'>Locked</font>";
+                }
+                else { 
+                    $locked = false;
+                    $unlock = "disabled";
+                    $lock = "";
+                    $status = "<font color='green'>Active</font>";
+                }
+                
+                
+                if ($plugin->isAdminLock()) {
+                    $status = "<font color='red'>Administrativly Locked</font>";
+                }
+                $date = $plugin->getProperty('pwdchangedtime');
+                $flags = array();
+                if (strtolower($plugin->getProperty('pwdreset')) == 'true')
+                    $flags[]="Password must be changed on next login";
+                
+                ?>
+                <table class="general">
+                <tr><td>Account Status:</td><td><?php echo $status;?></td></tr>
+                <?php if ($locked) { ?>
+                <tr><td>Account Locked Time: </td><td><?php echo Zivios_Util::ldapDateRender($plugin->getProperty('pwdaccountlockedtime'));?></td></tr>
+                <?php } ?>
+                <tr><td>Password Last Changed: </td><td><?php echo Zivios_Util::ldapDateRender($date);?></td></tr>
+                <tr><td>Password Expires: </td><td><?php echo Zivios_Util::tsRender($plugin->getExpiryDate()->getTimeStamp());?></td></tr>
+                <tr><td>Consecutive Password Failures: </td><td><?php echo sizeof($plugin->getProperty('pwdfailuretime'));?></td></tr>
+                <tr><td>Grace Logins: </td><td><?php echo sizeof($plugin->getProperty('pwdgraceusetime'));?></td></tr>
+                <tr><td>Flags: </td><td><?php echo implode(',',$flags);?></td></tr>
+                <tr><td>Applied Policy: </td><td><?php echo $plugin->getPolicy()->getProperty('cn')?></td></tr>
+                
+                
+                </table>
+                
+                
+                </div>
+            <div class="cboth"></div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,40 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     Zivios
+ * @copyright   Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+?>
+<p class="headline">Remove Squid Plugin from Group</p>
+
+<div class="alert alertcl" style="margin-left: 10px; width: 500px;">
+You are about to <b>remove</b> the Squid plugin from this group. All user access provisioned via
+this group  will also be removed.
+<br /><br />
+<b>Are you certain you wish to proceed?</b>
+</div>
+
+<div style="margin-left: 10px; margin-top: 5px;">
+    <button dojoType="dijit.form.Button" id="dosqgrpdel">Yes, Remove Squid Plugin
+        <script type="dojo/method" event="onClick">
+            zivios.callAction('/squid/group/dodelete', {dn: '<?php echo urlencode($this->entry->getdn());?>'},'dosqgrpdel');
+        </script>
+    </button>
+</div>

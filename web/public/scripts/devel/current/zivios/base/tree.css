@@ -1,0 +1,103 @@
+/**
+ * Copyright (c) 2008-2010 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     Zivios
+ * @copyright   Copyright (c) 2008-2010 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+
+#tree_menu {
+    background: #e5e5e5;
+    border: 1px solid #ccc;
+    font-size: 11px;
+}
+
+.treeIcon {
+    background-image: url('../../../../../imgs/directory-icons/tree.png');
+    height: 16px !important;
+    width: 16px !important;
+}
+
+.treeDirectoryContainerIcon {
+    background-position: -51px 0px;
+}
+
+.treeZiviosContainerIcon {
+    background-position: -88px 0px;
+}
+
+.treeControlContainerIcon {
+    background-position: -68px 0px;
+}
+
+.treeUserEntryIcon {
+    background-position: -28px 0px;
+}
+
+.treeGroupEntryIcon {
+    background-position: -106px 0px;
+}
+
+.treeGroupContainerIcon {
+    background-position: -106px 0px;
+}
+
+.treeServerContainerIcon {
+    background-position: -123px 0px;
+}
+
+.treeServerEntryIcon {
+    background-position: -123px 0px;
+}
+
+.treeServiceEntryIcon {
+    background-position: -158px 0px;
+}
+
+.treeServiceContainerIcon {
+    background-position: -178px 0px;
+}
+
+.treeUserContainerIcon {
+    background-position: -196px 0px;
+}
+
+.treeLocalityContainerIcon {
+    background-position: -214px 0px;
+}
+
+.treeBranchContainerIcon {
+    background-position: -234px 0px;
+}
+
+.treeCustomContainerIcon {
+    background-position: -254px 0px;
+}
+
+.treeDesktopEntryIcon {
+    background-position: -274px 0px;
+}
+
+.treeDesktopContainerIcon {
+    background-position: -294px 0px;
+}
+
+.treeManageAclsIcon {
+    background-position: -312px 0px;
+}
+

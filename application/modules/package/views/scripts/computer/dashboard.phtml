@@ -1,0 +1,42 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     mod_package
+ * @copyright   Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+ 
+
+$this->borderContainer()->captureStart('packagemain', array('design' => 'headline', 'style' => 
+    'width: 100%; padding: 0px; margin: 0px; border: 0px;'));
+
+$this->contentPane()->captureStart('packagedisplay', array('region' => 'top', 
+    'style' => 'height: 500px; padding: 0px; margin: 0px; border-left: 0px; border-top: 0px; border-bottom: 0px;',
+     'href' => '/package/computer/searchpackages/dn/'.urlencode($this->computer->getdn())));
+
+
+echo $this->contentPane()->captureEnd('packagedisplay');
+
+$this->contentPane()->captureStart('packageform', array('region' => 'center', 
+    'style' => 'height: 150px; padding: 0px; margin: 0px; border-left: 0px; border-top: 0px; border-bottom: 0px;'));
+
+echo $this->render('computer/searchform.phtml');
+echo $this->contentPane()->captureEnd('packageform');
+
+echo $this->borderContainer()->captureEnd('packagemain');

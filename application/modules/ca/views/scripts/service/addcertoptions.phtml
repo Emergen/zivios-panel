@@ -1,0 +1,92 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     mod_ca
+ * @copyright   Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+?>
+<div id="pgupdate">
+    <div style="padding-left: 10px;">
+    Getting Started: Step 1.
+    <hr size="1" width="95%" />
+
+    <form id="gencert" method="post" action="#" onsubmit="return false;"
+        style="padding-left: 10px; width: 450px;">
+    <fieldset>
+    <legend>Select Certificate Type</legend>
+    <label for="certtype">Certificate Type</label>
+
+    <select name="certtype" onChange="sdisplay(this.form.certtype)";>
+        <option value="scap">Service Certificate</option>
+        <option value="eecap">User Certificate</option>
+    </select>
+    <br /><br />
+
+    <div class="opts" id="scap" style="display: block;">
+    <label for="srct">Certificate capabilities</label>
+        <input type="checkbox" name="sct" value="https-server" /> HTTPS-Server <br />
+    </div>
+
+    <div class="opts" id="eecap" style="display: none;">
+    <label for="clct">Certificate capabilities</label>
+        <input type="checkbox" name="cct" value="https-client" /> Web Client (TLS) <br />
+    <label for="clct"></label>
+        <input type="checkbox" name="cct" value="smime" onclick="vfdisplay('emailaddrs');" /> Email Protection <br />
+
+    <div id="emailaddrs" style="display: none;">
+        <label for="emhelp"></label>
+            Enter e-mail addresses to protect
+
+        <label for="em1"></label>
+            <input type="text" value="" name="email_addr1" size="22" maxlength="64" /> <br />
+        <label for="em1"></label>
+            <input type="text" value="" name="email_addr2" size="22" maxlength="64" /> <br />
+    </div>
+
+    <label for="clct"></label>
+        <input type="checkbox" name="cct" value="codesign" /> Code Signing <br />
+    <label for="clct"></label>
+        <input type="checkbox" name="cct" value="codesign" /> PK-INIT (Smart card Logins) <br />
+        <br />
+    </div>
+
+    <input type="submit" value="Proceed to Step 2"
+        onclick="javascript:callFormUpdate('gencert', '/ca/service/addcert/');" />
+    </fieldset>
+    <input type="hidden" name="operate_dn" value="<?php echo $this->obj->getdn();?>" />
+    <input type="hidden" name="step" value="2" />
+    </form>
+    </div>
+</div>
+
+<script language="javascript">
+sdisplay = function(copt)
+{
+    sd = copt.options[copt.selectedIndex].value;
+    $$('div.opts').each(Element.hide);
+    Element.show(sd);
+    return;
+}
+
+vfdisplay = function(divid)
+{
+    $(divid).toggle();
+}
+</script>

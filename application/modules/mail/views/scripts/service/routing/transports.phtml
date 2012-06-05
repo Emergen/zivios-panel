@@ -1,0 +1,59 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     mod_mail
+ * @copyright   Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+
+ if (sizeof($this->transports) == 0) {
+     ?>
+     <div class="info"> No Transports currently enabled.</div>
+     <?php 
+ } else {
+     ?>
+     <div class="note">The following table displays transports which control specific routing for particular domains</div>
+     <table class="general">
+     <th style="text-align: left;width: 90%;">Transport</th><th>Destination</th><th>Relay Type</th><th>Action</th>
+     <?php
+     $i=0;
+     foreach ($this->transports as $transport) {
+         $i++;
+         Zivios_Log::error($transport);
+         $tarray = explode(":",$transport);
+         $domain = $tarray[0];
+         $type = $tarray[1];
+         $dest = $tarray[2];
+         ?>
+         <tr>
+            <td style="text-align: left;"><?php echo $domain;?></td>
+            <td><?php echo $dest;?></td>
+            <td><?php echo $type;?></td>
+            <td><span id="transport<?php echo $i;?>"><a href="#" 
+            onClick="alert('Not implemented')" onFlick="zivios.callAction('/mail/service/dochangetransports',{
+            dn: '<?php echo urlencode($this->entry->getdn());?>',
+            changeaction: 'delete',
+            transportline: '<?php echo $transport;?>'},'transport<?php echo $i;?>')"> delete</a></span></td>
+        </tr>
+        <?php 
+     }
+     ?>
+     </table>
+     <?php
+ }

@@ -1,0 +1,8 @@
+[kdc]
+logging = FILE:/var/log/heimdal-kdc.log
+enable-pkinit = yes
+pki-identity = FILE:%%%KDC_PUBKEY%%%,%%%KDC_PRVKEY%%%
+pki-anchors = FILE:%%%ZIVIOS_CA_PUBKEY%%%
+pki-allow-proxy-certificate = false
+acl_file = /opt/zivios/heimdal/etc/kadmind.acl
+

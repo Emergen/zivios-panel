@@ -1,0 +1,42 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		Zivios
+ * @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ **/
+
+Zend_Dojo_View_Helper_Dojo::setUseDeclarative();
+$this->dojo()->enable();
+?>
+<div class="alert">You are about to perform an irreversible action. Deleting a user entry will 
+unsubscribe the user from all active services and remove the user entry from the directory service.
+<br /><br />
+Again: you cannot undo this operation. All user data will be lost. This is inclusive of all data
+in Zivios provided plugins (mail, storage, etc).
+</div>
+
+<div style="padding: 15px; background-color: #f2f2f2; width: 85%; 
+    margin-left: 40px; border: 1px solid #f0f0f0; margin-top: 20px;">
+Deleting user: <b><?php echo $this->entry->getProperty("cn"); ?></b>. <br />
+User DN: <b><?php echo $this->entry->getdn(); ?></b><br /><br/>
+<?php echo $this->form; ?>
+<br />
+</div>
+

@@ -1,0 +1,26 @@
+
+<div class="note">
+This plugin will in the near future allow you to add,remove and upgrade packages. Currently it serves as 
+a stub allowing query of packages on this server
+</div>
+<div class="info">
+Found a total of <b><?php echo sizeof($this->packages);?></b> installed packages on the system
+</div>
+<table class="general">
+<th>Package Name</th>
+<th>Version</th>
+<th>Brief</th>
+<th>Dependencies</th>
+
+<?php
+foreach ($this->packages as $package)
+{
+    ?>
+    <tr>
+    <td><b><?php echo $package->name;?></b></td>
+    <td><?php echo $package->version;?></td>
+    <td><?php echo $package->short_desc;?></td>
+    <td><?php echo $package->depends;?></td>
+    </tr>
+    <?php
+}

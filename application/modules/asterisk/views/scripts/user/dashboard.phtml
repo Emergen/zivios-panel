@@ -1,0 +1,174 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     mod_asterisk
+ * @copyright   Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+
+ 
+$formid   = Zivios_Util::randomString(8);
+$regexLib = Zivios_Util::getRegexLibrary();
+$user = $this->user;
+$plugin = $user->getPlugin('AsteriskUser');
+
+?>
+
+<div class="subheading">Asterisk Plugin</div>
+<div style="float: left; width: 600px;">
+<div class="content">
+    <form id='<?php echo $formid; ?>' enctype="application/x-www-form-urlencoded" method="post" 
+        action="#" dojoType="dijit.form.Form">    
+     
+    <div class="labell">Extension: </div>
+
+    <input dojoType="dijit.form.ValidationTextBox" style="width: 100px;" required="true"
+    name="ast[rq_digits_astexten_Asterisk+Extension]" class="genField" value="<?php echo $plugin->getProperty('emsastexten');?>"/>
+    <div class="cboth"></div>
+
+    <div class="labell">Context: </div>
+    <input dojoType="dijit.form.ValidationTextBox" style="width: 200px;" value="<?php echo $plugin->getProperty('astaccountcontext');?>" name="ast[rq_postaladdress_context_Sip+Context]" 
+    	class="genField"/>
+    <div class="cboth"></div>
+    
+    <div class="labell">Phone Password: </div>
+    <input dojoType="dijit.form.ValidationTextBox" value="<?php echo $plugin->getProperty('astaccountsecret');?>" name="ast[op_alnumnospaces_password_Phone+Password]" class="genField"/>
+    <div class="cboth"></div>
+    <br />
+    
+    <div class="labell">Allowed Codecs</div>
+    <?php
+    	$codecs = $plugin->getProperty('astaccountallowedcodec');
+    	$ulawsel = $alawsel = $gsmsel = $g729sel = "false";
+    	if (in_array('ulaw',$codecs)) 
+    		$ulawsel = "true";
+    	
+    	if (in_array('alaw',$codecs))
+    		$alawsel = "true";
+    	
+    	if (in_array('g729',$codecs))
+    		$g729sel = "true";
+    	
+    	if (in_array('gsm',$codecs))
+    		$gsmsel = "true";
+    ?>
+    
+    <input dojoType="dijit.form.CheckBox" value="ulaw" checked="<?php echo $ulawsel;?>" name="ast[op_noval_codecs_Allowed+Codecs][]" class="genField"/>-ulaw
+    <input dojoType="dijit.form.CheckBox" value="alaw" checked="<?php echo $alawsel;?>" name="ast[op_noval_codecs_Allowed+Codecs][]" class="genField"/>-alaw
+    <input dojoType="dijit.form.CheckBox" value="gsm" checked="<?php echo $gsmsel;?>" name="ast[op_noval_codecs_Allowed+Codecs][]" class="genField"/>-gsm
+    <input dojoType="dijit.form.CheckBox" value="g729" checked="<?php echo $g729sel;?>" name="ast[op_noval_codecs_Allowed+Codecs][]" class="genField"/>-g729
+    <div class="cboth"></div>
+    <div class="labell">Phone Lock Code: </div>
+    <input dojoType="dijit.form.ValidationTextBox" style="width:100px;" required="false" value="<?php echo $plugin->getProperty('emsastphonelockcode');?>" 
+    			name="ast[op_digits_plock_Phone+Lock+Code]" class="genField"/>
+    <div class="cboth"></div><br />
+    <div class="labell">Allowed Routes: </div>
+    <?php
+    $allroutes = $plugin->getService()->getObRoutes();
+    $userroutes = $plugin->getProperty('emsastroutesallowed');
+    foreach ($allroutes as $route) {
+    	$selected = 'false';
+    	if (in_array($route,$userroutes)) {
+    		$selected = 'true';
+    	}
+    	?>
+    	<input dojoType="dijit.form.CheckBox" value="<?php echo $route;?>" checked="<?php echo $selected;?>" name="ast[op_noval_routes_Allowed+Routes][]"
+    		class="genField" /> <?php echo $route;?>
+    	<?php
+    }
+    ?>
+    <div class="cboth"></div><br />
+    <?php
+    $disabled = 'false';
+    if ($plugin->getProperty('emsastdisable') == "1")
+    {
+    	$disabled = 'true';
+    }
+    ?>
+    <?php
+    $canreinvite = 'false';
+    if ($plugin->getProperty('astaccountcanreinvite') == "yes")
+    {
+    	$canreinvite = 'true';
+    }
+    ?>
+    <div class="labell">Can SIP Reinvite Enabeld?: </div>
+    <input dojoType="dijit.form.CheckBox" value="1" checked="<?php echo $canreinvite;?>" name="ast[op_noval_canreinvite_canreinvite]" class="genField" />
+    <div class="cboth"></div><br />
+    
+    <div class="labell">Phone Disabled : </div>
+    <input dojoType="dijit.form.CheckBox" value="1" checked="<?php echo $disabled;?>" name="ast[op_noval_disabled_disabled]" class="genField" />
+    <div class="cboth"></div><br />
+    <div class="labell">Qualify Time (sec) :</div>
+    <input dojoType="dijit.form.ValidationTextBox" style="width:100px;" required="false" value="<?php echo $plugin->getProperty('astaccountqualify');?>" 
+    			name="ast[op_digits_qualify_Qualify+Time]" class="genField"/>
+    <div class="cboth"></div><br />
+    
+     <?php
+    $vmenabled = 'false';
+    if ($plugin->getProperty('emsastvoicemailenabled') == "1")
+    {
+    	$vmenabled = 'true';
+    }
+    ?>
+    <div class="labell">VoiceMailbox Enabled: </div>
+    <input dojoType="dijit.form.CheckBox" value="1" checked="<?php echo $vmenabled;?>" name="ast[op_noval_vmenabled_vmenabled]" class="genField" />
+    <div class="cboth"></div><br />
+    <div class="labell">Voicemailbox Password :</div>
+    <input dojoType="dijit.form.ValidationTextBox" style="width:100px;" required="false" value="<?php echo $plugin->getProperty('astvoicemailpassword');?>" 
+    			name="ast[op_digits_vmpassword_VoiceMail+Password]" class="genField"/>
+    <div class="cboth"></div><br />
+    
+    
+    <input onclick="zivios.postxhr('/asterisk/user/dodashboard', '', '<?php echo $formid; ?>',
+        'form', 'json', [], [], [], [], this.id); return false;" 
+        name="inica" value="Apply" 
+        type="submit" label="Apply" dojoType="dijit.form.Button"/>
+    <div class="cboth"></div>
+
+    <input type="hidden" name="ast[rq_noval_dn_dn]" value="<?php echo $user->getdn();?>"/>
+
+    </form>
+    
+</div>
+</div>
+<div class="info" style="float: left; width: 300px;">
+<?php
+	$ip = $plugin->getProperty('astaccountipaddress');
+	$delay = $plugin->getProperty('astaccountlastqualifymilliseconds');
+	$ua = $plugin->getProperty('useragent');
+	if ($ip == "" || $ip == "0.0.0.0")
+		$status = "Not Registered";
+	else {
+		if ($delay == -1) 
+			$status = "Registered but Unreachable";
+		else 
+			$status = "Registered AND Reachable";
+	}
+?>
+<table class="general"> 
+<tr><td>Status : </td><td><?php echo $status;?></td></tr>
+<tr><td>UA IP : </td><td><?php echo $ip;?></td></tr>
+<tr><td>Ping Time : </td><td><?php echo $delay;?> ms</td></tr>
+<tr><td>User Agent : </td><td><?php echo $ua;?></td></tr>
+</table>
+
+</div>
+<div class="cboth"></div>
+ 

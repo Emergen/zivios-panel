@@ -1,0 +1,83 @@
+<?php
+/**
+ * Copyright (c) 2008-2010 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     Zivios
+ * @copyright   Copyright (c) 2008-2010 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+
+$formid   = Zivios_Util::randomString(8);
+$regexLib = Zivios_Util::getRegexLibrary();
+?>
+<div class="heading">Database configuration</div>
+<div class="content">
+    <div class="info infocl" style="width: 450px;">
+    <b>Caution:</b> Updating the Database Server properties, including the Zivios database user
+    or password, will not trigger changes in the actual MySQL system.  Changes to the backend
+    Database system need to be made manually (for now).
+    </div>
+
+    <form id='<?php echo $formid; ?>' enctype="application/x-www-form-urlencoded" method="post" 
+        action="#" dojoType="dijit.form.Form">
+
+    <div class="zflabel" style="width: 150px;">Database Host: </div>
+    <input name="zcfggeneral[rq_hostname_dbhost_Database+Host]" type="text" dojoType="dijit.form.ValidationTextBox" 
+        size="16" maxlength="64" regExp="<?php echo $regexLib->exp->hostname; ?>" required="true" 
+        invalidMessage="Invalid characters in field value." class="zfgenField" 
+        value="<?php echo $this->config->database->host; ?>" />
+    <div class="cboth"></div>
+
+    <div class="zflabel" style="width: 150px;">Database Name: </div>
+    <input name="zcfggeneral[rq_alnumnospaces_dbname_Database+Name]" type="text" dojoType="dijit.form.ValidationTextBox" 
+        size="16" maxlength="64" regExp="<?php echo $regexLib->exp->alnumnospaces; ?>" required="true" 
+        invalidMessage="Invalid characters in field value." class="zfgenField" 
+        value="<?php echo $this->config->database->name; ?>" />
+    <div class="cboth"></div>
+
+    <div class="zflabel" style="width: 150px;">Database User: </div>
+    <input name="zcfggeneral[rq_alnumnospaces_dbuser_Database+User]" type="text" dojoType="dijit.form.ValidationTextBox" 
+        size="16" maxlength="64" regExp="<?php echo $regexLib->exp->alnumnospaces; ?>" required="true" 
+        invalidMessage="Invalid characters in field value." class="zfgenField" 
+        value="<?php echo $this->config->database->username; ?>" />
+    <div class="cboth"></div>
+
+    <div class="zflabel" style="width: 150px;">Database Password: </div>
+    <input name="zcfggeneral[rq_password_dbpass_Database+Password]" type="password" dojoType="dijit.form.ValidationTextBox" 
+        size="16" maxlength="64" regExp="<?php echo $regexLib->exp->password; ?>" required="true" 
+        invalidMessage="Invalid characters in field value." class="zfgenField" 
+        value="<?php echo $this->config->database->password; ?>" />
+    <div class="cboth"></div>
+
+    <div class="zflabel" style="width: 150px;">Confirm Password: </div>
+    <input name="zcfggeneral[cmp_dbpass_cdbpass_Confirm+Database]" type="password" dojoType="dijit.form.ValidationTextBox" 
+        size="16" maxlength="64" regExp="<?php echo $regexLib->exp->password; ?>" required="true" 
+        invalidMessage="Invalid characters in field value." class="zfgenField" 
+        value="<?php echo $this->config->database->password; ?>" />
+    <div class="cboth"></div>
+
+    <div class="zflabel" style="width: 150px;">&nbsp;</div>
+    <input onclick="zivios.postxhr('/default/zconfig/update', '', '<?php echo $formid; ?>',
+        'form', 'json', [], [], [], [], this.id); return false;" 
+        name="zcfgupdate" value="Update Configuration"
+        type="submit" label="Update Configuration" dojoType="dijit.form.Button"/>
+    <div class="cboth"></div>
+    <input type="hidden" name="zcfggeneral[rq_alnospaces_section_Update+Section]" value="database"/>
+    </form>
+</div>
+

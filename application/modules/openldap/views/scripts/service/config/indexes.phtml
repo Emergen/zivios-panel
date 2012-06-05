@@ -1,0 +1,167 @@
+<?php
+/**
+ * Copyright (c) 2008-2010 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     mod_openldap
+ * @copyright   Copyright (c) 2008-2010 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+
+$regexLib  = Zivios_Util::getRegexLibrary(); 
+$formRefId = Zivios_Util::randomString(8);
+$formAddId = Zivios_Util::randomString(8);
+?>
+<div class="subheading">LDAP Indexes</div>
+
+<div class="content">
+
+    Update indexes below and click on &quot;Refresh Indexes&quot;. To remove an index, simply deselect all properties associated with the
+    index in question. 
+    <br /><br />
+
+
+    <div class="indexHead" style="width: 100px;">Index Name</div>
+    <div class="indexHead">eq</div>
+    <div class="indexHead">pres</div>
+    <div class="indexHead">approx</div>
+    <div class="indexHead">sub</div>
+    <div class="indexHead">subinitial</div>
+    <div class="indexHead">subany</div>
+    <div class="indexHead">subfinal</div>
+    <div class="cboth"></div>
+
+    <form id='<?php echo $formRefId; ?>' enctype="application/x-www-form-urlencoded" method="post" 
+        action="#" dojoType="dijit.form.Form">
+
+    <?php
+    foreach ($this->primaryIndexes as $index) {
+        $indexDetails = explode(" ", $index);
+        $indexName = $indexDetails[0];
+        $indexes = explode(',',$indexDetails[1]);
+        ?>
+
+        <div class="indexBody" style="width: 100px; line-height: 18px;"><?php echo $indexName; ?></div>
+        <div class="indexBody"><input name="indexes[<?php echo $indexName; ?>][eq]" dojoType="dijit.form.CheckBox" value="1" class="zfgenField"
+           <?php if (in_array('eq', $indexes)) echo 'checked'; ?> />
+        </div>
+
+        <div class="indexBody"><input name="indexes[<?php echo $indexName; ?>][pres]" dojoType="dijit.form.CheckBox" value="1" class="zfgenField"
+           <?php if (in_array('pres', $indexes)) echo 'checked'; ?> />
+        </div>
+
+        <div class="indexBody"><input name="indexes[<?php echo $indexName; ?>][approx]" dojoType="dijit.form.CheckBox" value="1" class="zfgenField"
+           <?php if (in_array('approx', $indexes)) echo 'checked'; ?> />
+        </div>
+       
+        <div class="indexBody"><input name="indexes[<?php echo $indexName; ?>][sub]" dojoType="dijit.form.CheckBox" value="1" class="zfgenField"
+           <?php if (in_array('sub', $indexes)) echo 'checked'; ?> />
+        </div>
+
+        <div class="indexBody"><input name="indexes[<?php echo $indexName; ?>][subinitial]" dojoType="dijit.form.CheckBox" value="1" class="zfgenField"
+           <?php if (in_array('subinitial', $indexes)) echo 'checked'; ?> />
+        </div>
+
+        <div class="indexBody"><input name="indexes[<?php echo $indexName; ?>][subany]" dojoType="dijit.form.CheckBox" value="1" class="zfgenField"
+           <?php if (in_array('subany', $indexes)) echo 'checked'; ?> />
+        </div>
+
+        <div class="indexBody"><input name="indexes[<?php echo $indexName; ?>][subfinal]" dojoType="dijit.form.CheckBox" value="1" class="zfgenField"
+           <?php if (in_array('subfinal', $indexes)) echo 'checked'; ?> />
+        </div>       
+        <div class="cboth"></div>
+    <?php
+    }
+    ?>
+
+    <div style="border-top: 1px solid #ccc; margin-top: 3px; padding: 3px; width:700px;">
+    <input onclick="zivios.postxhr('/openldap/service/cfgupdateindexes', '', '<?php echo $formRefId; ?>',
+        'form', 'json', [], [], [], [], this.id); return false;" name="cfgindexupdate" value="Refresh Indexes" 
+         type="submit" label="Refresh Indexes" dojoType="dijit.form.Button"/>
+    </div>
+    <input type="hidden" name="servicedn" value="<?php echo urlencode($this->service->getdn()); ?>"/>
+    </form>
+</div>
+
+<div class="subheading">Add New Index</div>
+<div class="content">
+    Enter the name of the attribute you would like to index and select associated index properties. Click on &quot;Add Index&quot; when done.
+    <br /><br />
+    <div class="indexHead" style="width: 100px;">Index Name</div>
+    <div class="indexHead">eq</div>
+    <div class="indexHead">pres</div>
+    <div class="indexHead">approx</div>
+    <div class="indexHead">sub</div>
+    <div class="indexHead">subinitial</div>
+    <div class="indexHead">subany</div>
+    <div class="indexHead">subfinal</div>
+    <div class="cboth"></div>
+
+    <form id='<?php echo $formAddId; ?>' enctype="application/x-www-form-urlencoded" method="post"
+        action="#" dojoType="dijit.form.Form">
+
+    <div class="indexBody" style="width: 100px;">
+        <input name="addindex[name]" type="text" dojoType="dijit.form.ValidationTextBox" 
+            size="16" maxlength="64" regExp="<?php echo $regexLib->exp->alnumnospaces; ?>" required="true" 
+            invalidMessage="Invalid characters in field value." style="width: 100px;" value="" />
+    </div>
+
+    <div class="indexBodyAdd"><input name="addindex[eq]" dojoType="dijit.form.CheckBox" value="1" class="zfgenField"/></div>
+    <div class="indexBodyAdd"><input name="addindex[pres]" dojoType="dijit.form.CheckBox" value="1" class="zfgenField"/></div>
+    <div class="indexBodyAdd"><input name="addindex[approx]" dojoType="dijit.form.CheckBox" value="1" class="zfgenField"/></div>
+    <div class="indexBodyAdd"><input name="addindex[sub]" dojoType="dijit.form.CheckBox" value="1" class="zfgenField"/></div>
+    <div class="indexBodyAdd"><input name="addindex[subinitial]" dojoType="dijit.form.CheckBox" value="1" class="zfgenField"/></div>
+    <div class="indexBodyAdd"><input name="addindex[subany]" dojoType="dijit.form.CheckBox" value="1" class="zfgenField"/></div>
+    <div class="indexBodyAdd"><input name="addindex[subfinal]" dojoType="dijit.form.CheckBox" value="1" class="zfgenField"/></div>
+    <div class="cboth"></div>
+
+    <div style="border-top: 1px solid #ccc; margin-top: 3px; padding: 3px; width:700px;">
+    <input onclick="zivios.postxhr('/openldap/service/cfgaddindex', '', '<?php echo $formAddId; ?>',
+        'form', 'json', [], [], [], [], this.id); return false;" name="cfgindexadd" value="Add Index" 
+         type="submit" label="Add Index" dojoType="dijit.form.Button"/>
+    </div>
+    <input type="hidden" name="servicedn" value="<?php echo urlencode($this->service->getdn()); ?>"/>
+    </form>
+</div>
+
+<style type="text/css">
+
+.indexHead {
+    padding: 4px;
+    border-bottom: 1px solid #ccc;
+    background-color: #e5e5e5;
+    float: left;
+    text-align: center;
+    font-weight: bold;
+    width: 75px;
+}
+
+.indexBody {
+    padding: 4px;
+    float: left;
+    text-align: center;
+    width: 75px;
+}
+
+.indexBodyAdd {
+    padding: 4px;
+    float: left;
+    text-align: center;
+    width: 75px;
+}
+</style>
+

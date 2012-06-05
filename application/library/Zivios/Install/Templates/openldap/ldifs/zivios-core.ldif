@@ -1,0 +1,206 @@
+dn: cn=zivios-core,cn=schema,cn=config
+objectClass: olcSchemaConfig
+cn: zivios-core
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.1 NAME 'emsdescription' DESC '
+ Description of the EMS Object' EQUALITY caseIgnoreMatch SUBSTR caseIgnoreSu
+ bstringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{32768} SINGLE-VALUE )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.2 NAME 'emspermission' DESC 'S
+ ingle security Entry' SUP name )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.3 NAME 'emscontainertype' DESC
+  'EMS Container Type' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.4 NAME 'emsplugins' DESC 'Grou
+ p User Service Plugins' SUP name )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.5 NAME 'emsprimarygroupdn' DES
+ C 'EMS Primary Group DN' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.6 NAME 'emscomputervendormodel
+ ' DESC 'EMS Computer Vendor Model' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.7 NAME 'emscomputercpumhz' DES
+ C 'EMS Computer CPU MHz' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.8 NAME 'emscomputerram' DES
+ C 'EMS Computer RAM' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.9 NAME 'emscomputerswap' DES
+ C 'EMS Computer SWAP' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.10 NAME 'emscomputersystem' DE
+ SC 'EMS Computer System (OS)' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.11 NAME 'emscomputerdistro' D
+ ESC 'EMS Computer Distribution' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.12 NAME 'emscomputerdistrorel
+ ease' DESC 'EMS Computer Distribution Release' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.13 NAME 'emsmodelclass' DESC
+ 'EMS Model Class' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.14 NAME 'emsservicemap' DESC
+ 'EMS Computer Map for Plugin' SUP emsplugins )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.15 NAME 'emsmastercomputerdn'
+  DESC 'EMS Generic Master Computer Dn' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.16 NAME 'emscomputersdn' DESC
+  'EMS Generic Multivalued Computer Dn' SUP name )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.17 NAME 'emsmodules' DESC 'EM
+ S Service Module Name' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.18 NAME 'emsntpserver' DESC '
+ NTP Servers' SUP name )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.19 NAME 'emssubnetbroadcast'
+ DESC 'Broadcast To Subnets' SUP name )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.20 NAME 'emsstatisticsenable'
+  DESC 'Enable NTP Statistics' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.21 NAME 'emsstatistics' DESC
+ 'Statistics To Enable' SUP name )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.22 NAME 'emsldapserver' DESC
+ 'Ldap Servers' SUP name )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.23 NAME 'emskrbserver' DESC '
+ Kerberos Servers' SUP name )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.24 NAME 'emstype' DESC 'Objec
+ t type' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.25 NAME 'emsdnsserverreplicas
+ ' DESC 'EMS Dns Replicas' SUP name )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.26 NAME 'emsdnsreplicationmod
+ e' DESC 'EMS Dns Replication Mode' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.27 NAME 'emsdnsmastercomputer
+ dn' DESC 'EMS Dns Master Computer DN' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.28 NAME 'emsdnsrootzone' DESC
+  'ems dns root Zone ' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.29 NAME 'emsmodulename' DESC
+ 'ems module name' SUP emsdescription )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.30 NAME 'emscaserver' DESC 'C
+ A Server' SUP name )
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.31 NAME 'emscomputerarch' DES
+ C 'Computer Arch type' SUP name)
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.32 NAME 'emsdnszonetype' DESC
+  'Ems DNS Zone Type' SUP emsdescription)
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.33 NAME 'emsdistrodesc' DESC
+ 'Ems Distribution Description' SUP emsdescription)
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.34 NAME 'emsdistrocodename'
+ DESC 'Ems Computer Distribution Codename' SUP emsdescription)
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.35 NAME 'emssubchannels' DES
+ C 'Ems Subscribed Channels' SUP name)
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.36 NAME 'emscomputercpucount' DES
+ C 'EMS Computer CPU count' SUP name)
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.37 NAME 'emsdependson' DESC 'EMS
+ Dependency'SUP name)
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.38 NAME 'emsaccountlockout' DESC
+ 'EMS Global Account Lockout' SUP name)
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.39 NAME 'emskrbpasslifedays'
+ DESC 'EMS Kerberos Password Lifetime' SUP emsdescription)
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.40 NAME 'emskrbpasspolicies'
+ DESC 'EMS Kerberos Password Policies' SUP name)
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.41 NAME 'emskrbpassminlength'
+  DESC 'EMS Kerberos Password Min Length' SUP emsdescription)
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.42 NAME 'emsldapserverreplicas'
+ DESC 'EMS Directory Server Replicas' SUP name)
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.43 NAME 'emsldapreplicarid' DES
+ C 'EMS Directory Service Replica ID' SUP emsdescription)
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.44 NAME 'emsldapreplicahostname'
+ DESC 'EMS Directory Replica Hostname' SUP emsdescription)
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.45 NAME 'emsldapreplicaconfigpw
+ ' DESC 'EMS Directory Replica Config Password' SUP emsdescription)
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.46 NAME 'emskrbreplicahostname'
+ DESC 'EMS Kerberos Replica Hostname' SUP emsdescription)
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.47 NAME 'emsdnsreplicahostname'
+ DESC 'EMS DNS Replica Hostname' SUP emsdescription)
+olcAttributeTypes: ( 1.3.6.1.4.1.31267.1.1.48 NAME 'emscode' DESC 'EMS Code' SUP emsdescription)
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.2.1 NAME 'ZvLdapObject' DESC 'EMS
+  Ldap Object' SUP top AUXILIARY MAY (emspermission $ emsdependson ))
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.2.2 NAME 'ZvCacheObject' DESC 'EM
+ S Cacheable Object' SUP ZvLdapObject AUXILIARY )
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.2.3 NAME 'emsSecurityObject' DESC
+  'EMS Security Object' SUP zvCacheObject AUXILIARY MAY emspermission )
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.2.4 NAME 'emsObject' DESC 'EMS Ob
+ ject' SUP zvCacheObject AUXILIARY MUST ( emsdescription $ cn ) MAY ( emsmod
+ elclass $ emstype $ emsmodulename ) )
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.2.5 NAME 'emsOrganizationalUnit'
+ DESC 'EMS Organizational Unit' SUP emsObject AUXILIARY MUST ( emsdescriptio
+ n $ emstype $ ou $ cn $ emscontainertype ) MAY (emscode) )
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.2.6 NAME 'emsGroup' DESC 'EMS Gro
+ up' SUP emsObject AUXILIARY MUST ( emsdescription $ emstype $ cn ) MAY ( em
+ splugins $ emsservicemap $ emsmodules ) )
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.2.7 NAME 'emsUser' DESC 'EMS User
+ ' SUP emsObject AUXILIARY MUST ( emsdescription $ emstype $ cn $ emsprimary
+ groupdn ) MAY ( emsplugins $ emsmodules $ emsaccountlockout ) )
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.2.8 NAME 'emsComputer' DESC 'EMS
+ Computer' SUP emsObject AUXILIARY MUST ( emsdescription $ emstype $ cn ) MA
+ Y ( emsmodules $ emsservicemap $ emsplugins $ emscomputervendormodel $ emscomp
+ utercpumhz $ emscomputercpucount $ emscomputersystem $ emscomputerram $ emscom
+ puterswap $ emscomputerdistro $ emscomputerdistrorelease $ sn $ uid $ emscompu
+ terarch $ emsdistrodesc $ emsdistrocodename $ emssubchannels) )
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.2.9 NAME 'emsKerberos' DESC 'EMS
+ Kerberos' SUP emsObject AUXILIARY MUST ( emsdescription $ emstype $ cn ) )
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.2.10 NAME 'emsHost' DESC 'EMS DNS
+  Host Entry' SUP emsObject AUXILIARY MUST ( emsdescription $ emstype $ cn )
+  )
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.2.11 NAME 'emsLocality' DESC 'EM
+ S Locality Entry' SUP emsObject AUXILIARY MAY (emscode) )
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.2.12 NAME 'emsUserContainer' DES
+ C 'EMS User Container' SUP emsOrganizationalUnit AUXILIARY MUST ( emsdescri
+ ption $ emstype $ cn ) )
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.2.13 NAME 'emsGroupContainer' DE
+ SC 'EMS Group' SUP emsOrganizationalUnit AUXILIARY MUST ( emsdescription $
+ emstype $ cn ) )
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.2.14 NAME 'emsComputerContainer'
+  DESC 'EMS Group' SUP emsOrganizationalUnit AUXILIARY MUST ( emsdescription
+  $ emstype $ cn ) )
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.2.15 NAME 'emsKrbContainer' DESC
+  'EMS Group' SUP emsObject AUXILIARY MUST ( emsdescription $ emstype $ cn )
+  )
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.2.16 NAME 'emsDNSContainer' DESC
+  'EMS Group' SUP emsObject AUXILIARY MUST ( emsdescription $ emstype $ cn )
+  )
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.2.17 NAME 'emsIgnore' DESC 'EMS
+ Ignore Object' SUP emsObject AUXILIARY )
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.2.18 NAME 'emsDnsZone' DESC 'EMS
+  Ignore Object' SUP emsObject AUXILIARY MUST (emsdnszonetype) )
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.2.19 NAME 'emsDnsHostName' DESC
+ 'EMS Ignore Object' SUP emsObject AUXILIARY )
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.2.20 NAME 'emsDnsRecord' DESC 'E
+ MS Ignore Object' SUP emsObject AUXILIARY )
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.2.21 NAME 'emsDhcpServer' DESC '
+ EMS Ignore Object' SUP emsObject AUXILIARY )
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.2.22 NAME 'emsDhcpService' DESC
+ 'EMS Ignore Object' SUP emsObject AUXILIARY )
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.2.23 NAME 'emsDhcpSharedNetwork'
+  DESC 'EMS Ignore Object' SUP emsObject AUXILIARY )
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.2.24 NAME 'emsDhcpSubnet' DESC '
+ EMS Ignore Object' SUP emsObject AUXILIARY )
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.2.25 NAME 'emsDhcpPool' DESC 'EM
+ S Ignore Object' SUP emsObject AUXILIARY )
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.2.26 NAME 'emsDhcpContainer' DES
+ C 'EMS Dhcp Container' SUP emsOrganizationalUnit AUXILIARY )
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.2.27 NAME 'emsOlcDatabase' DESC
+ 'EMS Exten Entry Object' SUP emsObject AUXILIARY )
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.2.28 NAME 'emsCnConfig' DESC 'EM
+ S Cn Config Object' SUP emsObject AUXILIARY )
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.2.29 NAME 'emsOlcSchema' DESC 'E
+ MS Schema Entry Object' SUP emsObject AUXILIARY )
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.2.30 NAME 'emsOlcSchemaConfig' D
+ ESC 'EMS Schema Collection Entry' SUP emsObject AUXILIARY )
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.2.31 NAME 'emsservice' DESC 'EMS
+  Service' SUP emsObject AUXILIARY MUST emsmodulename MAY ( emsmastercompute
+ rdn $ emscomputersdn ) )
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.2.32 NAME 'emsdnsservice' DESC '
+ EMS DNS Service' SUP emsservice AUXILIARY MUST ( emsdnsmastercomputerdn $ e
+ msdnsreplicationmode $ emsdnsrootzone ) MAY emsdnsserverreplicas )
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.2.33 NAME 'emsntpservice' DESC '
+ EMS NTP Service' SUP emsservice AUXILIARY MUST emsntpserver MAY ( emssubnet
+ broadcast $ emsstatisticsenable $ emsstatistics ) )
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.2.34 NAME 'emsldapservice' DESC
+ 'EMS LDAP Service' SUP emsservice AUXILIARY MUST emsldapserver MAY ( emsld
+ apserverreplicas ))
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.2.35 NAME 'emskerberosservice' D
+ ESC 'EMS Kerberos Service' SUP emsservice AUXILIARY MUST emskrbserver MAY (
+ emskrbpasslifedays $ emskrbpasspolicies $ emskrbpassminlength) )
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.2.36 NAME 'emsplugin' DESC 'EMS
+ Plugin' SUP ZvCacheObject AUXILIARY )
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.2.37 NAME 'emscaservice' DESC 'E
+ MS CA Service' SUP emsservice AUXILIARY MUST emscaserver )
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.2.38 NAME 'emscomputergroup' DES
+ C 'EMS Computer Group' SUP emsobject AUXILIARY MAY (member $ emssubchannels
+  $ emsmodules $ emsplugins))
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.2.39 NAME 'emsldapreplicaservice
+ ' DESC 'EMS Openldap Replica Service' SUP emsservice AUXILIARY MUST ( emslda
+ preplicarid $ emsldapreplicahostname $ emsldapreplicaconfigpw ))
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.2.40 NAME 'emskrbreplicaservice
+ ' DESC 'EMS Kerberos Replica Service' SUP emsservice AUXILIARY MUST emskrbr
+ eplicahostname )
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.2.41 NAME 'emsdnsreplicaservice
+ ' DESC 'EMS DNS Replica Service' SUP emsservice AUXILIARY MUST emsdnsreplic
+ ahostname )
+olcObjectClasses: ( 1.3.6.1.4.1.31267.1.2.42 NAME 'emspwdpolicy' DESC 'EMS
+ PWD Policy Object' SUP emsObject AUXILIARY ) 

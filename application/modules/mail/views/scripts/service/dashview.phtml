@@ -1,0 +1,69 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		mod_mail
+ * @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ * @version		$Id$
+ * @lastchangeddate $LastChangedDate$
+ **/
+
+?>
+<div style="padding-left: 15px; width: 400px;">
+
+
+    <table class="general" width="100%">
+    <th style="text-align: left; width=90%;"> Subsystem </th><th>Status</th>
+    <tr>
+    <td style="text-align: left">Spamassassin Anti Spam Subsystem </td>
+    <td><?php echo $this->AgentResponse()->statuscode($this->status['spamassassin']);?></td>
+    </tr>
+
+    <tr>
+    <td style="text-align: left">Clam Anti Virus Subsystem </td>
+    <td><?php echo $this->AgentResponse()->statuscode($this->status['clamav']);?></td>
+    </tr>
+
+    <tr>
+    <td style="text-align: left">Amavis Content Scanner </td>
+    <td><?php echo $this->AgentResponse()->statuscode($this->status['amavis']);?></td>
+    </tr>
+
+    <tr>
+    <td style="text-align: left">Postfix MTA </td>
+    <td><?php echo $this->AgentResponse()->statuscode($this->status['postfix']);?></td>
+    </tr>
+
+    <tr>
+    <td style="text-align: left">Cyrus IMAP Server </td>
+    <td><?php echo $this->AgentResponse()->statuscode($this->status['cyrus']);?></td>
+    </tr>
+    </table>
+    
+    <div style="text-align: right;">
+    [ <span id="mailstop"><a href="#" onClick="zivios.callAction('/mail/service/stopservice',
+                                {dn: '<?php echo $this->entry->getdn();?>'},'mailstop')">Stop Service</a>
+    </span>]
+    [ <span id="mailstart"><a href="#" onClick="zivios.callAction('/mail/service/startservice',
+                                {dn: '<?php echo $this->entry->getdn();?>'},'mailstart')">Start Service</a>
+    </span>]
+    </div>
+                                        
+    
+</div>

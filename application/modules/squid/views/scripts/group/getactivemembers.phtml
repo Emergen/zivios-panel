@@ -1,0 +1,63 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     Zivios
+ * @copyright   Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+?>
+<p class="headline">Activated Group Members</p>
+<?php 
+if (!is_array($this->activeMembers) || empty($this->activeMembers)) {
+?>
+<div class="note notecl" style="width: 500px; margin-left: 10px;">
+No group members exist, or none have been activated with the squid plugin.
+</div>
+<?php 
+} else {
+    ?>
+    <div style="margin-left: 10px;">
+    <?php
+    $c = 0;
+    $memberCount = count($this->activeMembers);
+    foreach ($this->activeMembers as $squidUser) {
+        $link = "zivios.cpaneRefresh('dirdata', '/default/user/view/dn/".
+            urlencode($squidUser->getdn())."')";
+        if ($c == 3) {
+            echo '<div class="clearboth"></div>';
+            $c = 0;
+        }
+    ?>
+        <div class="floatleft treeIcon treeUserEntryIcon"></div>
+        <div class="squidactiveuser"><a href="#" onClick="<?php echo $link; ?>"><?php 
+            echo $squidUser->getProperty('cn'); ?></a></div>
+<?php
+        $c++;
+    }
+}
+?>
+</div>
+
+<style type="text/css">
+.squidactiveuser {
+    float: left;
+    width: 150px;
+    margin-left: 10px;
+}
+</script>

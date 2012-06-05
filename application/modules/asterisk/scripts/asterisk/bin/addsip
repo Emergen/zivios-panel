@@ -1,0 +1,104 @@
+#!/usr/bin/perl -w
+#
+# Copyright (c) 2008 Zivios, LLC.
+#
+# This file is part of Zivios.
+#
+# Zivios is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Zivios is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+#
+# @package		Zivios
+# @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+# @license		http://www.zivios.org/legal/license
+# @version		$Id: addattendant 1019 2008-09-08 07:26:34Z gmustafa $
+#
+use lib "/opt/zivios/asterisk/lib";
+use Asterisk::config;
+use Getopt::Long;
+
+
+##args from cmd line
+GetOptions ("name:s" 		=> \$name,
+			"secret=s"		=> \$secret,
+			"authuser:s"	=> \$authuser,
+			"exten:s"		=> \$exten,
+			"username:s"	=> \$username,
+			"fromdomain:s"	=> \$fromdomain,
+			"fromuser:s"	=> \$fromuser,
+			"type=s"		=> \$type,
+			"callerid:s"	=> \$callerid,
+			"host=s"		=> \$host,
+			"port=s"		=> \$port,
+			"context:s"		=> \$context,
+			"mailbox:s"		=> \$mailbox,
+			"allow=s"		=> \$allowc,
+			"insecure:s"	=> \$insecure,
+			"canreinvite:s"	=> \$canreinvite,
+			"nat:s"			=> \$nat,
+			"qualify:s"		=> \$qualify,
+			"expiry:s"		=> \$expiry,
+			"dtmfmode:s"	=> \$dtmfmode,
+			"auth:s"		=> \$auth,
+			"callgroup:i"	=> \$callgroup,
+			"pickupgroup:i"	=> \$pickupgroup,
+			"trunk"			=> \$trunk,
+			"register" 		=> \$register);  
+##
+
+@allow = split(' ',$allowc);
+
+my $rc = new Asterisk::config(file=>'/etc/asterisk/sip.conf',keep_resource_array=>0);
+
+$rc->assign_addsection(section=>$username);
+$rc->assign_append(point=>'foot',section=>$username,data=>"secret=$secret");
+$rc->assign_append(point=>'foot',section=>$username,data=>"type=$type");
+$rc->assign_append(point=>'foot',section=>$username,data=>"host=$host");
+$rc->assign_append(point=>'foot',section=>$username,data=>"context=$context");
+$rc->assign_append(point=>'foot',section=>$username,data=>"disallow=all");
+foreach (@allow) {
+     $rc->assign_append(point=>'foot',section=>$username,data=>"allow=$_");
+}
+if ($callgroup ne "") 	{ $rc->assign_append(point=>'foot',section=>$username,data=>"callgroup=$callgroup"); 						}
+if ($port ne "") 		{ $rc->assign_append(point=>'foot',section=>$username,data=>"port=$port"); 									}
+if ($pickupgroup ne "") { $rc->assign_append(point=>'foot',section=>$username,data=>"pickupgroup=$pickupgroup"); 					}
+if ($callerid ne "") 	{ $rc->assign_append(point=>'foot',section=>$username,data=>"callerid=$callerid"); 							}
+if ($mailbox ne "") 	{ $rc->assign_append(point=>'foot',section=>$username,data=>"mailbox=".$mailbox."\@default");				}
+if ($qualify ne "") 	{ $rc->assign_append(point=>'foot',section=>$username,data=>"qualify=$qualify");    	   				    }
+if ($expiry ne "") 		{ $rc->assign_append(point=>'foot',section=>$username,data=>"expiry=$expiry");		       				    }
+if ($nat ne "") 		{ $rc->assign_append(point=>'foot',section=>$username,data=>"nat=$nat");             					    }
+if ($insecure ne "") 	{ $rc->assign_append(point=>'foot',section=>$username,data=>"insecure=$insecure");              			}
+if ($fromdomain ne "") 	{ $rc->assign_append(point=>'foot',section=>$username,data=>"fromdomain=$fromdomain");    					}
+if ($fromuser ne "") 	{ $rc->assign_append(point=>'foot',section=>$username,data=>"fromuser=$fromuser");              			}
+if ($username ne "") 	{ $rc->assign_append(point=>'foot',section=>$username,data=>"username=$username");			                }
+if ($dtmfmode ne "") 	{ $rc->assign_append(point=>'foot',section=>$username,data=>"dtmfmode=$dtmfmode");              			}
+if ($canreinvite ne "")	{ $rc->assign_append(point=>'foot',section=>$username,data=>"canreinvite=$canreinvite");	                }
+if ($auth ne "")		{ $rc->assign_append(point=>'foot',section=>$username,data=>"auth=$auth");	                				}
+if ($authuser ne "")	{ $rc->assign_append(point=>'foot',section=>$username,data=>"authuser=$authuser");	                		}
+
+if ($register == 1) {
+	$rc->assign_append(point=>'foot',section=>'general',data=>"register => ".$username.":".$secret."\@".$host."/".$username);
+}
+	my $rcexten = new Asterisk::config(file=>'/etc/asterisk/extensions.conf',keep_resource_array=>0);
+if ($trunk == 1) {
+	$rcexten->assign_append(point=>'foot',section=>'globals',data=>"TRUNK_". $name . "=SIP/".$username);
+	$rcexten->assign_addsection(section=>$context);
+}
+	if ($exten ne "") {
+		$rcexten->assign_append(point=>'foot',section=>'internal',data=>"exten => ".$exten.",1,Macro(sip-vm)");
+	}
+
+$rcexten->save_file();
+$rc->save_file();
+
+
+

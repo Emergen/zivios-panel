@@ -1,0 +1,45 @@
+<?php
+/**
+ * Copyright (c) 2008-2010 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     Zivios
+ * @copyright   Copyright (c) 2008-2010 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+?>
+<div class="heading">Zivios Server Configuration</div>
+<div class="content">
+The Zivios Server configuration section allows you to modify server settings in real time. Zivios
+will automatically backup and save your previous configuration file at the following location: 
+<ul>
+    <span font="smtxt"><?php echo APPLICATION_PATH . '/config/app.config.ini.bak'; ?>
+</ul>
+</div>
+
+<div class="heading">Important Notice</div>
+<div class="content">
+Updates performed in this section can <b>very easily</b> render the system unusable. For example, specifying
+an incorrect hostname for your database settings, changing your directory server hostname, or incorrectly
+updating security settings. It is recommended you carefully read the accompanying text for any directive you
+are updating. 
+<div class="info infocl" style="width: 650px; margin-left: 20px;">
+If you have not created any entries in the Zivios system as yet, you may want to start with the directory settings
+and update the start/stop numbers for user and group ids! If you have any questions or concerns, please contact
+your system administrator, or; email the <a href="mailto: zivios-discuss@lists.zivios.org"><b>Zivios mailing list</b></a>.
+</div>
+</div>

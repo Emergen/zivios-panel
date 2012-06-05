@@ -1,0 +1,55 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		mod_openafs
+ * @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ * @version		$Id: editvolquota.phtml 919 2008-08-25 11:45:23Z fkhan $
+ * @lastchangeddate $LastChangedDate: 2008-08-25 17:45:23 +0600 (Mon, 25 Aug 2008) $
+ **/
+
+?>
+
+<b>Edit Volume Quota</b><br />
+To adjust the quota of this volume, please update the current quota
+field shown below and click on &quot;Adjust Quota&quot;.
+<hr size="1" />
+
+<form method="post" action="#" onsubmit="return false;" id="editvolquota">
+<fieldset>
+<legend>Edit Volume Quota</legend>
+<label for="cn"><b>Volume Name</b></label>
+	<span class="formtext"><b><?php echo $this->volEntry->getProperty("cn"); ?></b></span> <br />
+<label for="Current">Current Volume Quota</label>
+	<span class="formtext"> <?php echo Ecl_Util::formatSize(($this->volEntry->getProperty('emsafsvolmaxquota') * 1024), null, '%01.0f (%s)', true); ?></span><br />
+<label for="Usage">Current Usage</label>
+	<span class="formtext"> <?php echo Ecl_Util::formatSize(($this->volEntry->getProperty('emsafsvoldiskused') * 1024), null, '%01.0f (%s)', true); ?></span><br />
+
+<label for="maxquota">Maximum Volume Quota</label>
+	 <input id="maxquota" type="text" size="20" maxlength="32" value=""
+		name="maxquota" /> MB<br />
+
+	<input type="submit" name="adjustquota" value="Adjust Quota"
+		onclick="javascript:callAfsFormAction('editvolquota', '/openafs/server/updatequota', 'optrst');" />
+	  	<input type="hidden" name="operate_dn" value="<?php echo $this->obj->getdn(); ?>" />
+	  	<input type="hidden" name="voldn" value="<?php echo $this->volEntry->getdn(); ?>" />
+	  	<input type="hidden" name="updateRequestFor" value="volquota" />
+	  	<input type="hidden" name="utype" value="update" />
+</fieldset>
+</form>

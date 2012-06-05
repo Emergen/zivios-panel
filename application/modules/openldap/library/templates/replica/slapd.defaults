@@ -1,0 +1,30 @@
+#
+# Enable the daemon.
+###
+START="yes"
+
+###
+# Keytab
+###
+export KRB5_KTNAME=/opt/zivios/openldap/etc/openldap/ldap.keytab
+
+###
+# slapd User and Group
+###
+SLAPD_USER="zopenldap"
+SLAPD_GROUP="zopenldap"
+
+###
+# Services
+###
+SLAPD_SERVICES="ldap:/// ldaps:/// ldapi:///"
+
+###
+# Additional options
+###
+SLAPD_OPTIONS=""
+
+###
+# SLAPD Configuration
+###
+SLAPD_CONF="/opt/zivios/openldap/etc/openldap/slapd.d"

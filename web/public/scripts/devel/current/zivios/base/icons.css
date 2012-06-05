@@ -1,0 +1,106 @@
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     Zivios
+ * @copyright   Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+
+.dijitToolbarIcon {
+    background-image: url('../../../../../imgs/toolbar-header.png');
+    background-repeat: no-repeat;
+    width: 18px;
+    height: 18px;
+    text-align: center;
+}
+
+.dijitToolbarIconNotifications {
+    background-position: -145px;
+    width: 90px;
+    margin-right: 0px; 
+}
+
+.dijitToolbarIconExceptions {
+    background-position: -20px;
+    width: 75px;
+}
+
+.dijitToolbarIconAlerts {
+    background-position: -95px;
+    width: 50px;
+}
+
+.genericIcon {
+    background-image: url('../../../../../imgs/icons.png');
+    height: 16px !important;
+    width: 16px !important;
+}
+
+.directoryIcon {
+    background-position: -12px 0px;
+}
+
+.configIcon {
+    background-position: -50px 0px;
+}
+
+.deleteIcon {
+    background-position: -68px 0px;
+}
+
+.shutdownIcon {
+    background-position: -88px 0px;
+}
+
+.powerupIcon {
+    background-position: -106px 0px;
+}
+
+.reportIcon {
+    background-position: -124px 0px;
+}
+
+.clipboardIcon {
+    background-position: -162px 0px;
+}
+
+.useraddIcon {
+    background-position: -180px 0px;
+}
+
+.userdeleteIcon {
+    background-position: -198px 0px;
+}
+
+.searchIcon {
+    background-position: -218px 0px;
+}
+
+.helpIcon {
+    background-position: -237px 0px;
+}
+
+.copyIcon {
+    background-position: -259px 0px;
+}
+
+.editIcon {
+    background-position: -283px 0px;
+}
+
+

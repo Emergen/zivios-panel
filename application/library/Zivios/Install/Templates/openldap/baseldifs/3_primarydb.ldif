@@ -1,0 +1,119 @@
+dn: olcDatabase=hdb,cn=config
+objectClass: olcDatabaseConfig
+objectClass: olcHdbConfig
+olcDatabase: {1}hdb
+olcSuffix: %%%BASE_DN%%%
+olcDbDirectory: %%%DATA_DIR%%%
+olcRootDn: cn=admin,%%%BASE_DN%%%
+olcRootPw: %%%ZADMIN_PASS%%%
+olcDbConfig: set_cachesize 0 2097152 0
+olcDbConfig: set_lk_max_objects 1500
+olcDbConfig: set_lk_max_locks 1500
+olcDbConfig: set_lk_max_lockers 1500
+olcLastMod: TRUE
+olcDbCheckpoint: 512 30
+olcDbIndex: objectClass eq
+olcDbIndex: entryCSN eq
+olcDbIndex: entryUUID eq
+olcDbIndex: cn pres,eq,subinitial
+olcDbIndex: uid pres,eq
+olcDbIndex: uidNumber eq
+olcDbIndex: gidNumber eq
+olcDbIndex: mail pres,eq
+olcLimits: dn.base="uid=zldapreplica,ou=zusers,ou=core control,ou=zivios,%%%BASE_DN%%%"
+  size.soft=unlimited size.hard=unlimited time.soft=unlimited time.hard=unlimited
+olcAccess: to dn.base=""
+  by dn.exact=gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth write
+  by * read
+  by * break
+olcAccess: to dn.base="cn=Subschema"
+  by * read
+  by * break
+olcAccess: to * by dn.base="uid=zldapreplica,ou=zusers,ou=core control,ou=zivios,%%%BASE_DN%%%" read  by * break
+olcAccess: to attrs=userPassword,shadowLastChange
+  by sockurl.regex="^ldapi:///$" write
+  by dn.exact=gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth write
+  by dn="uid=zadmin,ou=zusers,ou=core control,ou=zivios,%%%BASE_DN%%%" write
+  by anonymous auth
+olcAccess: to attrs=krb5PrincipalName
+  by dn.exact=gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth write
+  by sockurl.regex="^ldapi:///$" write
+  by dn="uid=zadmin,ou=zusers,ou=core control,ou=zivios,%%%BASE_DN%%%" write
+  by anonymous auth
+olcAccess: to attrs=krb5KeyVersionNumber,krb5PrincipalRealm,krb5EncryptionType,krb5KDCFlags,krb5Key,krb5MaxLife,krb5MaxRenew,krb5PasswordEnd,krb5ValidEnd,krb5ValidStart,krb5RealmName
+  by dn.exact=gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth write
+  by sockurl.regex="^ldapi:///$" write
+  by dn="uid=zadmin,ou=zusers,ou=core control,ou=zivios,%%%BASE_DN%%%" write
+  by * none
+olcAccess: to *
+  by dn.exact=gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth write
+  by sockurl.regex="^ldapi:///$" write
+  by dn="uid=zadmin,ou=zusers,ou=core control,ou=zivios,%%%BASE_DN%%%" write
+  by * read
+
+# accesslog db.
+dn: olcDatabase=hdb,cn=config
+objectClass: olcDatabaseConfig
+objectClass: olcHdbConfig
+olcDatabase: {2}hdb
+olcDbDirectory: %%%ACCESSLOG_DIR%%%
+olcSuffix: cn=accesslog
+olcRootDN: cn=accesslog
+olcDbConfig: set_cachesize 0 67108864 1
+olcDbConfig: set_lg_regionmax 262144
+olcDbConfig: set_lg_bsize 2097152
+olcLimits: dn.base="uid=zldapreplica,ou=zusers,ou=core control,ou=zivios,%%%BASE_DN%%%" 
+  size.soft=unlimited size.hard=unlimited time.soft=unlimited time.hard=unlimited
+olcAccess: to * 
+  by dn.base="uid=zldapreplica,ou=zusers,ou=core control,ou=zivios,%%%BASE_DN%%%" read
+  by * none
+olcDbIndex: default eq
+olcDbIndex: entryCSN,objectClass,reqEnd,reqResult,reqStart
+
+# syncrepl Provider for primary db
+dn: olcOverlay=syncprov,olcDatabase={1}hdb,cn=config
+changetype: add
+objectClass: olcOverlayConfig
+objectClass: olcSyncProvConfig
+olcOverlay: syncprov
+olcSpNoPresent: TRUE
+
+# accesslog overlay definitions for primary db
+dn: olcOverlay=accesslog,olcDatabase={1}hdb,cn=config
+objectClass: olcOverlayConfig
+objectClass: olcAccessLogConfig
+olcOverlay: accesslog
+olcAccessLogDB: cn=accesslog
+olcAccessLogOps: writes
+olcAccessLogSuccess: TRUE
+olcAccessLogPurge: 07+00:00 01+00:00
+
+# smbk5pwd overlay for primary db
+dn: olcOverlay=smbk5pwd,olcDatabase={1}hdb,cn=config
+objectClass: olcOverlayConfig
+objectClass: olcSmbK5PwdConfig
+olcOverlay: smbk5pwd
+
+# unique overlay for primary db
+dn: olcOverlay=unique,olcDatabase={1}hdb,cn=config
+objectClass: olcOverlayConfig
+objectClass: olcUniqueConfig
+olcOverlay: unique
+olcUniqueAttribute: uid
+olcUniqueAttribute: uidNumber
+olcUniqueAttribute: mail
+
+# memberof overlay for primary db
+dn: olcOverlay=memberof,olcDatabase={1}hdb,cn=config
+objectclass: olcOverlayConfig
+objectclass: olcMemberof
+olcOverlay: memberof 
+
+# accesslog db syncprov.
+dn: olcOverlay=syncprov,olcDatabase={2}hdb,cn=config
+changetype: add
+objectClass: olcOverlayConfig
+objectClass: olcSyncProvConfig
+olcOverlay: syncprov
+olcSpNoPresent: TRUE
+olcSpReloadHint: TRUE

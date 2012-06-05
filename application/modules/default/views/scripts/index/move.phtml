@@ -1,0 +1,60 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		Zivios
+ * @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ **/
+$formid   = Zivios_Util::randomString(8);
+$regexLib = Zivios_Util::getRegexLibrary();
+?>
+
+<div class="heading">Rename / Move <?php echo $this->entry->getProperty('cn')?> with dn: <?php echo $this->entry->getdn();?></div>
+<div class="content">
+    Using the (auto-complete) form below, search available parents to move this entry to
+
+    <hr size="1" color="#eeeeee"/>
+
+    <form id='<?php echo $formid; ?>' enctype="application/x-www-form-urlencoded" method="post" 
+        action="#" dojoType="dijit.form.Form">
+
+    <div class="zflabel" style="width: 50px;">Search:</div> 
+    <div dojotype="zivios.AutocompleteReadStore" jsid="searchdn" 
+        url="/default/index/searchdn/dn/<?php echo urlencode($this->entry->getdn()); ?>/" 
+        requestmethod="get"></div>
+
+        <input dojoType="dijit.form.FilteringSelect" class="zfgenField" required="true" style="width: 200px;"
+        store="searchdn" name="entrysearch[rq_noval_newparentdn_Entry+Dn_enc]" hasDownArrow="false"
+        />
+    <div class="cboth">
+    
+
+    <div class="zflabel" style="width: 50px;">&nbsp;</div>
+    <input onclick="zivios.postxhr('/default/index/domove', '', '<?php echo $formid; ?>',
+        'form', 'json', [], [], [], [], this.id); return false;" 
+        name="zvdorename" value="Move"
+        type="submit" label="Move/Rename" dojoType="dijit.form.Button"/>
+    <div class="cboth"></div>
+
+    <input type="hidden" name="entrysearch[rq_noval_dn_Distinguished+Name_enc]" value="<?php echo urlencode($this->entry->getdn()); ?>"/>
+    </form>
+
+</div>
+
+

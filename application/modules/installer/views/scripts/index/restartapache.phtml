@@ -1,0 +1,40 @@
+<?php
+/**
+ * Copyright (c) 2008-2010 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		ZiviosInstaller
+ * @copyright	Copyright (c) 2008-2010 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ **/
+?>
+<div class="heading">Restart Web Server</div>
+<div class="content">
+SSL has been enabled for the Zivios host. Please restart the Web Server and click on the link 
+below to continue.<br/><br/>
+
+<b>Please note:</b> if you do not restart the Web Server, the link below <b>will not</b>
+work. The Web Server can be restarted by issuing the following command on the server terminal:
+<ul>
+    <li/> /etc/init.d/zvhttpd restart
+</ul>
+</div>
+
+<div class="content">
+    <a href="https://<?php echo $_SERVER['SERVER_NAME'];?>/">Continue installation</a>.
+</div>
+

@@ -1,0 +1,73 @@
+<?php
+/**
+ * Copyright (c) 2008-2010 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     Zivios
+ * @copyright   Copyright (c) 2008-2010 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+?>
+<div class="tbstyle" style="width: 100%; margin-bottom: 10px;">
+    <div class="tbrow">
+        <div class="colone" style="width: 65px;">Agent Status</div>
+        <div class="coltwo red bold">Offline</div>
+    </div>
+</div>
+
+<div class="alert alertcl" style="width: 350px; margin: auto;">The Zivios 
+Agent appears to be offline. Zivios can try and start the Agent process via SSH. 
+If you would like to proceed, please enter the root user's password in the form 
+below and click on <b>Start Zivios Agent</b>.</div>
+
+<div class="tbstyle" style="width: 100%; margin-top: 10px;">
+    <div class="tbrow">
+        <div class="colone" style="width: 65px;">Root Password</div>
+        <div class="coltwo">
+        <form action="#" method="post" id="startagt" dojoType="dijit.form.Form" onsubmit="return false;">
+        <input type="password" id="rpass" name="rpass" required="true" dojoType="dijit.form.ValidationTextBox" />
+        <input type="hidden" name="dn" value="<?php echo urlencode($this->entry->getdn()); ?>" />
+        <button id="startagt-submit" dojoType="dijit.form.Button" label="Start Zivios Agent">
+            <script type="dojo/method" event="onClick"> 
+                zivios.formXhrPost('startagt', '/default/server/startagent');
+            </script>
+        </button>
+        </form>
+        </div>
+    </div>
+</div>
+
+<style type="text/css">
+.tbrow div.colone {
+    width: 150px;
+    border-bottom: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    text-align: right;
+    border-right: 1px dotted #ccc;
+    padding: 10px;
+    padding-right: 5px;
+}
+.tbrow div.coltwo {
+    padding: 10px;
+    padding-left: 3px;
+    border-bottom: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    font-weight: bold;
+    width: 181px;
+}
+</style>
+

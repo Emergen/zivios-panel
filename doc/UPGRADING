@@ -1,0 +1,13 @@
+* Upgrading from 0.5.0 to 0.5.1
+--------------------------------
+No upgrade path is available between Zivios 0.5.0 and 0.5.1
+
+Though the upgrade _is_ possibly manually, it would be a tedious task as the initial
+core ldif which is auto-generated has been altered. We have also included a schema
+which was unfortunately missing in the initial release. These schemas are imported
+by Zivios during the automated installation
+
+Though we recommend a clean installation, if an upgrade is unavoidable, please discuss
+this with us on the mailing list -- we'll try and help. Mailing lists are available at: 
+  
+  * http://www.zivios.org/index/mailinglists

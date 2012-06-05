@@ -1,0 +1,62 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		mod_ntp
+ * @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ * @version		$Id: dashview.phtml 915 2008-08-25 11:32:48Z fkhan $
+ * @lastchangeddate $LastChangedDate: 2008-08-25 17:32:48 +0600 (Mon, 25 Aug 2008) $
+ **/
+
+?>
+<div id="ntppgupdate">
+	<div style="padding-left: 10px;">
+		<div style="width: 140px;" class="floatleft">Master Computer</div>
+		<div style="width: 350px;" class="floatleft">
+			<?php
+			foreach ($this->dashboardData['masterservers'] as $mastdn => $mastcn) {
+			?>
+			<a href="#" onclick="javascript:nodeDetails('<?php
+				echo $mastdn;
+				?>'); return false;"><img src="<?php echo $this->imgBase; ?>/icons/server.png" align="absmiddle"/>
+				<?php echo $mastcn;?></a>
+			<?php
+			}
+			?>
+		</div>
+		<div class="clear"></div>
+		<div style="width: 140px;" class="floatleft">Service Status</div>
+		<div style="width: 350px;" class="floatleft">
+		<?php
+			if ($this->dashboardData['status']) {
+				echo '<span style="color: green; font-weight: bold;">Running</span>';
+				echo '  [<a href="#" onclick="javascript:serviceAction(\'stop\');">Stop Service</a>]';
+			} else {
+				echo '<span style="color: red; font-weight: bold;">Stopped</span>';
+				echo '  [<a href="#" onclick="javascript:serviceAction(\'start\'); return false;">Start Service</a>]';
+			}
+
+		?></div>
+		<div class="clear"></div>
+		<div style="width: 140px;" class="floatleft">Current Server Time</div>
+		<div style="width: 350px;" class="floatleft"><b><?php echo $this->dashboardData['currentTime']; ?></b></div>
+		<div class="floatleft"></div>
+		<div class="clear"></div>
+	</div>
+</div>

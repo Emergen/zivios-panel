@@ -1,0 +1,68 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     Zivios
+ * @copyright   Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+
+$membercount = sizeof($this->group->getProperty('member',1)) - 1;
+$plugins = $this->group->getAllPlugins();
+?>
+<p class="headline">Group Details</p>
+
+<div class="tbstyle">
+    <div class="tbrow">
+        <div class="colone">Group Name</div>
+        <div class="coltwo"><?php echo $this->group->getProperty('cn'); ?></div>
+    </div>
+
+    <div class="tbrow">
+        <div class="colone">Total Members</div>
+        <div class="coltwo"><?php echo $membercount; ?></div>
+    </div>
+
+    <div class="tbrow">
+        <div class="colone">Active Plugins</div>
+        <div class="coltwo"><?php
+        foreach ($plugins as $plugin) {
+            echo $plugin->returnDisplayName() . '<br />';
+        }
+        ?></div>
+    </div>    
+</div>
+
+
+<style type="text/css">
+.tbrow div.colone {
+    width: 90px;
+    border-bottom: 1px solid #ccc;
+    text-align: right;
+    border-right: 1px dotted #ccc;
+    padding: 10px;
+    padding-right: 5px;
+}
+.tbrow div.coltwo {
+    padding: 10px;
+    padding-left: 3px;
+    border-bottom: 1px solid #ccc;
+    font-weight: bold;
+    width: 181px;
+}
+</style>

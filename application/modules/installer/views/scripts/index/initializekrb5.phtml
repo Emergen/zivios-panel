@@ -1,0 +1,54 @@
+<?php
+/**
+ * Copyright (c) 2008-2010 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		ZiviosInstaller
+ * @copyright	Copyright (c) 2008-2010 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ **/
+
+$formid   = Zivios_Util::randomString(8);
+$regexLib = Zivios_Util::getRegexLibrary();
+?>
+<div class="heading">Heimdal Kerberos Initialization</div>
+<div class="content">
+Zivios is ready to initialize the Kerberos Service. Kerberos provides single sign-on
+functionality to network services, as well as a ticket based authentication system. 
+<br /><br />
+</div>
+
+<div class="subheading">Initialize Heimdal Kerberos</div>
+<div class="content">
+    <form id='<?php echo $formid; ?>' enctype="application/x-www-form-urlencoded" method="post" 
+        action="#" dojoType="dijit.form.Form">
+
+    <label>Kerberos Realm: </label>
+    <div class="disabledInput"><?php echo $this->localSysInfo['krb5realm']; ?></div>
+    <div class="cboth"></div>
+    
+    <label></label>
+    <input onclick="installer.postxhr('/installer/index/processinikrb5', '', '<?php echo $formid; ?>',
+        'form', 'json', [], ['loadingmsg'], ['loadingmsg'], [], this.id); return false;" 
+        name="inikrb5" value="Initialize Heimdal Kerberos" 
+        type="submit" label="Initialize Heimdal Kerberos" dojoType="dijit.form.Button"/>
+    <div class="cboth"></div>
+
+    <input type="hidden" name="krb5setup[rq_digits_initializekrb5_Initialize+Kerberos]" value="1"/>
+    </form>
+</div>
+

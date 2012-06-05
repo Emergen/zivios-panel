@@ -1,0 +1,44 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		Zivios
+ * @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ **/
+
+if ($this->nocompat!="") {
+?>
+<div class="alert"><?php echo $this->nocompat; ?></div>
+<div class="note">List of compatible Operating Systems.
+<ul>
+<?php
+for($c = 0; $c < sizeof($this->computers) -1; $c++) {
+        echo '<li />' . $this->computers[$c] . '</li>';
+}
+?>
+</ul>
+</div>
+<?php
+} else {
+?>
+<div class="info">The Asterisk Service <strong>must already be running</strong> on the server you specify. The installation process will ensure that the service is running correctly before adding it to the container: <strong><?php echo $this->container; ?></strong>. </div>
+<?php
+    echo $this->form;
+}
+?>

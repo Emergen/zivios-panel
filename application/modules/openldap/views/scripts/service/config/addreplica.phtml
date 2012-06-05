@@ -1,0 +1,90 @@
+<?php
+/**
+ * Copyright (c) 2008-2010 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     mod_openldap
+ * @copyright   Copyright (c) 2008-2010 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+$formid   = Zivios_Util::randomString(8);
+$ranPass  = Zivios_Util::randomString(8);
+$regexLib = Zivios_Util::getRegexLibrary();
+?>
+
+<div class="heading">Add LDAP Replica</div>
+<div class="content">
+
+    <div class="info infocl" style="width: 650px;">
+    Before setting up a Zivios Directory Replica, please ensure that the following packages are in
+    place on the remote server: 
+
+        <ul>
+            <li/> Zivios BDB
+            <li/> Zivios Bind DNS
+            <li/> Zivios OpenLDAP
+            <li/> Zivios Heimdal
+            <li/> Zivios Cyrus SASL
+        </ul>
+
+    Zivios will check the installation status of these packages before proceeding.
+    </div>
+
+    <form id='<?php echo $formid; ?>' enctype="application/x-www-form-urlencoded" method="post" 
+        action="#" dojoType="dijit.form.Form">
+
+    <div class="zflabel" style="width: 100px;">Select Server: </div>
+
+    <div class="zflabel">
+    <select dojoType="dijit.form.FilteringSelect" name="addreplica[rq_dn_compatSystems_Compatible+Systems_enc]">
+    <?php
+    $c = 0;
+    foreach ($this->compatibleSystems as $dn => $compatSystem) {
+        if ($c == 0) {
+            $selected = ' selected';
+            $c++;
+        } else {
+            $selected = '';
+        }
+
+        echo '<option class="zfgenField" value="'.urlencode($dn).'" '.$selected.'>'  . $compatSystem . '</option>';
+    }
+    ?>
+    </select>
+    </div>
+    <div class="cboth" style="margin-bottom: 10px;"></div>
+
+    <div class="info infocl" style="width: 650px;">
+        Specify a password for the remote host's cn=config database. <br/><br />
+        <b>Note:</b> A random password has been generated for you.
+    </div>
+
+    <div class="zflabel" style="width: 100px;">CN Config Pass: </div>
+    <input name="addreplica[rq_password_cnpass_cnConfig+Password]" type="text" dojoType="dijit.form.ValidationTextBox" maxlength="64" 
+        regExp="<?php echo $regexLib->exp->password; ?>" required="true" style="width: 180px;"
+        invalidMessage="Invalid password. Should be at least 3 characters." class="zfgenField"  value="<?php echo $ranPass; ?>"/>
+    <div class="cboth"></div>
+
+    <div class="zflabel" style="width: 100px;"></div>
+    <input type="hidden" name="addreplica[rq_dn_serviceDn_Service+DN_enc]" value="<?php echo urlencode($this->service->getdn()); ?>"/>
+    <input onclick="zivios.postxhr('/openldap/service/doaddreplica', '', '<?php echo $formid; ?>',
+        'form', 'json', [], [], [], [], this.id); return false;" 
+        name="zvlogin" value="Add Replica" 
+        type="submit" label="Add Replica" dojoType="dijit.form.Button"/>
+    <div class="cboth"></div>
+</div>
+

@@ -1,0 +1,86 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     mod_dns
+ * @copyright   Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+
+$this->ptrs = $this->zone->getAllPtrRecords();
+?>
+<!-- PTR Records -->
+<?php
+if (is_array($this->ptrs) && !empty($this->ptrs)) {
+?>
+<div style="margin: 0px auto; width: 520px;">
+<div style="width: 510px; border-bottom: 1px solid #477795; border-top: 1px solid #477795; 
+    background: #7c849c; padding: 5px; color: #fff;"><b>Reverse Records for: <?php echo $this->zone->getProperty("cn");?></b></div>
+
+<div class="dnszdhead">IP Map</div>
+<div class="dnszdhead" style="width: 250px;">Hostname</div>
+<div class="dnszdhead">Options</div>
+<div class="clearboth"></div>
+<?php
+foreach ($this->ptrs as $ptrRecord) { 
+?>
+<div class="dnszdinf"><?php echo $ptrRecord->getProperty('cn');?></div>
+<div class="dnszdinf" style="width: 250px;"><?php echo $ptrRecord->getHostname();?></div>
+<div class="dnszdinf">
+    <?php
+    // Content pane ID is based on the stripped cn of the zone entry.
+    $strpCn = strtolower(preg_replace("/[^a-z0-9]/i", "", $this->zone->getProperty('cn')));
+    $cpId   = $strpCn . '-dnszeopts';
+    ?>
+    <button class="smallbutton" dojoType="dijit.form.Button">Delete
+    <script type="dojo/connect" event="onClick">
+        zivios.cpaneRefresh(
+            '<?php echo $cpId; ?>', // cpane target
+            '/dns/service/deleterecordentry/zonedn/<?php echo urlencode($this->zone->getdn()); ?>/dn/<?php echo urlencode($this->service->getdn());?>/recorddn/<?php echo urlencode($ptrRecord->getdn()); ?>'
+        );
+    </script>
+    </button>
+</div>
+<div class="clearboth"></div>
+<?php
+    }
+} else {
+    echo "<div class='info'>No reverse records defined.</div>";
+}
+?>
+<style tyle="text/css">
+.dnszdhead {
+    float: left;
+    width: 120px;
+    border-bottom: 1px solid #ccc;
+    background: #e5e5e5;
+    margin-left: 0px;
+    padding: 5px;
+    font-weight: bold;
+
+}
+.dnszdinf {
+    width: 120px;
+    border-bottom: 1px solid #ccc;
+    background: #fff;
+    float: left;
+    clear: right;
+    padding: 5px;
+    height: 23px;
+}
+</style>

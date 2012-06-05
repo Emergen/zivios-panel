@@ -1,0 +1,46 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package		Zivios
+ * @copyright	Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license		http://www.zivios.org/legal/license
+ **/
+$regex = Zivios_Regex::loadLibrary();
+?>
+<div class="note"> You can add a new email to the blacklist below </div>
+
+<form action="#" method="post" id="addblform" dojoType="dijit.form.Form" onsubmit="return false;">
+    <input type="hidden" name="dn" value="<?php echo $this->dn;?>"/>
+    <input type="hidden" name="changeaction" value="add"/>
+    
+    <div style="padding-left: 5px; width:70%; float: left;">
+        <Label for="acl"><B>New Blacklist Email: </b> </label>
+        <input type="text" dojoType="dijit.form.ValidationTextBox" name="bl" id="bl" 
+        regExp="<?php echo $regex->exp->email;?>" required="true" invalidMessage="Invalid Email">
+    </div>
+    
+    <div style="width: 26%; float: left;">
+    <button id="addblform-submit" dojoType="dijit.form.Button" label="Add to Blacklist">
+        <script type="dojo/method" event="onClick"> 
+            zivios.formXhrPost('addblform', '/mail/service/dochangebl');
+        </script>
+    </button>   
+    </div>
+    <div style="clear: both;"></div>
+</form>

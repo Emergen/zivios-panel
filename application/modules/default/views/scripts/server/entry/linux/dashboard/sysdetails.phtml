@@ -1,0 +1,133 @@
+<?php
+/**
+ * Copyright (c) 2008 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     Zivios
+ * @copyright   Copyright (c) 2008 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+?>
+<p class="headline">Network Details</p>
+
+<div class="sysdetailsl">Hostname</div>
+<div class="sysdetailsr"><?php echo $this->entry->getProperty('cn'); ?></div>
+<div style="clear: both;"></div>
+
+<div class="sysdetailsl">IP Address</div>
+<div class="sysdetailsr"><?php echo $this->entry->getProperty('iphostnumber'); ?></div>
+<div style="clear: both;"></div>
+
+<p class="headline">System Details</p>
+
+<div class="sysdetailsl">Distribution</div>
+<div class="sysdetailsr"><?php echo $this->entry->getProperty('emscomputerdistro'); ?></div>
+<div style="clear: both;"></div>
+
+<div class="sysdetailsl">Release</div>
+<div class="sysdetailsr"><?php echo $this->entry->getProperty('emscomputerdistrorelease'); ?></div>
+<div style="clear: both;"></div>
+
+<div class="sysdetailsl">CPU Vendor Model</div>
+<div class="sysdetailsr"><?php echo $this->entry->getProperty('emscomputervendormodel'); ?></div>
+<div style="clear: both;"></div>
+
+<div class="sysdetailsl">CPU Mhz</div>
+<div class="sysdetailsr"><?php echo $this->entry->getProperty('emscomputercpumhz'); ?></div>
+<div style="clear: both;"></div>
+
+<div class="sysdetailsl">CPU Count</div>
+<div class="sysdetailsr"><?php echo $this->entry->getProperty('emscomputercpucount'); ?></div>
+<div style="clear: both;"></div>
+
+
+<div class="sysdetailsl">Memory</div>
+<div class="sysdetailsr"><?php echo $this->entry->getProperty('emscomputerram'); ?></div>
+<div style="clear: both;"></div>
+
+<div class="sysdetailsl">SWAP</div>
+<div class="sysdetailsr"><?php echo $this->entry->getProperty('emscomputerswap'); ?></div>
+<div style="clear: both;"></div>
+
+<div class="sysdetailsl">Architecture</div>
+<div class="sysdetailsr"><?php echo $this->entry->getProperty('emscomputerarch'); ?></div>
+<div style="clear: both;"></div>
+
+<div style="margin: 5px;">
+    <button class="smallbutton" dojoType="dijit.form.Button" 
+        onClick="dijit.byId('probeDialog').show()" type="button">Probe Server Hardware
+    </button>
+
+    <div dojoType="dijit.Dialog" style="width: 400px;" id="probeDialog" title="Probe Server Hardware..." 
+        execute="zivios.callAction('default/server/mainctrl',{
+        dn: '<?php echo $this->entry->getdn(); ?>',
+        action: 'probe'},'probesrv');">
+
+    <div class="info">
+        You are about to <b>probe hardware details</b> for the server: <b><?php echo $this->entry->getProperty('cn'); ?></b>. 
+        <br /><br />
+        The probe operation is recommended only if the server hardware has been updated.
+        </div>
+        <div style="margin: 10px;">
+            <button id="probesrv" dojoType=dijit.form.Button type="submit">Yes, Probe Now</button>
+            <button dojoType=dijit.form.Button type="submit" onClick="dijit.byId('probeDialog').hide(); return false;">Cancel Request</button>
+        </div>
+    </div>
+</div>
+
+
+<p class="headline">Active Service Subscriptions</p>
+<div class="note">Please see the server menu for service configuration.</div>
+<?php
+if ('' == ($aservices = $this->entry->getProperty('emsservicemap'))) {
+    echo '<em>No active service subsciptions found.</em>';
+} else {
+    if (!is_array($aservices) || empty($aservices)) {
+        $aservices = array($aservices);
+    }
+    echo '<div style="margin-left: 5px;">';
+    foreach ($aservices as $servicedetails) {
+        $servicemap = explode(':', $servicedetails);
+        echo "<div class='sysdsrv'>" . substr($servicemap[2], 0, strpos($servicemap[2], 'Service')) . '</div>';
+    }
+    echo '</div>';
+}
+?>
+<style type="text/css">
+.sysdetailsl {
+    float: left;
+    margin-left: 5px;
+    width: 130px;
+    padding: 5px;
+    background-color: #dbeaf0;
+}
+
+.sysdetailsr {
+    float: left;
+    width: 230px;
+    padding: 5px;
+    background-color: #f6f6f6;
+}
+.sysdsrv {
+    float: left;
+    width: 60px;
+    padding: 5px;
+    background-color: #f6f6f6;
+    border-bottom: 2px solid #e5e5e5;
+    border-right: 1px solid #e5e5e5;
+}
+</style>

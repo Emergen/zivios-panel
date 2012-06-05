@@ -1,0 +1,107 @@
+<?php
+/**
+ * Copyright (c) 2008-2010 Zivios, LLC.
+ *
+ * This file is part of Zivios.
+ *
+ * Zivios is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Zivios is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Zivios.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     Zivios
+ * @copyright   Copyright (c) 2008-2010 Zivios, LLC. (http://www.zivios.org)
+ * @license     http://www.zivios.org/legal/license
+ **/
+?>
+<div class="tbstyle" style="width: 100%">
+    <div class="tbrow">
+        <div class="colone">Agent Status</div>
+        <div class="coltwo green bold">Online</div>
+    </div>
+
+    <div class="tbrow">
+        <div class="colone">Server Options</div>
+        <div class="coltwo bold">
+        
+        <!-- Shutdown option -->
+        <button class="smallbutton" dojoType="dijit.form.Button" 
+        onClick="dijit.byId('shutdownDialog').show()" type="button">Shutdown Server
+        </button>
+
+        <div dojoType="dijit.Dialog" id="shutdownDialog" title="Shutdown Server..." 
+            execute="zivios.callAction('default/server/mainctrl',{
+            dn: '<?php echo $this->entry->getdn(); ?>',
+            action: 'shutdown'},'shutdownsrv');">
+
+            <div class="alert">
+            Are you sure you want to <b>shutdown</b> the server: <?php echo $this->entry->getProperty('cn'); ?>?
+            </div>
+            <div style="margin: 10px;">
+                <button id="shutdownsrv" dojoType=dijit.form.Button type="submit">Yes, Shutdown Now</button>
+                <button dojoType=dijit.form.Button type="submit" onClick="dijit.byId('shutdownDialog').hide(); return false;">Cancel Request</button>
+            </div>
+        </div>
+        <!-- End shutdown option -->
+
+        <!-- Reboot option -->
+        <button class="smallbutton" dojoType="dijit.form.Button" 
+        onClick="dijit.byId('rebootDialog').show()" type="button">Reboot Server
+        </button>
+
+        <div dojoType="dijit.Dialog" id="rebootDialog" title="Reboot Server Server..." 
+            execute="zivios.callAction('default/server/mainctrl',{
+            dn: '<?php echo $this->entry->getdn(); ?>',
+            action: 'reboot'},'rebootsrv');">
+
+            <div class="alert">
+            Are you sure you want to <b>reboot</b> the server: <?php echo $this->entry->getProperty('cn'); ?>?
+            </div>
+            <div style="margin: 10px;">
+                <button id="rebootsrv" dojoType=dijit.form.Button type="submit">Yes, Reboot Now</button>
+                <button dojoType=dijit.form.Button type="submit" onClick="dijit.byId('rebootDialog').hide(); return false;">Cancel Request</button>
+            </div>
+        </div>
+        <!-- End reboot option -->
+        </div>
+    </div>
+
+    <div class="tbrow">
+        <div class="colone">System Uptime</div>
+        <div class="coltwo">
+        <?php
+            if ($uptime = $this->entry->getSystemUptime()) {
+                echo $uptime;
+            } else {
+                echo '<em>Not Available</em>';
+            }
+        ?>
+        </div>
+    </div>
+</div>
+
+<style type="text/css">
+.tbrow div.colone {
+    width: 50px;
+    border-bottom: 1px solid #ccc;
+    text-align: right;
+    border-right: 1px dotted #ccc;
+    padding: 10px;
+    padding-right: 5px;
+}
+.tbrow div.coltwo {
+    padding: 10px;
+    padding-left: 3px;
+    border-bottom: 1px solid #ccc;
+    width: 181px;
+}
+</style>
+
